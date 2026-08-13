@@ -37,6 +37,97 @@ function buildChoiceCustomizationSection(title: string, options: Array<{ id: str
   ];
 }
 
+export function resolveProductCustomOptions(productName: string, basePrice: number) {
+  const normalizedName = normalizeText(productName);
+
+  if (normalizedName.includes("filet") && normalizedName.includes("mignon")) {
+    return [
+      {
+        id: "carbohidrato",
+        title: "1. Carbohidrato",
+        options: [
+          { id: "papas_fritas_francesas", name: "Papas fritas francesas", price: 0 },
+          { id: "papas_salteadas_mantequilla", name: "Papas salteadas en mantequilla", price: 0 },
+        ],
+      },
+      {
+        id: "ensalada",
+        title: "2. Ensalada",
+        options: [
+          { id: "ensalada_organica", name: "Ensalada orgánica", price: 0 },
+          { id: "ensalada_sancochada", name: "Ensalada sancochada", price: 0 },
+        ],
+      },
+    ];
+  }
+
+  if (normalizedName.includes("espagueti") && normalizedName.includes("pesto")) {
+    return [
+      {
+        id: "proteina",
+        title: "1. Proteína",
+        options: [
+          { id: "milanesa", name: "Milanesa", price: 42 },
+          { id: "pollo_grill", name: "Pollo al grill", price: 40 },
+          { id: "filet_mignon", name: "Filet mignon", price: 46 },
+        ],
+      },
+      {
+        id: "carbohidrato",
+        title: "2. Carbohidrato",
+        options: [
+          { id: "papas_fritas_francesas", name: "Papas fritas francesas", price: 0 },
+          { id: "papas_salteadas_mantequilla", name: "Papas salteadas en mantequilla", price: 0 },
+        ],
+      },
+      {
+        id: "ensalada",
+        title: "3. Ensalada",
+        options: [
+          { id: "ensalada_organica", name: "Ensalada orgánica", price: 0 },
+          { id: "ensalada_sancochada", name: "Ensalada sancochada", price: 0 },
+        ],
+      },
+    ];
+  }
+
+  if ((normalizedName.includes("fetuchini") || normalizedName.includes("fetuccini") || normalizedName.includes("fettuccini")) && normalizedName.includes("huancaina")) {
+    return buildChoiceCustomizationSection("1. Proteína", [
+      { id: "pollo_grill", name: "Pollo al grill", price: 40 },
+      { id: "lomo_saltado", name: "Lomo saltado", price: 44 },
+    ]);
+  }
+
+  const isCuyLasFlores = normalizedName.includes("cuy las flores") && !normalizedName.includes("deshuesado");
+  const isCuyLasFloresDeshuesado = normalizedName.includes("cuy las flores") && normalizedName.includes("deshuesado");
+  const isMixto = normalizedName.includes("mixto") && !normalizedName.includes("deshuesado");
+  const isMixtoDeshuesado = normalizedName.includes("mixto") && normalizedName.includes("deshuesado");
+
+  if (isCuyLasFlores) {
+    return buildSizeCustomizationSection(basePrice, Math.round(basePrice * 1.79));
+  }
+
+  if (isCuyLasFloresDeshuesado) {
+    return buildSizeCustomizationSection(basePrice, Math.round(basePrice * 1.71));
+  }
+
+  if (isMixto) {
+    return buildChoiceCustomizationSection("1. Tamaño", [
+      { id: "mixto_clasico", name: "Mixto clásico", price: basePrice },
+      { id: "mixto_deshuesado", name: "Mixto deshuesado", price: Math.round(basePrice * 1.12) },
+    ]);
+  }
+
+  if (isMixtoDeshuesado) {
+    return buildChoiceCustomizationSection("1. Tamaño", [
+      { id: "mixto_clasico", name: "Mixto clásico", price: Math.round(basePrice / 1.12) },
+      { id: "mixto_deshuesado", name: "Mixto deshuesado", price: basePrice },
+    ]);
+  }
+
+  return undefined;
+}
+
 /**
  * Normaliza nombres de categorías para emparejar slug/id
  */
@@ -132,31 +223,8 @@ export async function getLiveCategories(): Promise<Category[]> {
         normalizeCategorySlug(prod.categories?.name || "") ||
         "entradas";
 
-      const normalizedName = normalizeText(prod.name);
-      const isCuyLasFlores = normalizedName.includes("cuy las flores") && !normalizedName.includes("deshuesado");
-      const isCuyLasFloresDeshuesado =
-        normalizedName.includes("cuy las flores") && normalizedName.includes("deshuesado");
-      const isMixto = normalizedName.includes("mixto") && !normalizedName.includes("deshuesado");
-      const isMixtoDeshuesado = normalizedName.includes("mixto") && normalizedName.includes("deshuesado");
-
-      // Calcular precios de variantes basados en el precio del producto en BD
       const basePrice = Number(prod.price || 0);
-
-      const customOptions = isCuyLasFlores
-        ? buildSizeCustomizationSection(basePrice, Math.round(basePrice * 1.79))
-        : isCuyLasFloresDeshuesado
-          ? buildSizeCustomizationSection(basePrice, Math.round(basePrice * 1.71))
-          : isMixto
-            ? buildChoiceCustomizationSection("1. Tamaño", [
-                { id: "mixto_clasico", name: "Mixto clásico", price: basePrice },
-                { id: "mixto_deshuesado", name: "Mixto deshuesado", price: Math.round(basePrice * 1.12) },
-              ])
-            : isMixtoDeshuesado
-              ? buildChoiceCustomizationSection("1. Tamaño", [
-                  { id: "mixto_clasico", name: "Mixto clásico", price: Math.round(basePrice / 1.12) },
-                  { id: "mixto_deshuesado", name: "Mixto deshuesado", price: basePrice },
-                ])
-          : undefined;
+      const customOptions = resolveProductCustomOptions(prod.name, basePrice) || prod.custom_options || undefined;
 
       const dish: Dish = {
         name: prod.name,
