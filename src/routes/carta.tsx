@@ -142,7 +142,7 @@ function CartaPage() {
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto w-full flex-1">
         {/* Vertical Category Sidebar (Desktop) / Horizontal Tabs (Mobile) */}
         <aside className="w-full md:w-72 bg-piedra border-b md:border-b-0 md:border-r border-nogal/10 flex-shrink-0 md:sticky md:top-24 md:h-[calc(100vh-100px)] overflow-x-auto md:overflow-y-auto z-20 scrollbar-none">
-          <div className="flex flex-row md:flex-col py-0 md:py-8 w-max min-w-full md:w-auto">
+          <div className="flex flex-row md:flex-col py-0 md:py-8 w-max min-w-full md:w-auto md:pr-8">
             {currentCategories.map((cat) => (
               <button
                 key={cat.id}
@@ -155,9 +155,9 @@ function CartaPage() {
                     });
                   }
                 }}
-                className={`text-center md:text-left whitespace-nowrap md:whitespace-normal px-6 md:px-8 py-4 md:py-4 text-xs font-bold uppercase tracking-[0.15em] transition-all border-b-4 md:border-b-0 md:border-l-4 ${
+                className={`text-center md:text-left whitespace-nowrap md:whitespace-normal px-6 md:px-8 py-4 md:py-3.5 text-[11px] font-bold uppercase tracking-[0.15em] transition-all border-b-4 md:border-b-0 md:border-l-4 md:rounded-r-full ${
                   activeId === cat.id
-                    ? "border-cochinilla text-cochinilla bg-cochinilla/5"
+                    ? "border-cochinilla text-cochinilla bg-cochinilla/10"
                     : "border-transparent text-nogal/50 hover:text-nogal hover:bg-nogal/5"
                 }`}
               >
@@ -169,11 +169,22 @@ function CartaPage() {
 
         {/* Menu Content */}
         <main id="menu-content" className="flex-1 p-6 md:p-12">
-          <div className="flex justify-between items-end mb-8 border-b border-nogal/10 pb-4">
+          {/* Título de Categoría */}
+          <div className="flex justify-between items-end mb-5">
             <h2 className="font-serif text-3xl md:text-4xl text-nogal">{active.label}</h2>
             <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-nogal/40 bg-nogal/5 px-4 py-2 rounded-full hidden sm:inline-block">
               {active.dishes.length} platos
             </span>
+          </div>
+          
+          {/* Separador elegante con rombo (manteniendo el color nogal/20) */}
+          <div className="relative flex items-center justify-center mb-10 w-full">
+            <div className="absolute inset-0 flex items-center w-full">
+              <div className="w-full border-t border-nogal/20"></div>
+            </div>
+            <div className="relative flex justify-center bg-piedra px-2">
+              <div className="w-2 h-2 bg-nogal/30 transform rotate-45"></div>
+            </div>
           </div>
 
           <div
