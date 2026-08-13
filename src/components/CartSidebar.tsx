@@ -524,7 +524,7 @@ export function CartSidebar() {
       // Increment coupon used_count in Supabase & Log redemption record for BI Analytics
       if (appliedCoupon) {
         try {
-          await supabase.rpc("increment_coupon_used_count", { coupon_id: appliedCoupon.id }).catch(() => {
+          await (supabase.rpc("increment_coupon_used_count", { coupon_id: appliedCoupon.id }) as any).catch(() => {
             // Fallback si la función RPC no existe: incremento directo
             return supabase
               .from("coupons")
@@ -1183,11 +1183,10 @@ export function CartSidebar() {
                     <div
                       className="w-36 h-36 rounded-xl p-3 mb-3 border border-nogal/10 bg-white shadow-xs"
                     >
-                      <div
-                        className="w-full h-full rounded-lg"
-                        style={{
-                          backgroundImage: `repeating-linear-gradient(0deg,${R.morado} 0,${R.morado} 2px,transparent 2px,transparent 10px),repeating-linear-gradient(90deg,${R.morado} 0,${R.morado} 2px,transparent 2px,transparent 10px)`,
-                        }}
+                      <img
+                        src="/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg"
+                        alt="QR Yape o Plin"
+                        className="w-full h-full object-contain rounded-lg"
                       />
                     </div>
                     <p className="font-serif font-bold text-sm text-black/80">
