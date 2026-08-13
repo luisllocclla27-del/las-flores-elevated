@@ -1193,7 +1193,7 @@ export function CartSidebar() {
                       Escanea con Yape o Plin
                     </p>
                     <p className="text-xs text-black/50 mt-0.5">
-                      A nombre de <strong>Las Flores SAC</strong>
+                      A nombre de <strong>Corporación Las Flores SAC</strong>
                     </p>
                   </div>
                   <div>
