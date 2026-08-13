@@ -356,31 +356,34 @@ function RestaurantePage() {
             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
         </Link>
-        <div className="flex-1 flex justify-end items-center gap-6 md:gap-8 text-[11px] md:text-sm uppercase tracking-widest md:tracking-[0.15em] font-semibold pointer-events-auto">
-          <Link
-            to="/reservas"
-            className="hover:text-chilca transition-colors"
-          >
-            RESERVAS
-          </Link>
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
           <button
             onClick={() => startTransition(() => setIsMenuOpen(true))}
-            className="hover:text-chilca transition-colors"
+            className="hidden sm:inline-block hover:text-chilca transition-colors leading-none"
           >
             DELIVERY
           </button>
+          <Link
+            to="/reservas"
+            className={`pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
+              isScrolled
+                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
+            }`}
+          >
+            Reservar
+          </Link>
           {totalItems > 0 && (
             <button
               onClick={() => setCartOpen(true)}
-              className="relative hover:text-chilca transition-colors"
+              className="relative hover:text-chilca transition-colors ml-1"
             >
               <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
                 {totalItems}
               </span>
             </button>
           )}
-          
         </div>
       </nav>
 

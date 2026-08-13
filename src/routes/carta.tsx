@@ -104,11 +104,11 @@ function CartaPage() {
           />
         </Link>
 
-        <div className="flex-1 flex justify-end items-center gap-6 md:gap-8 text-[11px] md:text-sm uppercase tracking-widest md:tracking-[0.15em] font-semibold">
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
           {totalItems > 0 && (
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative hover:text-chilca transition-colors text-nogal"
+              className="relative hover:text-chilca transition-colors text-nogal mr-2"
             >
               <ShoppingCart size={20} />
               <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
@@ -116,20 +116,18 @@ function CartaPage() {
               </span>
             </button>
           )}
-
-          <Link
-            to="/reservas"
-            className="hover:text-chilca transition-colors text-nogal"
-          >
-            RESERVAS
-          </Link>
-
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="hover:text-chilca transition-colors text-nogal"
+            className="hidden sm:inline-block hover:text-chilca transition-colors text-nogal leading-none"
           >
             DELIVERY
           </button>
+          <Link
+            to="/reservas"
+            className="pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+          >
+            Reservar
+          </Link>
         </div>
       </nav>
 
