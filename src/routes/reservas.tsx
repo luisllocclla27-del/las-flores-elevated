@@ -168,15 +168,17 @@ function ReservasPage() {
     }
   }, [searchParams.zona]);
 
-  // Auto-clamp guests count if current selected zone capacity is lower
+  // Reset form selections when the selected zone changes
   useEffect(() => {
     if (selectedZona) {
-      const currentGuests = parseInt(form.guests) || 2;
-      if (currentGuests > selectedZona.maxCap) {
-        setForm((f) => ({ ...f, guests: String(selectedZona.maxCap) }));
-      }
+      setForm((f) => ({
+        ...f,
+        guests: "",
+        date: "",
+        time: ""
+      }));
     }
-  }, [selectedZona]);
+  }, [selectedZona?.id]);
 
   // Main Steps: 1 = Encontrar, 2 = Información, 3 = Adicional, 4 = Confirmación
   const [mainStep, setMainStep] = useState(1);
@@ -218,7 +220,7 @@ function ReservasPage() {
 
   const [form, setForm] = useState({
     zona: ZONAS[0],
-    guests: "2",
+    guests: "",
     date: "",
     time: "",
     serviceType: "almuerzo",
@@ -331,12 +333,7 @@ function ReservasPage() {
     return list;
   }, []);
 
-  // Set initial default date
-  useEffect(() => {
-    if (!form.date && DAYS_CAROUSEL.length > 0) {
-      setForm((f) => ({ ...f, date: DAYS_CAROUSEL[0].iso }));
-    }
-  }, [DAYS_CAROUSEL, form.date]);
+  // Note: date is not pre-selected; user must pick a date
 
   // Sync Supabase Session
   useEffect(() => {
@@ -943,25 +940,10 @@ function ReservasPage() {
 
             {/* 3. Selector Horizontal de Días & Leyenda de Estados con Branding */}
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+              <div className="mb-3">
                 <span className="text-xs uppercase tracking-wider font-bold text-[#2e5339]">
                   Selecciona una fecha
                 </span>
-                {/* Leyenda con Branding Las Flores */}
-                <div className="flex items-center gap-3 text-[10px] text-gray-600 flex-wrap">
-                  <span className="flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#2e5339]" /> Disponible
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-[#3b1f10]" /> Día seleccionado
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 rounded-full bg-gray-300" /> Cerrado
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 rounded-full border border-red-500 bg-white" /> Completo
-                  </span>
-                </div>
               </div>
 
               {/* Carousel horizontal de fechas */}
@@ -975,7 +957,7 @@ function ReservasPage() {
                       onClick={() => setForm((f) => ({ ...f, date: item.iso }))}
                       className={`flex flex-col items-center justify-center min-w-[54px] py-2.5 rounded-xl border transition-all text-center ${
                         isSelected
-                          ? "bg-[#3b1f10] text-white border-[#3b1f10] shadow-md scale-105"
+                          ? "bg-[#2e5339] text-white border-[#2e5339] shadow-md scale-105"
                           : "bg-[#2e5339]/10 text-[#2e5339] border-[#2e5339]/30 hover:bg-[#2e5339]/20"
                       }`}
                     >
@@ -992,7 +974,7 @@ function ReservasPage() {
               {/* Bloque Desayuno (9:00 am - 11:00 am) */}
               <div>
                 <h4 className="text-xs uppercase tracking-[0.2em] font-extrabold text-[#2e5339] mb-3 text-center border-b border-gray-200 pb-1 flex items-center justify-center gap-2">
-                  <span>☕ Desayuno (9:00 am - 11:00 am)</span>
+                  <span>Desayuno (9:00 am - 11:00 am)</span>
                 </h4>
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5">
                   {DESAYUNO_HOURS.map((h) => {
@@ -1023,7 +1005,7 @@ function ReservasPage() {
               {/* Bloque Almuerzo (11:30 am - 5:00 pm) */}
               <div>
                 <h4 className="text-xs uppercase tracking-[0.2em] font-extrabold text-[#2e5339] mb-3 text-center border-b border-gray-200 pb-1 flex items-center justify-center gap-2">
-                  <span>🍲 Almuerzo (11:30 am - 5:00 pm)</span>
+                  <span>Almuerzo (11:30 am - 5:00 pm)</span>
                 </h4>
                 <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5">
                   {ALMUERZO_HOURS.map((h) => {
