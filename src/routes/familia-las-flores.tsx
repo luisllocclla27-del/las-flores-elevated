@@ -40,8 +40,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "5 años en Las Flores",
     photo: "/familia/Ritney.webp",
-    quote:
-      "Liderar el área administrativa de Las Flores durante estos 5 años ha sido un honor. Mi enfoque principal es optimizar nuestros procesos para que cada área brinde lo mejor y sigamos creciendo como una gran familia.",
+    quote: "Liderar la administración ha sido un honor. Mi enfoque es optimizar procesos para seguir creciendo juntos.",
     recommendedDish: "Pachamanca",
     dishPrice: "S/ 55.00",
     badge: "Líder Estratégico",
@@ -53,8 +52,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "3 años en Las Flores",
     photo: "/familia/Mayte.webp",
-    quote:
-      "Como Jefa de Azafatas, mi misión es asegurar que cada detalle en el salón sea perfecto. Liderar este equipo me llena de orgullo, y ver a nuestros clientes regresar felices es la mayor recompensa.",
+    quote: "Mi misión es la perfección en el salón. Ver a los clientes regresar felices es mi mayor recompensa.",
     recommendedDish: "Puca Picante Especial",
     dishPrice: "S/ 42.00",
     badge: "Líder de Servicio",
@@ -66,8 +64,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "reposteria",
     years: "1 año en Las Flores",
     photo: "/familia/Paola.webp",
-    quote:
-      "Durante mi primer año trabajando como repostera en el restaurante Las Flores, tuve la oportunidad de desarrollar y perfeccionar mis habilidades en la elaboración de postres, Pan elavorado conmasa madre y diferentes productos de repostería.",
+    quote: "Este año me permitió perfeccionar mi técnica en panes de masa madre y postres tradicionales de la casa.",
     recommendedDish: "Mazamorra de Calabaza y Chapla Tradicional",
     dishPrice: "S/ 18.00",
     badge: "Maestra Dulcera",
@@ -79,10 +76,9 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "3 años en Las Flores",
     photo: "/familia/Fernanda.webp",
-    quote:
-      "Durante mis tres años trabajando en el área de administración del restaurante Las Flores, tuve la oportunidad de conocer de cerca el funcionamiento y la organización de un negocio gastronómico.",
-      recommendedDish: "Chancho Azado",
-      dishPrice: "S/ 16.00",
+    quote: "Estos tres años me enseñaron la verdadera organización detrás del éxito gastronómico.",
+    recommendedDish: "Chancho Azado",
+    dishPrice: "S/ 16.00",
     badge: "Anfitrión Estrella",
   },
   {
@@ -92,8 +88,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "1 años en Las Flores",
     photo: "/familia/Carlos.webp",
-    quote:
-      "Durante mi primer año trabajando en el área de inocuidad del restaurante Las Flores, mi principal función fue velar por que los alimentos fueran manipulados, almacenados y preparados de manera segura, cumpliendo con las normas y buenas prácticas de higiene.",
+    quote: "Velar por la higiene y la inocuidad garantiza que cada plato llegue seguro a nuestra mesa.",
     recommendedDish: "Cuy Chactado Crujiente Tradicional",
     dishPrice: "S/ 68.00",
     badge: "Maestro Parrillero",
@@ -105,8 +100,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "cocina",
     years: "1 año en Las Flores",
     photo: "/familia/chef.webp",
-    quote:
-      "Durante mis dos años como chef en el restaurante Las Flores, adquirí experiencia en la preparación, presentación y control de calidad de los alimentos. Desarrollé habilidades de liderazgo, organización y trabajo en equipo, manteniendo siempre altos estándares de higiene e inocuidad. Fue una experiencia muy enriquecedora que me permitió crecer profesionalmente y aportar a la satisfacción de nuestros clientes.",
+    quote: "Mi secreto es el respeto por los insumos locales, el liderazgo y el control estricto de calidad.",
     recommendedDish: "Puca Picante con Chicharrón",
     dishPrice: "S/ 38.00",
     badge: "Líder de Cocina",
@@ -118,8 +112,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "cocina",
     years: "1 años en Las Flores",
     photo: "/familia/Cocina.webp",
-    quote:
-      "Mi experiencia en el área de cocina del restaurante Las Flores durante el año me permitió fortalecer mis conocimientos en la preparación y elaboración de alimentos. A lo largo de este tiempo, desarrollé habilidades de organización, trabajo en equipo y cumplimiento de las normas de higiene e inocuidad. Esta etapa laboral fue muy importante para mi crecimiento profesional y me permitió contribuir al buen funcionamiento y servicio del restaurante.",
+    quote: "Desarrollé habilidades de organización y trabajo en equipo, fundamentales para nuestro servicio.",
     recommendedDish: "Ceviche de Trucha",
     dishPrice: "S/ 28.00",
     badge: "Mixólogo Andino",
@@ -131,8 +124,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "1 año en Las Flores",
     photo: "/familia/Melisa.webp",
-    quote:
-      "Mi experiencia durante el año en el área de ventas del restaurante Las Flores me permitió desarrollar habilidades de atención y servicio al cliente. Durante este tiempo aprendí a comunicarme de manera efectiva, conocer las necesidades de los clientes y brindar una atención amable y eficiente. Fue una etapa muy enriquecedora que contribuyó a mi crecimiento profesional y me enseñó la importancia de ofrecer siempre un buen servicio. ",
+    quote: "Aprender a escuchar a nuestros clientes me enseñó que la clave es una atención amable y eficiente.",
     recommendedDish: "Chorizo Ayacuchano",
     dishPrice: "S/ 34.00",
     badge: "Garantía de Servicio",
@@ -144,8 +136,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "1 año en Las Flores",
     photo: "/familia/Jhon.webp",
-    quote:
-      "Me enorgullece recibir a cada familia que nos visita y asegurar que se lleven una experiencia inolvidable. El ambiente cálido de Las Flores es contagioso y me encanta ser parte de ello.",
+    quote: "Me enorgullece recibir a cada familia. El ambiente cálido de Las Flores es contagioso.",
     recommendedDish: "Puca Picante con Chicharrón",
     dishPrice: "S/ 38.00",
     badge: "Atención Especial",
@@ -157,8 +148,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "8 meses en Las Flores",
     photo: "/familia/Heidi.webp",
-    quote:
-      "Desde mi primer día me sentí acogida. Recibir a los clientes con una sonrisa y guiarlos a su mesa es el primer paso para una gran comida ayacuchana.",
+    quote: "Recibirlos con una sonrisa y guiarlos a su mesa es el primer paso de una gran experiencia.",
     recommendedDish: "Chicharrón de Cerdo",
     dishPrice: "S/ 42.00",
     badge: "Sonrisa Acogedora",
@@ -170,8 +160,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "2 años en Las Flores",
     photo: "/familia/Dina.webp",
-    quote:
-      "Atender a nuestros comensales es un arte que cultivo cada día. Conozco nuestros platos a la perfección y siempre recomiendo lo mejor según los gustos de cada cliente.",
+    quote: "Atender es un arte. Conozco nuestra carta a la perfección para recomendar lo mejor.",
     recommendedDish: "Cuy Chactado",
     dishPrice: "S/ 68.00",
     badge: "Servicio Impecable",
@@ -183,8 +172,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "3 años en Las Flores",
     photo: "/familia/Aurelio.webp",
-    quote:
-      "Organizar el salón y garantizar que cada mesa reciba un trato excepcional es mi pasión. Estos años en Las Flores me han enseñado el verdadero significado de la hospitalidad andina.",
+    quote: "Garantizar un trato excepcional es mi pasión y el verdadero significado de la hospitalidad andina.",
     recommendedDish: "Trucha Frita",
     dishPrice: "S/ 35.00",
     badge: "Líder de Salón",
@@ -196,8 +184,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "salon",
     years: "2 años en Las Flores",
     photo: "/familia/Percy.webp",
-    quote:
-      "Me dedico a brindar la mejor atención, asegurando que cada comensal tenga todo lo que necesita en su mesa. Formar parte de Las Flores por estos dos años me ha llenado de hermosas experiencias.",
+    quote: "Me dedico a que cada comensal tenga todo lo que necesita. Han sido dos años de hermosas experiencias.",
     recommendedDish: "Mondongo Ayacuchano",
     dishPrice: "S/ 25.00",
     badge: "Atención Dedicada",
@@ -209,8 +196,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "2 años en Las Flores",
     photo: "/familia/Sofia.webp",
-    quote:
-      "Atender a nuestros clientes al finalizar su comida con rapidez, exactitud y amabilidad es mi objetivo. Garantizo que su experiencia termine tan bien como empezó.",
+    quote: "Atiendo con rapidez y amabilidad para que su experiencia termine tan bien como empezó.",
     recommendedDish: "Choclo con Queso",
     dishPrice: "S/ 15.00",
     badge: "Atención Eficiente",
@@ -222,8 +208,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "administracion",
     years: "1 año en Las Flores",
     photo: "/familia/Jose.webp",
-    quote:
-      "Mi trabajo es mostrar al mundo la belleza, sabor y tradición de Las Flores. Cada foto y cada publicación busca transmitir el cariño con el que preparamos nuestros platos.",
+    quote: "Muestro al mundo nuestra belleza y sabor, transmitiendo el cariño de nuestros platos.",
     recommendedDish: "Helado de Lúcuma",
     dishPrice: "S/ 12.00",
     badge: "Creatividad Visual",
@@ -235,8 +220,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "cocina",
     years: "3 años en Las Flores",
     photo: "/familia/Ronaldinho.webp",
-    quote:
-      "Cocinar es mi verdadera pasión. Estos 3 años me han enseñado que el secreto de un buen plato está en el respeto por nuestros insumos locales y el amor que le ponemos a cada preparación.",
+    quote: "El secreto está en el respeto a los ingredientes y el amor profundo por cada preparación.",
     recommendedDish: "Mondongo Ayacuchano",
     dishPrice: "S/ 25.00",
     badge: "Sazón Tradicional",
@@ -248,8 +232,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "cocina",
     years: "5 años en Las Flores",
     photo: "/familia/Marina.webp",
-    quote:
-      "Tengo el orgullo de decir que llevo 5 años cuidando las recetas de la casa. Mi mayor alegría es saber que cada persona que prueba mi sazón se lleva un pedacito de nuestra tradición.",
+    quote: "Cuido las recetas de la casa. Mi alegría es que cada bocado sea un pedacito de nuestra tradición.",
     recommendedDish: "Puca Picante con Chicharrón",
     dishPrice: "S/ 38.00",
     badge: "Manos de Oro",
@@ -261,8 +244,7 @@ const COLLABORATORS: Collaborator[] = [
     category: "reposteria",
     years: "2 años en Las Flores",
     photo: "/familia/Nancy.webp",
-    quote:
-      "Acompañar nuestras comidas con el dulce perfecto es mi especialidad. Durante estos 2 años he aprendido a mezclar las técnicas tradicionales con el cariño que nos caracteriza.",
+    quote: "Acompañar nuestras comidas con el dulce perfecto combinando técnica y cariño es mi especialidad.",
     recommendedDish: "Helado de Lúcuma",
     dishPrice: "S/ 12.00",
     badge: "Toque Dulce",
@@ -290,17 +272,16 @@ function FamiliaLasFloresPage() {
     <div className="min-h-screen bg-piedra flex flex-col font-sans text-nogal selection:bg-chilca/20">
       {/* ── HEADER FIJO ── */}
       <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${
-          isScrolled ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3" : "bg-transparent border-transparent py-5"
-        }`}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${isScrolled ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3" : "bg-transparent border-transparent py-5"
+          }`}
       >
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center relative">
           <SiteNavigationMenu isScrolled={isScrolled} />
-          
+
           <a href="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center group">
-            <img 
-              src="/images.png" 
-              alt="Las Flores" 
+            <img
+              src="/images.png"
+              alt="Las Flores"
               className={`transition-all duration-300 origin-center ${isScrolled ? "h-8 opacity-100" : "h-10 md:h-12 opacity-100 invert brightness-0"}`}
               style={isScrolled ? { filter: "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)" } : {}}
             />
@@ -309,11 +290,10 @@ function FamiliaLasFloresPage() {
           <div className="flex items-center gap-4">
             <Link
               to="/reservas"
-              className={`hidden sm:inline-flex px-5 py-2 text-xs font-serif uppercase tracking-widest border transition-all rounded-sm ${
-                isScrolled
+              className={`hidden sm:inline-flex px-5 py-2 text-xs font-serif uppercase tracking-widest border transition-all rounded-sm ${isScrolled
                   ? "border-nogal/30 text-nogal hover:bg-nogal hover:text-piedra"
                   : "border-piedra/40 text-piedra hover:bg-piedra hover:text-nogal"
-              }`}
+                }`}
             >
               Reservar
             </Link>
@@ -353,66 +333,60 @@ function FamiliaLasFloresPage() {
 
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
-        
+
         {/* Category Filters */}
         <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => setActiveCategory("all")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "all"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "all"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Todos ({COLLABORATORS.length})
           </button>
           <button
             onClick={() => setActiveCategory("administracion")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "administracion"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "administracion"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Administración
           </button>
           <button
             onClick={() => setActiveCategory("cocina")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "cocina"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "cocina"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Cocina
           </button>
           <button
             onClick={() => setActiveCategory("salon")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "salon"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "salon"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Salón
           </button>
           <button
             onClick={() => setActiveCategory("barra")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "barra"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "barra"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Barra
           </button>
           <button
             onClick={() => setActiveCategory("reposteria")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
-              activeCategory === "reposteria"
+            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "reposteria"
                 ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-            }`}
+              }`}
           >
             Repostería
           </button>
@@ -431,52 +405,56 @@ function FamiliaLasFloresPage() {
                   src={c.photo}
                   alt={c.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  style={{ objectPosition: "center 18%" }}
+                  style={{
+                    objectPosition:
+                      c.id === "4" ? "center 5%"
+                      : c.id === "3" ? "center 8%"
+                      : c.id === "cocina-2" ? "center 10%"
+                      : c.id === "10" ? "center 12%"
+                      : "center 15%",
+                  }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                
+                <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+
                 <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#D4AF37] text-[#2D473C] text-[10px] font-black uppercase tracking-wider shadow-md">
-                  {c.badge}
+                  {c.role}
                 </span>
 
                 <div className="absolute bottom-4 left-4 right-4 text-white">
                   <h3 className="font-serif text-3xl leading-tight">
                     {c.name}
                   </h3>
-                  <p className="text-sm text-emerald-200">
-                    {c.role}
-                  </p>
-                  <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block mt-0.5">
+                  <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block mt-1">
                     {c.years}
                   </span>
                 </div>
               </div>
 
               {/* Quote Body */}
-              <div className="p-6 space-y-4 flex-1">
-                <Quote size={24} className="text-[#D4AF37]" />
-                <p className="text-base italic leading-relaxed text-gray-700">
-                  "{c.quote}"
+              <div className="px-7 pt-7 pb-6 space-y-4 flex-1">
+                <Quote size={22} className="text-[#D4AF37]" />
+                <p className="text-[14px] italic leading-[1.75] text-gray-600 pr-1">
+                  &ldquo;{c.quote}&rdquo;
                 </p>
               </div>
 
               {/* Dish Recommendation Footer */}
-              <div className="p-4 bg-[#F9F8F3] border-t border-gray-100 flex items-center justify-between gap-3">
-                <div className="min-w-0">
-                  <span className="text-[10px] uppercase font-black tracking-wider text-gray-400 block">
-                    Recomendación de {c.name.split(" ")[0]}
-                  </span>
-                  <p className="font-serif text-sm text-[#2D473C] truncate">
+              <div className="px-5 py-3.5 bg-[#F9F8F3] border-t border-gray-100 flex items-center gap-3">
+                {/* Plato: ocupa el espacio disponible, trunca si es largo */}
+                <div className="flex-1 min-w-0">
+                  <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-400 font-semibold mb-0.5">Su plato recomendado</span>
+                  <p className="font-serif text-sm text-[#2D473C] leading-snug line-clamp-2">
                     {c.recommendedDish}
                   </p>
                 </div>
 
+                {/* Botón de ancho fijo para que no se deforme */}
                 <button
                   onClick={() => setIsMenuOpen(true)}
-                  className="px-3.5 py-2 rounded-xl bg-[#2D473C] hover:bg-[#243B31] text-white text-[11px] font-black flex items-center gap-1.5 shadow-2xs shrink-0 active:scale-95 transition-all"
+                  className="w-[72px] shrink-0 flex flex-col items-center justify-center gap-0.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-[#D4AF37]/8 hover:bg-[#D4AF37]/20 text-[#2D473C] transition-all active:scale-95"
                 >
-                  <Utensils size={12} className="text-[#D4AF37]" />
-                  <span>Pedir Plato</span>
+                  <Utensils size={13} className="text-[#D4AF37]" />
+                  <span className="text-[9px] font-bold uppercase tracking-wider">Pedir</span>
                 </button>
               </div>
             </div>
