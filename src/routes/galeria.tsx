@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
@@ -174,7 +174,17 @@ function GaleriaPage() {
             }
           />
         </div>
-        <div className="flex-1 flex justify-end items-center">
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 pointer-events-auto">
+          <Link
+            to="/reservas"
+            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
+              isScrolled
+                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
+            }`}
+          >
+            Reservar
+          </Link>
         </div>
       </nav>
 
@@ -205,23 +215,47 @@ function GaleriaPage() {
         </div>
       </section>
 
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
-        {/* Category Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
+      {/* ── FILTROS MÓVIL: sticky pegado al header (solo < lg) ── */}
+      <div className="block lg:hidden sticky top-[56px] z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            className="flex items-center gap-2.5 overflow-x-auto py-3 scrollbar-none"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             {GALLERY_CATEGORIES.map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
+                className={`flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all ${
                   activeCategory === cat.id
-                    ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
+                    ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
                     : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {cat.label}
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* ── FILTROS DESKTOP: centrados dentro del contenido (solo lg+) ── */}
+        <div className="hidden lg:flex justify-center gap-3 mb-12">
+          {GALLERY_CATEGORIES.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                activeCategory === cat.id
+                  ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
+                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
         </div>
 
         {/* Gallery Grid */}

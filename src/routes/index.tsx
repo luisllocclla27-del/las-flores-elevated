@@ -389,6 +389,58 @@ function Modal({
   );
 }
 
+// ─── PLATOS TÍPICOS — Tap-to-reveal en móvil ─────────────────────────────────
+
+function PlatosTipicosGrid({ platos }: { platos: { img: string; nombre: string; desc: string }[] }) {
+  const [activeNombre, setActiveNombre] = useState<string | null>(null);
+
+  const handleCardClick = (nombre: string) => {
+    setActiveNombre((prev) => (prev === nombre ? null : nombre));
+  };
+
+  return (
+    <div
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+      onTouchStart={(e) => {
+        // Si el toque fue fuera de un card, cierra el activo
+        if (!(e.target as Element).closest(".dish-card-hover")) {
+          setActiveNombre(null);
+        }
+      }}
+    >
+      {platos.map((p) => {
+        const isActive = activeNombre === p.nombre;
+        return (
+          <article key={p.nombre} className="flex flex-col group">
+            <div
+              className={`dish-card-hover aspect-[5/4] bg-cafe/40 rounded-lg${isActive ? " dish-card-active" : ""}`}
+              onClick={() => handleCardClick(p.nombre)}
+            >
+              <img
+                src={p.img}
+                alt={p.nombre}
+                width={1000}
+                height={800}
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
+                className="w-full h-full object-cover"
+              />
+              <div className="dish-card-overlay">
+                <span className="text-chilca font-bold text-[10px] uppercase tracking-[0.25em] mb-1">
+                  Plato Tradicional
+                </span>
+                <h4 className="font-serif text-lg font-bold text-piedra mb-1">{p.nombre}</h4>
+                <p className="text-xs text-piedra/80 leading-relaxed">{p.desc}</p>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+}
+
 // ─── SECCIÓN FESTIVIDADES — Carrusel / Slider ───────────────────────────────────
 
 function FestividadesSlider({ onSelect }: { onSelect: (f: Festividad) => void }) {
@@ -1000,8 +1052,8 @@ function Index() {
               atraviesan generaciones.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
+          {(() => {
+            const PLATOS = [
               {
                 img: "/imagenes-reales/seccion-gastronomia/puca-picante.webp",
                 nombre: "Puca Picante",
@@ -1022,30 +1074,9 @@ function Index() {
                 nombre: "Chorizo Ayacuchano",
                 desc: "Carne de cerdo finamente picada y macerada en ají panca, servida sin embutir. Un manjar tradicional especialmente popular en Semana Santa.",
               },
-            ].map((p) => (
-              <article key={p.nombre} className="flex flex-col group">
-                <div className="dish-card-hover aspect-[5/4] bg-cafe/40 rounded-lg">
-                  <img
-                    src={p.img}
-                    alt={p.nombre}
-                    width={1000}
-                    height={800}
-                    loading="eager"
-                    decoding="async"
-                    fetchPriority="high"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="dish-card-overlay">
-                    <span className="text-chilca font-bold text-[10px] uppercase tracking-[0.25em] mb-1">
-                      Plato Tradicional
-                    </span>
-                    <h4 className="font-serif text-lg font-bold text-piedra mb-1">{p.nombre}</h4>
-                    <p className="text-xs text-piedra/80 leading-relaxed">{p.desc}</p>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+            ];
+            return <PlatosTipicosGrid platos={PLATOS} />;
+          })()}
         </div>
       </section>
 

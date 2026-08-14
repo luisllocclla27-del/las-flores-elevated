@@ -187,7 +187,7 @@ function GenerationFlipCard({
 }
 
 function GenerationsSection() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   return (
     <section id="historia" className="bg-piedra py-16 md:py-20 px-6">

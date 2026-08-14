@@ -344,24 +344,47 @@ function TesorosAyacuchoPage() {
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
-        
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
+      {/* ── FILTROS MÓVIL: sticky pegado al header (solo < lg) ── */}
+      <div className="block lg:hidden sticky top-12 z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            className="flex items-center gap-2.5 overflow-x-auto py-3 scrollbar-none"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
             {Object.keys(productosPorTemporada).map((temporada) => (
               <button
                 key={temporada}
                 onClick={() => setActiveTemporada(temporada)}
-                className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${
+                className={`flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all ${
                   activeTemporada === temporada
-                    ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
+                    ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
                     : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
                 }`}
               >
                 {temporada}
               </button>
             ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* ── FILTROS DESKTOP: centrados dentro del contenido (solo lg+) ── */}
+        <div className="hidden lg:flex justify-center gap-3 mb-12">
+          {Object.keys(productosPorTemporada).map((temporada) => (
+            <button
+              key={temporada}
+              onClick={() => setActiveTemporada(temporada)}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                activeTemporada === temporada
+                  ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
+                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {temporada}
+            </button>
+          ))}
         </div>
 
         {/* Grid de Productos */}
@@ -378,14 +401,14 @@ function TesorosAyacuchoPage() {
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 ease-out group-hover:scale-110"
                 />
                 
-                {/* Gradiente base (siempre visible para legibilidad) y gradiente hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90" />
+                {/* Gradiente base (más oscuro en móvil porque el texto siempre está visible, en PC se oscurece al hacer hover) */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-90 md:opacity-70 transition-opacity duration-500 md:group-hover:opacity-90" />
                 
                 {/* Contenido (Textos superpuestos) */}
                 <div className="absolute inset-0 p-6 md:p-8 flex flex-col justify-end">
                   
-                  {/* Título y nombre científico (Aparece con leve movimiento arriba) */}
-                  <div className="transform translate-y-4 group-hover:-translate-y-2 transition-all duration-500 ease-out">
+                  {/* Título y nombre científico (Aparece con leve movimiento arriba en desktop) */}
+                  <div className="transform md:translate-y-4 group-hover:!translate-y-0 md:group-hover:-translate-y-2 transition-all duration-500 ease-out">
                     <h3 className="font-serif text-3xl text-white font-bold mb-1 drop-shadow-md">
                       {producto.nombre}
                     </h3>
@@ -394,15 +417,15 @@ function TesorosAyacuchoPage() {
                     )}
                   </div>
                   
-                  {/* Temporada (Delay 1) */}
-                  <div className="transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-100 ease-out mb-5">
+                  {/* Temporada (Visible en móvil, Delay 1 en desktop) */}
+                  <div className="transform translate-y-0 opacity-100 md:translate-y-8 md:opacity-0 group-hover:!translate-y-0 group-hover:!opacity-100 transition-all duration-500 md:delay-100 ease-out mb-5 mt-3 md:mt-0">
                     <span className="inline-block text-[11px] font-bold uppercase tracking-wider text-chilca bg-black/40 backdrop-blur-sm px-3 py-1.5 rounded-full border border-white/10">
                       Temporada: {producto.meses}
                     </span>
                   </div>
                   
-                  {/* Etiquetas de usos (Delay 2) */}
-                  <div className="transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-200 ease-out">
+                  {/* Etiquetas de usos (Visible en móvil, Delay 2 en desktop) */}
+                  <div className="transform translate-y-0 opacity-100 md:translate-y-8 md:opacity-0 group-hover:!translate-y-0 group-hover:!opacity-100 transition-all duration-500 md:delay-200 ease-out">
                     <div className="flex flex-wrap gap-2">
                       {producto.usos.map((uso, i) => (
                         <span

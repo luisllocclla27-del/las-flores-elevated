@@ -290,9 +290,9 @@ function FamiliaLasFloresPage() {
           <div className="flex items-center gap-4">
             <Link
               to="/reservas"
-              className={`hidden sm:inline-flex px-5 py-2 text-xs font-serif uppercase tracking-widest border transition-all rounded-sm ${isScrolled
-                  ? "border-nogal/30 text-nogal hover:bg-nogal hover:text-piedra"
-                  : "border-piedra/40 text-piedra hover:bg-piedra hover:text-nogal"
+              className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
+                  ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                  : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
                 }`}
             >
               Reservar
@@ -331,66 +331,64 @@ function FamiliaLasFloresPage() {
         </div>
       </section>
 
-      {/* Main Content Area */}
-      <main className="max-w-7xl mx-auto px-6 py-16 space-y-12">
-
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={() => setActiveCategory("all")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "all"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
+      {/* ── FILTROS MÓVIL: sticky pegado al header (solo < lg) ── */}
+      <div className="block lg:hidden sticky top-[56px] z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            className="flex items-center gap-2.5 overflow-x-auto py-3 scrollbar-none"
+            style={{ WebkitOverflowScrolling: "touch" }}
           >
-            Todos ({COLLABORATORS.length})
-          </button>
-          <button
-            onClick={() => setActiveCategory("administracion")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "administracion"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            Administración
-          </button>
-          <button
-            onClick={() => setActiveCategory("cocina")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "cocina"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            Cocina
-          </button>
-          <button
-            onClick={() => setActiveCategory("salon")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "salon"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            Salón
-          </button>
-          <button
-            onClick={() => setActiveCategory("barra")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "barra"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            Barra
-          </button>
-          <button
-            onClick={() => setActiveCategory("reposteria")}
-            className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === "reposteria"
-                ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
-                : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-          >
-            Repostería
-          </button>
+            {([
+              { key: "all", label: `Todos (${COLLABORATORS.length})` },
+              { key: "administracion", label: "Administración" },
+              { key: "cocina", label: "Cocina" },
+              { key: "salon", label: "Salón" },
+              { key: "barra", label: "Barra" },
+              { key: "reposteria", label: "Repostería" },
+            ] as { key: string; label: string }[]).map((cat) => (
+              <button
+                key={cat.key}
+                onClick={() => setActiveCategory(cat.key)}
+                className={`flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all ${
+                  activeCategory === cat.key
+                    ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Main Content Area */}
+      <main className="max-w-7xl mx-auto px-6 py-12">
+
+        {/* ── FILTROS DESKTOP: centrados dentro del contenido (solo lg+) ── */}
+        <div className="hidden lg:flex justify-center gap-3 mb-12">
+          {([
+            { key: "all", label: `Todos (${COLLABORATORS.length})` },
+            { key: "administracion", label: "Administración" },
+            { key: "cocina", label: "Cocina" },
+            { key: "salon", label: "Salón" },
+            { key: "barra", label: "Barra" },
+            { key: "reposteria", label: "Repostería" },
+          ] as { key: string; label: string }[]).map((cat) => (
+            <button
+              key={cat.key}
+              onClick={() => setActiveCategory(cat.key)}
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                activeCategory === cat.key
+                  ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
+                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
 
         {/* Collaborators Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -408,10 +406,10 @@ function FamiliaLasFloresPage() {
                   style={{
                     objectPosition:
                       c.id === "4" ? "center 5%"
-                      : c.id === "3" ? "center 8%"
-                      : c.id === "cocina-2" ? "center 10%"
-                      : c.id === "10" ? "center 12%"
-                      : "center 15%",
+                        : c.id === "3" ? "center 8%"
+                          : c.id === "cocina-2" ? "center 10%"
+                            : c.id === "10" ? "center 12%"
+                              : "center 15%",
                   }}
                 />
                 <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />

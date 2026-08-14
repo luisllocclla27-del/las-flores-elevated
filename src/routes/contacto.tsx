@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { supabase } from "@/lib/supabase";
 import { sendContactEmail, OFFICIAL_EMAIL } from "@/lib/emailService";
 import { SiteFooter } from "@/components/site-footer";
@@ -134,10 +134,17 @@ function ContactoPage() {
             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
         </a>
-        <div className="flex-1 flex justify-end items-center gap-6 md:gap-8 text-[11px] md:text-sm uppercase tracking-widest md:tracking-[0.15em] font-semibold pointer-events-auto">
-          <a href="/reservas" className="hover:text-chilca transition-colors hidden sm:inline-block">
-            RESERVAS
-          </a>
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 pointer-events-auto">
+          <Link
+            to="/reservas"
+            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
+              isScrolled
+                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
+            }`}
+          >
+            Reservar
+          </Link>
         </div>
       </nav>
 

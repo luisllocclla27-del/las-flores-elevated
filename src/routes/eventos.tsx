@@ -117,6 +117,26 @@ function EventosPage() {
     bodas: 0,
   });
 
+  // Estado para el carrusel móvil (imagen individual por tab)
+  const [mobileImageIndices, setMobileImageIndices] = useState<Record<EventTabId, number>>({
+    familiares: 0,
+    corporativas: 0,
+    bodas: 0,
+  });
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleMobileSwipe = (direction: 'next' | 'prev') => {
+    setMobileImageIndices(prev => {
+      const images = EVENT_TABS.find(t => t.id === activeTab)?.images || [];
+      const total = images.length;
+      const current = prev[activeTab];
+      const next = direction === 'next'
+        ? (current + 1) % total
+        : (current - 1 + total) % total;
+      return { ...prev, [activeTab]: next };
+    });
+  };
+
   const handleNextSlide = () => {
     setCarouselIndices((prev) => {
       const currentImages = EVENT_TABS.find((t) => t.id === activeTab)?.images || [];
@@ -195,19 +215,22 @@ function EventosPage() {
             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
         </Link>
-        <div className="flex-1 flex justify-end items-center gap-6 md:gap-8 text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
-          <Link
-            to="/reservas"
-            className="hover:text-chilca transition-colors"
-          >
-            RESERVAS
-          </Link>
+        <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
           <button
             onClick={() => startTransition(() => setIsMenuOpen(true))}
-            className="hover:text-chilca transition-colors"
+            className="hidden sm:inline-block hover:text-chilca transition-colors"
           >
             DELIVERY
           </button>
+          <Link
+            to="/reservas"
+            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
+                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
+              }`}
+          >
+            Reservar
+          </Link>
           {totalItems > 0 && (
             <button
               onClick={() => setCartOpen(true)}
@@ -255,16 +278,39 @@ function EventosPage() {
 
       </section>
 
+      {/* ── TABS MÓVIL: sticky pegado al header (solo < lg) ── */}
+      <div className="block lg:hidden sticky top-12 z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <div
+            className="flex items-center gap-2.5 overflow-x-auto py-3 scrollbar-none"
+            style={{ WebkitOverflowScrolling: "touch" }}
+          >
+            {EVENT_TABS.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all ${activeTab === tab.id
+                    ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
+                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
+                  }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Servicios de Eventos - 3 Column Layout */}
       <section className="bg-piedra w-full overflow-hidden">
-        {/* Tabs Navigation */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-16 pb-0 w-full max-w-7xl mx-auto px-6">
+        {/* ── TABS DESKTOP: dentro del contenido, centrados (solo lg+) ── */}
+        <div className="hidden lg:flex justify-center gap-3 pt-16 pb-0">
           {EVENT_TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeTab === tab.id
-                  ? "bg-[#2D473C] text-[#D4AF37] font-black shadow-md scale-105"
+              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all ${activeTab === tab.id
+                  ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
                   : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
                 }`}
             >
@@ -283,19 +329,19 @@ function EventosPage() {
               <div
                 key={tab.id}
                 className={`transition-opacity duration-500 ease-in-out w-full flex flex-col lg:flex-row items-stretch ${activeTab === tab.id
-                    ? "opacity-100 relative z-10"
-                    : "opacity-0 absolute inset-0 z-0 pointer-events-none hidden"
+                  ? "opacity-100 relative z-10"
+                  : "opacity-0 absolute inset-0 z-0 pointer-events-none hidden"
                   }`}
               >
                 {/* Columna 1 (Izquierda - 40%) */}
-                <div className="w-full lg:w-[40%] flex flex-col justify-center px-8 lg:px-16 pt-12 pb-16">
+                <div className="w-full lg:w-[40%] flex flex-col justify-center px-8 lg:px-16 pt-6 pb-6 lg:pt-12 lg:pb-16">
                   <h2 className="font-serif text-4xl md:text-5xl leading-[1.1] text-balance mb-6 text-nogal">
                     {tab.title}
                   </h2>
                   <p className="text-lg text-nogal/70 leading-[1.7] mb-8">
                     {tab.description}
                   </p>
-                  <ul className="space-y-4 text-nogal/80 font-medium mb-12">
+                  <ul className="space-y-2 lg:space-y-4 text-nogal/80 font-medium mb-6 lg:mb-12">
                     {tab.bullets.map((bullet, idx) => (
                       <li key={idx} className="flex items-center gap-3">
                         <span className="w-1.5 h-1.5 bg-[#2D473C] rounded-full flex-shrink-0"></span>
@@ -329,15 +375,54 @@ function EventosPage() {
                   </button>
                 </div>
 
-                {/* Columna 3 (Derecha - 52% Galería Carrusel) */}
-                <div className="w-full lg:w-[52%] pt-8 lg:pt-12 pb-8 lg:pb-16 pr-2 lg:pr-4 relative self-stretch">
-                  {/* Clip wrapper — mueve páginas completas de 2 imágenes */}
+                {/* ─── COLUMNA 3 MÓVIL: una imagen a la vez con swipe táctil ─── */}
+                <div
+                  className="block lg:hidden w-full h-[300px] mb-8 relative overflow-hidden"
+                  onTouchStart={(e) => setTouchStartX(e.touches[0].clientX)}
+                  onTouchEnd={(e) => {
+                    if (touchStartX === null) return;
+                    const dx = e.changedTouches[0].clientX - touchStartX;
+                    if (Math.abs(dx) > 40) handleMobileSwipe(dx < 0 ? 'next' : 'prev');
+                    setTouchStartX(null);
+                  }}
+                >
+                  {/* Carril de imágenes individuales */}
+                  <div
+                    className="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                    style={{ transform: `translateX(-${mobileImageIndices[tab.id] * 100}%)` }}
+                  >
+                    {currentImages.map((img, imgIdx) => (
+                      <div key={imgIdx} className="w-full h-full flex-shrink-0 relative">
+                        <img
+                          src={img}
+                          alt={`${tab.title} ${imgIdx + 1}`}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-2 border border-white/40 pointer-events-none" />
+                      </div>
+                    ))}
+                  </div>
+                  {/* Dots de navegación */}
+                  <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-2">
+                    {currentImages.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setMobileImageIndices(prev => ({ ...prev, [tab.id]: i }))}
+                        className={`w-2 h-2 rounded-full transition-all ${mobileImageIndices[tab.id] === i ? 'bg-white scale-125' : 'bg-white/50'
+                          }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                {/* ─── COLUMNA 3 DESKTOP: Galería Carrusel de pares ─── */}
+                <div className="hidden lg:block lg:w-[52%] pt-12 pb-16 pr-4 relative self-stretch">
                   <div className="overflow-hidden h-full">
                     <div
                       className="flex h-full transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
                       style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                     >
-                      {/* Agrupar imágenes en pares (páginas de 2) */}
                       {Array.from({ length: Math.ceil(currentImages.length / 2) }, (_, pairIdx) => (
                         <div
                           key={pairIdx}
@@ -351,29 +436,12 @@ function EventosPage() {
                                 className="absolute inset-0 w-full h-full object-cover"
                                 loading="lazy"
                               />
-                              {/* Borde interior blanco fino */}
-                              <div className="absolute inset-2 md:inset-4 border border-white/40 pointer-events-none" />
+                              <div className="absolute inset-4 border border-white/40 pointer-events-none" />
                             </div>
                           ))}
                         </div>
                       ))}
                     </div>
-                  </div>
-
-                  {/* Controles Móviles (Ocultos en desktop) */}
-                  <div className="flex lg:hidden justify-center gap-4 mt-6 absolute bottom-12 left-0 right-0">
-                    <button
-                      onClick={handlePrevSlide}
-                      className="w-12 h-12 bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
-                    >
-                      <ChevronUp size={20} strokeWidth={1} className="-rotate-90" />
-                    </button>
-                    <button
-                      onClick={handleNextSlide}
-                      className="w-12 h-12 bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center text-white"
-                    >
-                      <ChevronDown size={20} strokeWidth={1} className="-rotate-90" />
-                    </button>
                   </div>
                 </div>
               </div>

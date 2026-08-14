@@ -272,9 +272,9 @@
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
   padding: 1.5rem;
   z-index: 10;
   will-change: opacity, transform;
@@ -283,6 +283,23 @@
 .dish-card-hover:hover .dish-card-overlay {
   opacity: 1;
   transform: scale(1);
+}
+
+/* Tap-to-reveal en móvil: clase activa agregada vía JS al tocar */
+.dish-card-active .dish-card-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dish-card-active img {
+  transform: scale(1.08);
+}
+
+@media (hover: none) {
+  .dish-card-hover:active {
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 /* Scrollbars estilizadas sin tracks o flechas toscas */

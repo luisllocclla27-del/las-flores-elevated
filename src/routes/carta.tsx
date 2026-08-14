@@ -116,15 +116,24 @@ function CartaPage() {
               </span>
             </button>
           )}
+          {/* Delivery: Estilo pill en móvil, texto simple en desktop */}
+          <button
+            onClick={() => setIsMenuOpen(true)}
+            className="pointer-events-auto sm:hidden px-4.5 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+          >
+            Delivery
+          </button>
           <button
             onClick={() => setIsMenuOpen(true)}
             className="hidden sm:inline-block hover:text-chilca transition-colors text-nogal leading-none"
           >
             DELIVERY
           </button>
+
+          {/* Reservar: Oculto en móvil, estilo pill en desktop */}
           <Link
             to="/reservas"
-            className="pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+            className="hidden sm:inline-flex pointer-events-auto md:px-5 md:py-2 md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
           >
             Reservar
           </Link>
@@ -139,7 +148,7 @@ function CartaPage() {
       {/* Main Content with Sidebar */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto w-full flex-1">
         {/* Vertical Category Sidebar (Desktop) / Horizontal Tabs (Mobile) */}
-        <aside className="w-full md:w-72 bg-piedra border-b md:border-b-0 md:border-r border-nogal/10 flex-shrink-0 md:sticky md:top-24 md:h-[calc(100vh-100px)] overflow-x-auto md:overflow-y-auto z-20 scrollbar-none">
+        <aside className="w-full md:w-72 bg-piedra border-b md:border-b-0 md:border-r border-nogal/10 flex-shrink-0 sticky top-[56px] md:top-24 md:h-[calc(100vh-100px)] overflow-x-auto md:overflow-y-auto z-20 scrollbar-none">
           <div className="flex flex-row md:flex-col py-0 md:py-8 w-max min-w-full md:w-auto md:pr-8">
             {currentCategories.map((cat) => (
               <button

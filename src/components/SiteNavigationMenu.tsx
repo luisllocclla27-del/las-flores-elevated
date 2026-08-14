@@ -4,15 +4,15 @@ import { Link } from '@tanstack/react-router';
 import { UserAuthButton } from './UserAuthButton';
 
 const NAV_LINKS = [
-  { label: 'Cultura Ayacuchana',  to: '/',                    hash: '' },
-  { label: 'Nuestro Restaurante', to: '/restaurante',         hash: '' },
-  { label: 'Familia Las Flores',  to: '/familia-las-flores',  hash: '' },
-  { label: 'La Carta',            to: '/carta',               hash: '' },
-  { label: 'Reservas',            to: '/reservas',            hash: '' },
-  { label: 'Eventos',             to: '/eventos',             hash: '' },
-  { label: 'Tesoros de Ayacucho', to: '/tesoros-ayacucho',    hash: '' },
-  { label: 'Galería',             to: '/galeria',             hash: '' },
-  { label: 'Contacto',            to: '/contacto',            hash: '' },
+  { label: 'Cultura Ayacuchana', to: '/', hash: '' },
+  { label: 'Nuestro Restaurante', to: '/restaurante', hash: '' },
+  { label: 'Familia Las Flores', to: '/familia-las-flores', hash: '' },
+  { label: 'La Carta', to: '/carta', hash: '' },
+  { label: 'Reservas', to: '/reservas', hash: '' },
+  { label: 'Eventos', to: '/eventos', hash: '' },
+  { label: 'Tesoros de Ayacucho', to: '/tesoros-ayacucho', hash: '' },
+  { label: 'Galería', to: '/galeria', hash: '' },
+  { label: 'Contacto', to: '/contacto', hash: '' },
 ];
 
 export function SiteNavigationMenu({
@@ -32,8 +32,8 @@ export function SiteNavigationMenu({
   const textColor = isAlwaysDark
     ? 'text-nogal'
     : isScrolled
-    ? 'text-nogal'
-    : 'text-piedra';
+      ? 'text-nogal'
+      : 'text-piedra';
 
   return (
     <>
@@ -51,18 +51,16 @@ export function SiteNavigationMenu({
 
       {/* ── Backdrop ── */}
       <div
-        className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-400 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-[90] bg-black/40 backdrop-blur-sm transition-opacity duration-300 ${isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
         onClick={() => setIsOpen(false)}
         aria-hidden="true"
       />
 
       {/* ── Drawer — diseño de una sola pantalla, sin scroll del documento ── */}
       <div
-        className={`fixed inset-y-0 left-0 h-screen max-h-screen w-[min(100vw,420px)] z-[100] bg-piedra flex flex-col shadow-2xl pointer-events-auto transition-transform duration-500 ease-in-out overflow-hidden ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
+        className={`fixed inset-y-0 left-0 h-screen max-h-screen w-[min(100vw,420px)] z-[100] bg-piedra flex flex-col shadow-2xl pointer-events-auto transition-transform duration-300 ease-out overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
       >
         {/* ── Header con logo + cerrar ── */}
         <div className="flex items-center justify-between px-8 pt-6 pb-4 shrink-0">
@@ -84,16 +82,22 @@ export function SiteNavigationMenu({
         {/* ── Separador ── */}
         <div className="mx-8 border-t border-nogal/10 shrink-0" />
 
-        {/* ── Nav links — distribución proporcional justify-evenly ── */}
-        <nav className="flex flex-col justify-evenly flex-1 min-h-0 px-8 py-2 w-full overflow-hidden">
+        {/* ── Nav links — agrupados para que entren todos en móviles pequeños ── */}
+        <nav className="flex flex-col gap-2 md:gap-3 flex-1 min-h-0 px-8 py-4 w-full overflow-y-auto">
           {NAV_LINKS.map(({ label, to, hash }) => {
             return (
               <Link
                 key={label}
                 to={to}
                 hash={hash || undefined}
-                onClick={() => setIsOpen(false)}
-                className="w-full py-2.5 font-serif text-base md:text-lg tracking-[0.08em] transition-all duration-300 font-bold leading-none uppercase border-b border-nogal/10 last:border-b-0 text-nogal hover:text-pacay hover:translate-x-2"
+                onClick={() => {
+                  // Si estamos en la misma página, cerramos el menú.
+                  // Si es otra página, dejamos que cambie de frente sin animar el cierre.
+                  if (window.location.pathname === to || (window.location.pathname === '/' && to === '')) {
+                    setIsOpen(false);
+                  }
+                }}
+                className="block w-full shrink-0 py-2 md:py-2.5 font-serif text-[15px] md:text-[17px] tracking-[0.08em] transition-all duration-300 font-bold leading-none uppercase border-b border-nogal/10 last:border-b-0 text-nogal hover:text-pacay hover:translate-x-2"
               >
                 {label}
               </Link>
