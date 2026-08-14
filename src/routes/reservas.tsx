@@ -189,15 +189,20 @@ function ReservasPage() {
   useEffect(() => {
     listRestaurantZones().then((res) => {
       if (res && res.length > 0) {
-        const mapped = res.map((z) => ({
-          id: z.id,
-          slug: `reservas-${z.id}`,
-          nombre: z.name,
-          maxCap: z.max_capacity_persons,
-          descripcion: z.description,
-          imagen: z.image_url,
-          capacidad: `Mesa para ${z.max_capacity_persons} personas`,
-        }));
+        const mapped = res.map((z) => {
+          const fallback = FALLBACK_ZONES.find((f) => f.id === z.id);
+          return {
+            id: z.id,
+            slug: `reservas-${z.id}`,
+            nombre: z.name,
+            maxCap: z.max_capacity_persons,
+            category: fallback?.category || "familias",
+            descripcion: z.description || fallback?.descripcion || "",
+            imagen: z.image_url || fallback?.imagen || "",
+            capacidad: `Mesa para ${z.max_capacity_persons} personas`,
+            badge: fallback?.badge || "Zona Exclusiva",
+          };
+        });
         setFetchedZones(mapped);
       }
     });

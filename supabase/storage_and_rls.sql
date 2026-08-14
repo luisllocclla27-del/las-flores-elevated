@@ -18,14 +18,17 @@ ALTER TABLE public.order_items ENABLE ROW LEVEL SECURITY;
 -- 2. POLÍTICAS RLS PARA PROFILES
 -- --------------------------------------------------------------------
 DROP POLICY IF EXISTS "Profiles son visibles públicamente" ON public.profiles;
-CREATE POLICY "Profiles son visibles públicamente"
+CREATE POLICY "profiles_select_own_or_admin"
     ON public.profiles FOR SELECT
-    USING (true);
+    USING (auth.uid() = id OR public.is_admin());
 
 DROP POLICY IF EXISTS "Usuarios pueden actualizar su propio perfil" ON public.profiles;
-CREATE POLICY "Usuarios pueden actualizar su propio perfil"
+CREATE POLICY "perfil_propio_sin_rol"
     ON public.profiles FOR UPDATE
-    USING (auth.uid() = id);
+    USING (auth.uid() = id)
+    WITH CHECK (auth.uid() = id AND role = (SELECT role FROM public.profiles WHERE id = auth.uid()));
+
+REVOKE UPDATE (role) ON public.profiles FROM authenticated;
 
 -- --------------------------------------------------------------------
 -- 3. POLÍTICAS RLS PARA CATEGORIES & PRODUCTS (Carta Gastronómica)

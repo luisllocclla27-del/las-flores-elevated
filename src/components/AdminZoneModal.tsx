@@ -11,24 +11,26 @@ interface AdminZoneModalProps {
 }
 
 export function AdminZoneModal({ isOpen, onClose, zone, onSaved }: AdminZoneModalProps) {
-  if (!isOpen || !zone) return null;
-
-  const [name, setName] = useState(zone.name);
-  const [description, setDescription] = useState(zone.description || "");
-  const [imageUrl, setImageUrl] = useState(zone.image_url || "");
-  const [maxCapacity, setMaxCapacity] = useState(zone.max_capacity_persons || 30);
-  const [maxTables, setMaxTables] = useState(zone.max_tables_count || 6);
-  const [isActive, setIsActive] = useState(zone.is_active);
+  const [name, setName] = useState(zone?.name || "");
+  const [description, setDescription] = useState(zone?.description || "");
+  const [imageUrl, setImageUrl] = useState(zone?.image_url || "");
+  const [maxCapacity, setMaxCapacity] = useState(zone?.max_capacity_persons || 30);
+  const [maxTables, setMaxTables] = useState(zone?.max_tables_count || 6);
+  const [isActive, setIsActive] = useState(zone?.is_active ?? true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    setName(zone.name);
-    setDescription(zone.description || "");
-    setImageUrl(zone.image_url || "");
-    setMaxCapacity(zone.max_capacity_persons || 30);
-    setMaxTables(zone.max_tables_count || 6);
-    setIsActive(zone.is_active);
+    if (zone) {
+      setName(zone.name);
+      setDescription(zone.description || "");
+      setImageUrl(zone.image_url || "");
+      setMaxCapacity(zone.max_capacity_persons || 30);
+      setMaxTables(zone.max_tables_count || 6);
+      setIsActive(zone.is_active);
+    }
   }, [zone]);
+
+  if (!isOpen || !zone) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

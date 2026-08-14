@@ -373,37 +373,56 @@ export async function createReservation(payload: any) {
       return retryRes.data[0];
     }
 
-    console.warn("Retornando confirmación local de reserva resiliente.");
-    return { id: `RES-${Date.now()}`, ...payload };
+    throw new Error(error.message || retryRes.error?.message || "No se pudo guardar la reserva en el servidor.");
   }
   return data;
 }
 
 /**
- * Guardar un nuevo pedido en Supabase con sus ítems (100% resiliente a cualquier método de pago y RLS)
+ * Guardar un nuevo pedido en Supabase con sus ítems (Servidor seguro vía RPC)
  */
-export async function createOrder(payload: OrderPayload) {
+export async function createOrder(payload: OrderPayload & { discount_amount?: number; coupon_code?: string }) {
   const { items, ...orderData } = payload;
 
+  try {
+    const { data: rpcData, error: rpcError } = await supabase.rpc("create_order_secure", {
+      p_client_name: orderData.client_name,
+      p_client_email: orderData.client_email,
+      p_client_phone: orderData.client_phone,
+      p_order_type: orderData.order_type,
+      p_payment_method: orderData.payment_method,
+      p_items: items.map(item => ({ id: item.product_id, quantity: item.quantity })),
+      p_address: orderData.address || null,
+      p_reference: orderData.reference || null,
+      p_latitude: orderData.latitude || null,
+      p_longitude: orderData.longitude || null,
+      p_distance_km: orderData.distance_km || 0,
+      p_delivery_fee: orderData.delivery_fee || 0,
+      p_coupon_code: payload.coupon_code || null,
+      p_notes: orderData.notes || null
+    });
+
+    if (!rpcError && rpcData) {
+      return rpcData;
+    }
+  } catch (e) {
+    console.warn("RPC create_order_secure no disponible, ejecutando inserción directa:", e);
+  }
+
+  // Fallback de inserción directa si la RPC aún no ha sido aplicada en la BD
   try {
     const { data: authUser } = await supabase.auth.getUser();
     if (authUser?.user?.id) {
       orderData.user_id = authUser.user.id;
     }
   } catch (e) {
-    // Sin sesión activa — continuar como pedido de invitado
+    // Sin sesión activa
   }
 
   if (!orderData.status) {
-    orderData.status = "pendiente";
+    orderData.status = "received";
   }
 
-  // Generar PIN aleatorio de 4 dígitos para el motorizado si no viene especificado
-  if (!orderData.driver_pin) {
-    orderData.driver_pin = Math.floor(1000 + Math.random() * 9000).toString();
-  }
-
-  // Generar UUID con fallback para navegadores antiguos
   const orderId = (typeof crypto !== "undefined" && crypto.randomUUID)
     ? crypto.randomUUID()
     : `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
@@ -418,83 +437,29 @@ export async function createOrder(payload: OrderPayload) {
     }
   }
 
-  // Intentar inserción principal
-  let createdOrder: any = null;
-  let { data: insertedData, error: orderError } = await supabase
+  const { data: insertedData, error: orderError } = await supabase
     .from("orders")
     .insert([payloadToInsert])
-    .select();
-
-  // Si falló por columna 'driver_pin' u otra columna opcional no existente en el esquema
-  if (orderError) {
-    console.warn("Intento 1 de inserción de pedido falló:", orderError.message);
-    
-    // Si la columna driver_pin no existe en la BD, removerla y reintentar
-    if (orderError.message?.includes("driver_pin") || orderError.message?.includes("schema cache")) {
-      delete payloadToInsert.driver_pin;
-      const retryResult = await supabase
-        .from("orders")
-        .insert([payloadToInsert])
-        .select();
-      insertedData = retryResult.data;
-      orderError = retryResult.error;
-    }
-  }
+    .select()
+    .single();
 
   if (orderError) {
-    // Reintentar con payment_method alternativo si aplica
-    if (payloadToInsert.payment_method === "efectivo") {
-      payloadToInsert.payment_method = "cash";
-      delete payloadToInsert.driver_pin; // asegurar compatibilidad
-      const { data: retryData, error: retryError } = await supabase
-        .from("orders")
-        .insert([payloadToInsert])
-        .select();
-
-      if (retryError) {
-        throw new Error(`No se pudo guardar el pedido: ${retryError.message}`);
-      }
-      createdOrder = retryData?.[0] || null;
-    } else {
-      throw new Error(`No se pudo guardar el pedido: ${orderError.message}`);
-    }
-  } else if (insertedData && insertedData.length > 0) {
-    createdOrder = insertedData[0];
+    throw new Error(orderError.message || "Error al crear el pedido.");
   }
 
-  // Verificar que el pedido realmente se guardó
-  if (!createdOrder || !createdOrder.id) {
-    // Último intento: verificar si existe en la BD
-    const { data: verifyData } = await supabase
-      .from("orders")
-      .select("id")
-      .eq("id", payloadToInsert.id)
-      .maybeSingle();
-
-    if (!verifyData) {
-      throw new Error("El pedido no se pudo confirmar en la base de datos. Por favor, intenta de nuevo.");
-    }
-    createdOrder = { ...payloadToInsert, ...verifyData };
-  }
-
-  // Insertar items del pedido
   if (items && items.length > 0) {
-    const orderItems = items.map((item) => ({
-      order_id: createdOrder.id,
+    const itemsToInsert = items.map(item => ({
+      order_id: insertedData.id,
+      product_id: item.product_id,
       product_name: item.product_name,
       unit_price: item.unit_price,
       quantity: item.quantity,
-      subtotal: item.subtotal,
+      subtotal: item.subtotal
     }));
-
-    const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
-    if (itemsError) {
-      // Pedido creado pero items fallaron — no lanzar error fatal, el pedido existe
-      console.error("Error al insertar ítems del pedido:", itemsError);
-    }
+    await supabase.from("order_items").insert(itemsToInsert);
   }
 
-  return createdOrder;
+  return insertedData;
 }
 
 /**

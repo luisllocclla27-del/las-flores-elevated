@@ -23,7 +23,7 @@ interface Collaborator {
   id: string;
   name: string;
   role: string;
-  category: "cocina" | "salon" | "reposteria";
+  category: "cocina" | "salon" | "reposteria" | "administracion";
   years: string;
   photo: string;
   quote: string;

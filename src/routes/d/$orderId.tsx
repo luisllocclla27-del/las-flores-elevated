@@ -225,20 +225,29 @@ function DriverMagicLink() {
     );
   }
 
-  const handleVerifyPin = (e: React.FormEvent) => {
+  const handleVerifyPin = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanInput = pinInput.trim();
-    const phoneLast4 = (orderData?.client_phone || "").replace(/\D/g, "").slice(-4);
-    const orderLast4 = (orderData?.order_number || "").slice(-4);
-    const exactDriverPin = (orderData as any)?.driver_pin;
+    if (!cleanInput) return;
 
-    if (
-      cleanInput === "2026" ||
-      cleanInput === "1234" ||
-      (exactDriverPin && cleanInput === String(exactDriverPin).trim()) ||
-      (phoneLast4 && cleanInput === phoneLast4) ||
-      (orderLast4 && cleanInput.toUpperCase() === orderLast4.toUpperCase())
-    ) {
+    try {
+      const { data: isValid, error } = await supabase.rpc("verify_driver_pin", {
+        p_order_id: orderId,
+        p_pin: cleanInput
+      });
+
+      if (!error && isValid === true) {
+        localStorage.setItem(`driver_auth_${orderId}`, "true");
+        setIsDriverAuthenticated(true);
+        setPinError(false);
+        return;
+      }
+    } catch (err) {
+      console.warn("RPC verify_driver_pin error:", err);
+    }
+
+    const exactDriverPin = (orderData as any)?.driver_pin;
+    if (exactDriverPin && cleanInput === String(exactDriverPin).trim()) {
       localStorage.setItem(`driver_auth_${orderId}`, "true");
       setIsDriverAuthenticated(true);
       setPinError(false);

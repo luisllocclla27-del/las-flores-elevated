@@ -199,12 +199,16 @@ function CashierDashboardRoute() {
         });
       }
 
-      // 2. Fetch Order Items
-      const { data: itemsData } = await supabase
-        .from("order_items")
-        .select("*, products(name, image_url)");
-
-      if (itemsData) setOrderItems(itemsData);
+      if (ordData && ordData.length > 0) {
+        const orderIds = ordData.map((o: any) => o.id);
+        const { data: itemsData } = await supabase
+          .from("order_items")
+          .select("*, products(name, image_url)")
+          .in("order_id", orderIds);
+        if (itemsData) setOrderItems(itemsData);
+      } else {
+        setOrderItems([]);
+      }
 
       // 3. Fetch Reservations
       const { data: resData, error: resErr } = await supabase

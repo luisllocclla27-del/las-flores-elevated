@@ -10,10 +10,17 @@ interface AdminBlackoutModalProps {
   onCreated: () => void;
 }
 
-export function AdminBlackoutModal({ isOpen, onClose, zones, onCreated }: AdminBlackoutModalProps) {
-  if (!isOpen) return null;
+function getLocalPeruDateStr(): string {
+  const d = new Date();
+  const peruDate = new Date(d.toLocaleString("en-US", { timeZone: "America/Lima" }));
+  const yyyy = peruDate.getFullYear();
+  const mm = String(peruDate.getMonth() + 1).padStart(2, "0");
+  const dd = String(peruDate.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
 
-  const todayStr = new Date().toISOString().split("T")[0];
+export function AdminBlackoutModal({ isOpen, onClose, zones, onCreated }: AdminBlackoutModalProps) {
+  const todayStr = getLocalPeruDateStr();
 
   const [zoneId, setZoneId] = useState<string>("global");
   const [blackoutType, setBlackoutType] = useState<BlackoutType>("full_day");
@@ -23,6 +30,8 @@ export function AdminBlackoutModal({ isOpen, onClose, zones, onCreated }: AdminB
   const [endTime, setEndTime] = useState("17:00");
   const [reason, setReason] = useState("");
   const [saving, setSaving] = useState(false);
+
+  if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

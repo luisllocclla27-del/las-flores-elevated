@@ -157,15 +157,19 @@ function AdminRoute() {
         .from("orders")
         .select("*")
         .gte("created_at", dateFilter)
-        .order("created_at", { ascending: false })
-        .limit(500);
-      if (ordData) setOrders(ordData);
-
-      // 3. Order Items
-      const { data: itemsData } = await supabase
-        .from("order_items")
-        .select("*, products(name, image_url)");
-      if (itemsData) setOrderItems(itemsData);
+      if (ordData) {
+        setOrders(ordData);
+        if (ordData.length > 0) {
+          const orderIds = ordData.map((o: any) => o.id);
+          const { data: itemsData } = await supabase
+            .from("order_items")
+            .select("*, products(name, image_url)")
+            .in("order_id", orderIds);
+          if (itemsData) setOrderItems(itemsData);
+        } else {
+          setOrderItems([]);
+        }
+      }
 
       // 4. Products
       const { data: prodData } = await supabase
