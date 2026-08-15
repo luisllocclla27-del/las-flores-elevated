@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -137,7 +137,7 @@ const GALLERY_CATEGORIES: Category[] = [
 
 function GaleriaPage() {
   const [activeCategory, setActiveCategory] = useState<string>("arte-cultura");
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -147,6 +147,18 @@ function GaleriaPage() {
   }, []);
 
   const currentCategory = GALLERY_CATEGORIES.find((cat) => cat.id === activeCategory);
+  const images = currentCategory?.images ?? [];
+
+  const openImage = (idx: number) => setSelectedIndex(idx);
+  const closeImage = () => setSelectedIndex(null);
+  const prevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIndex((i) => (i !== null ? (i - 1 + images.length) % images.length : null));
+  };
+  const nextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedIndex((i) => (i !== null ? (i + 1) % images.length : null));
+  };
 
   return (
     <div className="min-h-screen bg-piedra flex flex-col">
@@ -263,7 +275,7 @@ function GaleriaPage() {
           {currentCategory?.images.map((img, idx) => (
             <div
               key={idx}
-              onClick={() => setSelectedImage(img)}
+              onClick={() => openImage(idx)}
               className="relative aspect-[3/4] overflow-hidden group cursor-pointer shadow-md hover:shadow-xl transition-shadow duration-300"
             >
               <img
@@ -281,24 +293,50 @@ function GaleriaPage() {
       </main>
 
       {/* Lightbox Modal */}
-      {selectedImage && (
+      {selectedIndex !== null && images[selectedIndex] && (
         <div
           className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setSelectedImage(null)}
+          onClick={closeImage}
         >
+          {/* Cerrar */}
           <button
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 text-white text-4xl font-light hover:text-piedra transition-colors"
+            onClick={closeImage}
+            className="absolute top-4 right-4 text-white text-4xl font-light hover:text-piedra transition-colors z-10"
             aria-label="Cerrar"
           >
             ×
           </button>
+
+          {/* Contador */}
+          <span className="absolute top-4 left-1/2 -translate-x-1/2 text-white/60 text-xs uppercase tracking-widest">
+            {selectedIndex + 1} / {images.length}
+          </span>
+
+          {/* Flecha izquierda */}
+          <button
+            onClick={prevImage}
+            className="absolute left-4 md:left-8 text-white/70 hover:text-white transition-colors z-10 bg-black/30 hover:bg-black/60 rounded-full p-2"
+            aria-label="Anterior"
+          >
+            <ChevronLeft size={32} />
+          </button>
+
+          {/* Imagen */}
           <img
-            src={selectedImage}
+            src={images[selectedIndex]}
             alt="Vista ampliada"
             className="max-w-full max-h-full object-contain"
             onClick={(e) => e.stopPropagation()}
           />
+
+          {/* Flecha derecha */}
+          <button
+            onClick={nextImage}
+            className="absolute right-4 md:right-8 text-white/70 hover:text-white transition-colors z-10 bg-black/30 hover:bg-black/60 rounded-full p-2"
+            aria-label="Siguiente"
+          >
+            <ChevronRight size={32} />
+          </button>
         </div>
       )}
 

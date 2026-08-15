@@ -216,12 +216,6 @@ function EventosPage() {
           />
         </Link>
         <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
-          <button
-            onClick={() => startTransition(() => setIsMenuOpen(true))}
-            className="hidden sm:inline-block hover:text-chilca transition-colors"
-          >
-            DELIVERY
-          </button>
           <Link
             to="/reservas"
             className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
