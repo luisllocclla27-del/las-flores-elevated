@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
 import { MenuModal } from "@/components/MenuModal";
-import { Quote, Heart, Award, Utensils, Sparkles, ArrowRight, Star } from "lucide-react";
+import { Quote, Heart, Award, Utensils, Sparkles, ArrowRight, Star, ShoppingCart } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/familia-las-flores")({
   head: () => ({
@@ -252,6 +253,7 @@ const COLLABORATORS: Collaborator[] = [
 ];
 
 function FamiliaLasFloresPage() {
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeCategory, setActiveCategory] = useState<"all" | "administracion" | "cocina" | "salon" | "barra" | "reposteria">("all");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -289,7 +291,7 @@ function FamiliaLasFloresPage() {
             />
           </a>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-4 md:gap-6">
             <Link
               to="/reservas"
               className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
@@ -299,6 +301,21 @@ function FamiliaLasFloresPage() {
             >
               Reservar
             </Link>
+            
+            {/* Carrito */}
+            {totalItems > 0 && (
+              <button
+                onClick={() => setCartOpen(true)}
+                className={`relative transition-colors ${
+                  isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
+                }`}
+              >
+                <ShoppingCart size={20} />
+                <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  {totalItems}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </header>

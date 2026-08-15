@@ -14,10 +14,12 @@ import {
   Compass, 
   HelpCircle, 
   ExternalLink,
-  Sparkles
+  Sparkles,
+  ShoppingCart
 } from "lucide-react";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { useState, useEffect } from "react";
+import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/contacto")({
   head: () => ({
@@ -56,6 +58,7 @@ const FAQS = [
 ];
 
 function ContactoPage() {
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -145,6 +148,21 @@ function ContactoPage() {
           >
             Reservar
           </Link>
+          
+          {/* Carrito */}
+          {totalItems > 0 && (
+            <button
+              onClick={() => setCartOpen(true)}
+              className={`relative transition-colors ${
+                isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
+              }`}
+            >
+              <ShoppingCart size={20} />
+              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                {totalItems}
+              </span>
+            </button>
+          )}
         </div>
       </nav>
 

@@ -7,8 +7,9 @@ import { JobApplicationForm } from "../features/jobs/components/JobApplicationFo
 import { listPublicJobOffers } from "../features/jobs/api";
 import { sortPublicOffers } from "../features/jobs/rules";
 import type { PublicJobOffer } from "../features/jobs/types";
-import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift } from "lucide-react";
+import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift, ShoppingCart } from "lucide-react";
 import { FamiliaLasFloresSection } from "../components/FamiliaLasFloresSection";
+import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/unete-al-equipo")({
   head: () => ({
@@ -36,6 +37,8 @@ function UneteAlEquipoPage() {
 
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>("all");
+
+  const { totalItems, setCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -110,7 +113,30 @@ function UneteAlEquipoPage() {
             />
           </a>
 
-          <div className="w-8" />
+          <div className="flex items-center gap-3">
+            <a
+              href="/reservas"
+              className={`px-4 py-2 rounded-full font-semibold text-xs transition-all ${
+                isScrolled
+                  ? "bg-eucalipto text-cream hover:bg-eucalipto/90"
+                  : "bg-cream text-ink hover:bg-cream/90"
+              }`}
+            >
+              Reservar
+            </a>
+
+            {totalItems > 0 && (
+              <button
+                onClick={() => setCartOpen(true)}
+                className="relative p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
+              >
+                <ShoppingCart size={20} />
+                <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                  {totalItems}
+                </span>
+              </button>
+            )}
+          </div>
         </div>
       </header>
 

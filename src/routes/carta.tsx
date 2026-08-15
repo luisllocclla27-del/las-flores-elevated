@@ -105,17 +105,6 @@ function CartaPage() {
         </Link>
 
         <div className="flex items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
-          {totalItems > 0 && (
-            <button
-              onClick={() => setIsCartOpen(true)}
-              className="relative hover:text-chilca transition-colors text-nogal mr-2"
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            </button>
-          )}
           {/* Delivery: Estilo pill en móvil, texto simple en desktop */}
           <button
             onClick={() => setIsMenuOpen(true)}
@@ -137,6 +126,19 @@ function CartaPage() {
           >
             Reservar
           </Link>
+
+          {/* Carrito: Aparece al lado derecho después de los botones */}
+          {totalItems > 0 && (
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative hover:text-chilca transition-colors text-nogal"
+            >
+              <ShoppingCart size={20} />
+              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                {totalItems}
+              </span>
+            </button>
+          )}
         </div>
       </nav>
 

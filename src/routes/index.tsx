@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Star, MapPin, ChefHat, Info, ArrowRight, ArrowRightCircle } from "lucide-react";
+import { Star, MapPin, ChefHat, Info, ArrowRight, ArrowRightCircle, ShoppingCart } from "lucide-react";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { useState, useEffect, useRef } from "react";
+import { useCart } from "@/context/CartContext";
 const ayacuchoHero = "/inicio/ayacucho.webp";
 const culturaImg = "/imagenes-reales/ARTE Y CULTURA LISTO/CERAMICA/CERAMICA-AYACUCHANA.webp";
 const retabloImg =
@@ -720,6 +721,7 @@ function LugaresAccordion({ onSelect }: { onSelect: (l: Lugar) => void }) {
 // ─── PÁGINA PRINCIPAL ─────────────────────────────────────────────────────────
 
 function Index() {
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
   const [festividadActiva, setFestividadActiva] = useState<Festividad | null>(null);
   const [lugarActivo, setLugarActivo] = useState<Lugar | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -812,7 +814,7 @@ function Index() {
           />
         </Link>
         
-        <div className="flex items-center">
+        <div className="flex items-center gap-4 md:gap-6">
           <Link
             to="/reservas"
             className={`pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
@@ -823,6 +825,21 @@ function Index() {
           >
             Reservar
           </Link>
+          
+          {/* Carrito */}
+          {totalItems > 0 && (
+            <button
+              onClick={() => setCartOpen(true)}
+              className={`pointer-events-auto relative transition-colors ${
+                isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
+              }`}
+            >
+              <ShoppingCart size={20} />
+              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
+                {totalItems}
+              </span>
+            </button>
+          )}
         </div>
       </nav>
 
