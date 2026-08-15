@@ -262,6 +262,7 @@ export function AdminAnalyticsSection({
   const paymentMethodsData = useMemo(() => {
     const methods: Record<string, { label: string; count: number; revenue: number }> = {
       yape: { label: "Yape / Plin", count: 0, revenue: 0 },
+      culqi: { label: "Culqi (Tarjeta)", count: 0, revenue: 0 },
       card: { label: "Tarjeta de Crédito / Débito", count: 0, revenue: 0 },
       cash: { label: "Efectivo", count: 0, revenue: 0 },
       other: { label: "Otro / Transferencia", count: 0, revenue: 0 },
@@ -271,7 +272,10 @@ export function AdminAnalyticsSection({
       const pm = (o.payment_method || "yape").toLowerCase();
       const val = Number(o.total || 0);
 
-      if (pm.includes("yape") || pm.includes("plin")) {
+      if (pm === "culqi") {
+        methods.culqi.count += 1;
+        methods.culqi.revenue += val;
+      } else if (pm.includes("yape") || pm.includes("plin")) {
         methods.yape.count += 1;
         methods.yape.revenue += val;
       } else if (pm.includes("card") || pm.includes("tarjeta")) {

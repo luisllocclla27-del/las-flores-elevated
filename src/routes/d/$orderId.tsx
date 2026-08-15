@@ -345,7 +345,12 @@ function DriverMagicLink() {
 
   const rawPaymentMethod = (orderData.payment_method || "yape").toLowerCase();
   const isCashPayment = rawPaymentMethod.includes("efectivo") || rawPaymentMethod.includes("cash");
-  const paymentLabel = isCashPayment ? "Efectivo (Pago al entregar)" : orderData.payment_method || "Yape / Plin";
+  const isCulqiPayment = rawPaymentMethod === "culqi";
+  const paymentLabel = isCashPayment 
+    ? "Efectivo (Pago al entregar)" 
+    : isCulqiPayment
+    ? "Tarjeta (Culqi - Pagado)"
+    : orderData.payment_method || "Yape / Plin";
 
   return (
     <div className="min-h-screen bg-[#f8f4e6] font-sans flex flex-col p-4 md:p-6 justify-center">

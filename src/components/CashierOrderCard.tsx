@@ -127,6 +127,11 @@ export function CashierOrderCard({
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] uppercase border ${currentStatus.badge}`}>
               {currentStatus.label}
             </span>
+            {(order.payment_method || "").toLowerCase() === "culqi" && (
+              <span className="px-2 py-0.5 rounded-md text-[9px] font-black bg-[#00A19B]/15 text-[#00A19B] border border-[#00A19B]/40 flex items-center gap-1">
+                ✓ PAGADO
+              </span>
+            )}
           </div>
 
           <div className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg border ${timerBadgeStyle}`}>
@@ -224,8 +229,18 @@ export function CashierOrderCard({
 
           <div className="text-right">
             <span className="text-[10px] font-bold text-gray-400 block uppercase">Pago</span>
-            <span className="text-xs font-black text-emerald-900 uppercase px-2.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-md inline-block shadow-2xs">
-              {order.payment_method || "Yape / Plin"}
+            <span className={`text-xs font-black uppercase px-2.5 py-0.5 rounded-md inline-block shadow-2xs ${
+              (order.payment_method || "").toLowerCase() === "culqi" 
+                ? "text-[#00A19B] bg-[#00A19B]/10 border border-[#00A19B]/30"
+                : (order.payment_method || "").toLowerCase().includes("efectivo")
+                ? "text-orange-900 bg-orange-50 border border-orange-200"
+                : "text-emerald-900 bg-emerald-50 border border-emerald-200"
+            }`}>
+              {(order.payment_method || "yape").toLowerCase() === "culqi" 
+                ? "💳 Culqi" 
+                : (order.payment_method || "").toLowerCase().includes("efectivo")
+                ? "💵 Efectivo"
+                : order.payment_method || "Yape / Plin"}
             </span>
           </div>
         </div>

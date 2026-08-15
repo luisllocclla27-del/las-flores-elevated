@@ -34,6 +34,8 @@ import { sendOrderEmails } from "../lib/emailService";
 import { LocationSelector } from "./LocationSelector";
 import { CustomerHistoryModal } from "./CustomerHistoryModal";
 import { LoginModal } from "./LoginModal";
+import { openCulqiCheckout, formatAmountToCents, getCulqiErrorMessage, type CulqiToken } from "../lib/culqiClient";
+import { processCulqiCharge } from "../lib/culqiApi";
 import type { User } from "@supabase/supabase-js";
 
 type Step = "cart" | "delivery" | "payment" | "success" | "profile";
@@ -88,9 +90,11 @@ export function CartSidebar() {
   const [step, setStep] = useState<Step>("cart");
   const [deliverySubStep, setDeliverySubStep] = useState<"location" | "details">("location");
   const [orderType, setOrderType] = useState<OrderType>("delivery");
-  const [paymentMethod, setPaymentMethod] = useState<"yape" | "card" | "efectivo">("yape");
+  const [paymentMethod, setPaymentMethod] = useState<"yape" | "culqi" | "efectivo">("yape");
   const [yapeTitular, setYapeTitular] = useState("");
   const [yapeOperacion, setYapeOperacion] = useState("");
+  const [culqiToken, setCulqiToken] = useState<CulqiToken | null>(null);
+  const [culqiProcessing, setCulqiProcessing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<string>("");
@@ -423,6 +427,29 @@ export function CartSidebar() {
       }
     }
 
+    // Si el método es Culqi y no hay token, abrir modal de Culqi
+    if (paymentMethod === "culqi" && !culqiToken) {
+      setCulqiProcessing(true);
+      try {
+        const token = await openCulqiCheckout({
+          title: "Restaurante Las Flores",
+          currency: "PEN",
+          amount: formatAmountToCents(total),
+          // order es opcional - lo eliminamos si causa problemas
+        });
+        setCulqiToken(token);
+        setCulqiProcessing(false);
+        // No continuar automáticamente, dejar que el usuario confirme
+        alert("Tarjeta validada correctamente. Haz clic en 'Confirmar Pedido' para finalizar.");
+        return;
+      } catch (error: any) {
+        console.error("Error al tokenizar con Culqi:", error);
+        alert(getCulqiErrorMessage(error));
+        setCulqiProcessing(false);
+        return;
+      }
+    }
+
     setProcessing(true);
 
     // Validar disponibilidad de productos antes de confirmar el pedido
@@ -446,12 +473,45 @@ export function CartSidebar() {
       // Si no se puede verificar stock, continuar con el pedido
     }
 
+    // Procesar cargo con Culqi si el método de pago es Culqi
+    let culqiChargeId: string | null = null;
+    let culqiReferenceCode: string | null = null;
+    
+    if (paymentMethod === "culqi" && culqiToken) {
+      try {
+        const chargeResult = await processCulqiCharge({
+          tokenId: culqiToken.id,
+          amount: formatAmountToCents(total),
+          email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
+          description: `Pedido delivery - Restaurante Las Flores`,
+          orderNumber: `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`,
+          customerName: delivery.name || "Cliente",
+          customerPhone: delivery.phone,
+          address: delivery.address,
+        });
+
+        if (!chargeResult.success) {
+          throw new Error(chargeResult.error || "Error al procesar el pago con Culqi");
+        }
+
+        culqiChargeId = chargeResult.chargeId || null;
+        culqiReferenceCode = chargeResult.referenceCode || null;
+        
+        console.log("Cargo Culqi procesado exitosamente:", chargeResult);
+      } catch (culqiError: any) {
+        console.error("Error procesando cargo Culqi:", culqiError);
+        alert(`Error al procesar el pago: ${culqiError.message || "Por favor, intenta nuevamente."}`);
+        setProcessing(false);
+        return;
+      }
+    }
+
     const orderNum = `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     try {
       const createdOrd = await createOrder({
         order_number: orderNum,
         order_type: orderType,
-        status: "pendiente",
+        status: paymentMethod === "culqi" ? "pagado" : "pendiente",
         client_name: delivery.name || "Cliente",
         client_email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
         client_phone: delivery.phone || "",
@@ -468,6 +528,9 @@ export function CartSidebar() {
           delivery.notes,
           paymentMethod === "yape" && yapeTitular ? `Yape Titular: ${yapeTitular}` : "",
           paymentMethod === "yape" && yapeOperacion ? `N° Op: ${yapeOperacion}` : "",
+          paymentMethod === "culqi" && culqiToken ? `Culqi Token: ${culqiToken.id}` : "",
+          paymentMethod === "culqi" && culqiChargeId ? `Culqi Charge: ${culqiChargeId}` : "",
+          paymentMethod === "culqi" && culqiReferenceCode ? `Referencia: ${culqiReferenceCode}` : "",
         ].filter(Boolean).join(" | ") || undefined,
         items: items.map((i) => {
           const opts = i.customizations
@@ -591,6 +654,8 @@ export function CartSidebar() {
       setStep("cart");
       setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
       setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
+      setCulqiToken(null);
+      setCulqiProcessing(false);
     }
   };
 
@@ -1139,25 +1204,29 @@ export function CartSidebar() {
               <div className="grid grid-cols-3 gap-2">
                 {(
                   [
-                    { id: "yape", label: "Yape / Plin", Icon: Smartphone },
-                    { id: "card", label: "Tarjeta", Icon: CreditCard },
-                    { id: "efectivo", label: "Efectivo", Icon: Banknote },
+                    { id: "yape", label: "Yape / Plin", image: "/imagenes-reales/metodo-pagos/yape.webp" },
+                    { id: "culqi", label: "Tarjeta", image: "/imagenes-reales/metodo-pagos/targeta.webp" },
+                    { id: "efectivo", label: "Efectivo", image: "/imagenes-reales/metodo-pagos/dinero.webp" },
                   ] as const
-                ).map(({ id, label, Icon }) => {
+                ).map(({ id, label, image }) => {
                   const active = paymentMethod === id;
                   return (
                     <button
                       key={id}
                       type="button"
                       onClick={() => setPaymentMethod(id)}
-                      className={`py-3 px-1 rounded-2xl font-serif font-bold text-xs flex flex-col items-center gap-1.5 transition-all border-2 cursor-pointer ${
+                      className={`py-3 px-2 rounded-2xl font-serif font-bold text-xs flex flex-col items-center gap-2 transition-all border-2 cursor-pointer ${
                         active
                           ? "bg-[#2c4a3e] text-white border-[#2c4a3e] shadow-md scale-[1.02]"
                           : "bg-white text-nogal/70 border-nogal/15 hover:border-nogal/30 hover:bg-piedra/30"
                       }`}
                     >
-                      <Icon size={18} className={active ? "text-chilca" : "text-nogal/60"} />
-                      <span className="truncate w-full text-center">{label}</span>
+                      <img 
+                        src={image} 
+                        alt={label} 
+                        className="w-8 h-8 object-contain"
+                      />
+                      <span className="truncate w-full text-center leading-tight">{label}</span>
                     </button>
                   );
                 })}
@@ -1222,6 +1291,71 @@ export function CartSidebar() {
                       Entre 3 y 8 dígitos de aprobación de tu pantalla de éxito.
                     </p>
                   </div>
+                </div>
+              )}
+
+              {paymentMethod === "culqi" && (
+                <div className="bg-white rounded-2xl p-5 border border-[#00A19B]/20 shadow-sm space-y-4 animate-in fade-in duration-300">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className="bg-[#00A19B] text-white px-3 py-1 rounded-lg text-sm font-bold">
+                        Culqi
+                      </div>
+                      <span className="text-xs text-black/50 font-medium flex items-center gap-1">
+                        <Lock size={12} /> Pago Seguro
+                      </span>
+                    </div>
+                  </div>
+
+                  {!culqiToken ? (
+                    <div className="space-y-3">
+                      <p className="text-xs text-nogal/80 font-medium leading-relaxed">
+                        Paga de forma segura con tu tarjeta de crédito o débito. Culqi procesa tu pago de manera encriptada.
+                      </p>
+                      <div className="flex flex-wrap gap-3 items-center justify-center py-2">
+                        <img 
+                          src="/imagenes-reales/metodo-pagos/visa.webp" 
+                          alt="Visa" 
+                          className="h-8 object-contain"
+                        />
+                        <img 
+                          src="/imagenes-reales/metodo-pagos/master-card.webp" 
+                          alt="Mastercard" 
+                          className="h-8 object-contain"
+                        />
+                        <img 
+                          src="/imagenes-reales/metodo-pagos/amex.webp" 
+                          alt="American Express" 
+                          className="h-8 object-contain"
+                        />
+                        <img 
+                          src="/imagenes-reales/metodo-pagos/diners.webp" 
+                          alt="Diners Club" 
+                          className="h-8 object-contain"
+                        />
+                      </div>
+                      <p className="text-xs text-center text-black/50 italic">
+                        Al continuar, se abrirá el formulario seguro de Culqi
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-green-50 border border-green-200 rounded-xl p-4 space-y-2">
+                      <div className="flex items-center gap-2 text-green-700 font-bold text-sm">
+                        <CheckCircle size={18} />
+                        <span>Tarjeta tokenizada correctamente</span>
+                      </div>
+                      <p className="text-xs text-green-600">
+                        Terminación: •••• {culqiToken.last_four} ({culqiToken.iin.card_brand})
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setCulqiToken(null)}
+                        className="text-xs text-green-700 underline hover:text-green-900 font-medium"
+                      >
+                        Usar otra tarjeta
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -1459,11 +1593,21 @@ export function CartSidebar() {
               <button
                 type="submit"
                 form="payment-form"
-                disabled={processing}
-                className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none"
+                disabled={
+                  processing || 
+                  culqiProcessing ||
+                  (paymentMethod === "yape" && (!yapeTitular.trim() || !yapeOperacion.trim()))
+                }
+                className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
                 style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
               >
-                {processing ? "Procesando..." : `Pagar S/ ${total.toFixed(2)}`}
+                {culqiProcessing 
+                  ? "Procesando Culqi..." 
+                  : processing 
+                  ? "Procesando..." 
+                  : paymentMethod === "culqi" && !culqiToken
+                  ? "Validar Tarjeta"
+                  : `Confirmar Pedido - S/ ${total.toFixed(2)}`}
               </button>
             </div>
           )}

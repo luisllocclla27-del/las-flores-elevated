@@ -53,11 +53,12 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
     const discount = Number(o.discount_amount || o.discount || 0);
     const pm = (o.payment_method || "").toLowerCase().trim();
     const isCash = pm.includes("efectivo") || pm.includes("cash");
+    const isCulqi = pm === "culqi";
 
     if (isCash) {
       totalCash += total;
     } else {
-      totalOnline += total;
+      totalOnline += total; // Incluye Yape, Plin, Culqi y otros pagos digitales
     }
 
     totalDeliveryFees += fee;

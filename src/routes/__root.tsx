@@ -178,6 +178,8 @@ function RootShell({ children }: { children: ReactNode }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(restaurantSchema) }}
         />
+        {/* Culqi JS V4 - Pasarela de pagos */}
+        <script src="https://checkout.culqi.com/js/v4" />
       </head>
       <body className="overflow-x-hidden">
         {children}
