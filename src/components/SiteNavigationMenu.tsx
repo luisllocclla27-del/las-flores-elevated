@@ -83,7 +83,7 @@ export function SiteNavigationMenu({
         <div className="mx-8 border-t border-nogal/10 shrink-0" />
 
         {/* ── Nav links — agrupados para que entren todos en móviles pequeños ── */}
-        <nav className="flex flex-col gap-2 md:gap-3 flex-1 min-h-0 px-8 py-4 w-full overflow-y-auto">
+        <nav className="flex flex-col flex-1 min-h-0 px-8 py-3 w-full overflow-y-auto">
           {NAV_LINKS.map(({ label, to, hash }) => {
             return (
               <Link
@@ -91,13 +91,11 @@ export function SiteNavigationMenu({
                 to={to}
                 hash={hash || undefined}
                 onClick={() => {
-                  // Si estamos en la misma página, cerramos el menú.
-                  // Si es otra página, dejamos que cambie de frente sin animar el cierre.
                   if (window.location.pathname === to || (window.location.pathname === '/' && to === '')) {
                     setIsOpen(false);
                   }
                 }}
-                className="block w-full shrink-0 py-2 md:py-2.5 font-serif text-[15px] md:text-[17px] tracking-[0.08em] transition-all duration-300 font-bold leading-none uppercase border-b border-nogal/10 last:border-b-0 text-nogal hover:text-pacay hover:translate-x-2"
+                className="block w-full shrink-0 py-3 font-serif text-base tracking-[0.08em] transition-all duration-300 font-bold leading-none uppercase border-b border-nogal/10 last:border-b-0 text-nogal hover:text-pacay hover:translate-x-2"
               >
                 {label}
               </Link>
@@ -106,20 +104,19 @@ export function SiteNavigationMenu({
         </nav>
 
         {/* ── Footer de contacto y redes ── */}
-        <div className="px-8 pb-6 pt-4 shrink-0 border-t border-nogal/10">
-          <div className="flex flex-col gap-2.5 mb-5">
+        <div className="px-8 py-4 shrink-0 border-t border-nogal/10 bg-piedra">
+          <div className="flex flex-col gap-2 mb-4">
             <a
               href="tel:967456230"
-              className="flex items-center gap-3 text-xs text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
+              className="flex items-center gap-3 text-sm text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
             >
               <Phone size={15} strokeWidth={2.5} />
               967 456 230
             </a>
             <a
               href="https://wa.me/51980723422"
-              className="flex items-center gap-3 text-xs text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
+              className="flex items-center gap-3 text-sm text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
             >
-              {/* Ícono de WhatsApp nativo */}
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
               </svg>
@@ -127,7 +124,7 @@ export function SiteNavigationMenu({
             </a>
             <a
               href="mailto:restaurantelasfloresperu@gmail.com"
-              className="flex items-center gap-3 text-xs text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
+              className="flex items-center gap-3 text-sm text-nogal/70 hover:text-nogal transition-colors font-semibold tracking-wide"
             >
               <Mail size={15} strokeWidth={2.5} />
               restaurantelasfloresperu@gmail.com
