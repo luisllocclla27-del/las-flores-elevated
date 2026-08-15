@@ -59,7 +59,7 @@ export function SiteNavigationMenu({
 
       {/* ── Drawer — diseño de una sola pantalla, sin scroll del documento ── */}
       <div
-        className={`fixed inset-y-0 left-0 h-screen max-h-screen w-[min(100vw,420px)] z-[100] bg-piedra flex flex-col shadow-2xl pointer-events-auto transition-transform duration-300 ease-out overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed inset-y-0 left-0 h-[100dvh] max-h-[100dvh] w-[min(100vw,420px)] z-[100] bg-piedra flex flex-col shadow-2xl pointer-events-auto transition-transform duration-300 ease-out overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
       >
         {/* ── Header con logo + cerrar ── */}
@@ -82,8 +82,8 @@ export function SiteNavigationMenu({
         {/* ── Separador ── */}
         <div className="mx-8 border-t border-nogal/10 shrink-0" />
 
-        {/* ── Nav links — agrupados para que entren todos en móviles pequeños ── */}
-        <nav className="flex flex-col flex-1 min-h-0 px-8 py-3 w-full overflow-y-auto">
+        {/* ── Nav links ── */}
+        <nav className="flex flex-col flex-1 min-h-0 px-8 py-4 w-full overflow-y-auto">
           {NAV_LINKS.map(({ label, to, hash }) => {
             return (
               <Link
