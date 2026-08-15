@@ -275,10 +275,12 @@ function FamiliaLasFloresPage() {
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${isScrolled ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3" : "bg-transparent border-transparent py-5"
           }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center relative">
-          <SiteNavigationMenu isScrolled={isScrolled} />
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center gap-3 relative">
+          <div className="flex items-center">
+            <SiteNavigationMenu isScrolled={isScrolled} />
+          </div>
 
-          <a href="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center group">
+          <a href="/" className="flex-1 flex justify-center items-center group">
             <img
               src="/images.png"
               alt="Las Flores"
@@ -287,7 +289,7 @@ function FamiliaLasFloresPage() {
             />
           </a>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center">
             <Link
               to="/reservas"
               className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled

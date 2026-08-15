@@ -119,14 +119,14 @@ function ContactoPage() {
     <div className="min-h-screen bg-[#f8f4e6] flex flex-col font-sans text-[#2c2a29]">
       {/* Nav */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
       >
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={isScrolled} />
         </div>
         <a
           href="/"
-          className="flex-none pointer-events-auto"
+          className="flex-1 flex justify-center pointer-events-auto"
         >
           <img
             src="/images.png"
@@ -134,7 +134,7 @@ function ContactoPage() {
             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
         </a>
-        <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 pointer-events-auto">
+        <div className="flex items-center gap-4 md:gap-8 pointer-events-auto">
           <Link
             to="/reservas"
             className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${

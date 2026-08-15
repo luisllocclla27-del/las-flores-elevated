@@ -794,15 +794,15 @@ function Index() {
 
       {/* NAV */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
       >
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={isScrolled} />
         </div>
         
         <Link
           to="/"
-          className="flex-none pointer-events-auto"
+          className="flex-1 flex justify-center pointer-events-auto"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <img
@@ -812,7 +812,7 @@ function Index() {
           />
         </Link>
         
-        <div className="flex-1 flex justify-end gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold items-center">
+        <div className="flex items-center">
           <Link
             to="/reservas"
             className={`pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${

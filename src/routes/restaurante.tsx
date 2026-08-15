@@ -340,14 +340,14 @@ function RestaurantePage() {
     <div className="bg-piedra text-nogal font-sans selection:bg-chilca/30">
       {/* Nav: nuestra historia | logo | reservas y delivery */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
       >
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={isScrolled} />
         </div>
         <Link
           to="/restaurante"
-          className="flex-none pointer-events-auto"
+          className="flex-1 flex justify-center pointer-events-auto"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <img
@@ -356,7 +356,7 @@ function RestaurantePage() {
             className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
         </Link>
-        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
+        <div className="flex items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
           <button
             onClick={() => startTransition(() => setIsMenuOpen(true))}
             className="hidden sm:inline-block hover:text-chilca transition-colors leading-none"

@@ -163,15 +163,15 @@ function GaleriaPage() {
   return (
     <div className="min-h-screen bg-piedra flex flex-col">
       {/* Navigation Bar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
+      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
           isScrolled
             ? "bg-piedra/95 backdrop-blur-sm border-b border-nogal/10"
             : "bg-transparent border-b border-transparent"
         }`}>
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={isScrolled} isAlwaysDark={false} />
         </div>
-        <div className="flex-none pointer-events-auto">
+        <div className="flex-1 flex justify-center pointer-events-auto">
           <img
             src="/images.png"
             alt="Restaurante Las Flores"
@@ -186,7 +186,7 @@ function GaleriaPage() {
             }
           />
         </div>
-        <div className="flex-1 flex justify-end items-center gap-4 md:gap-8 pointer-events-auto">
+        <div className="flex items-center gap-4 md:gap-8 pointer-events-auto">
           <Link
             to="/reservas"
             className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${

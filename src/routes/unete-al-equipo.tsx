@@ -87,10 +87,12 @@ function UneteAlEquipoPage() {
             : "bg-transparent border-transparent py-5"
         }`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center">
-          <SiteNavigationMenu isScrolled={isScrolled} />
+        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center gap-3">
+          <div className="flex items-center">
+            <SiteNavigationMenu isScrolled={isScrolled} />
+          </div>
 
-          <a href="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center group">
+          <a href="/" className="flex-1 flex justify-center items-center group">
             <img
               src="/images.png"
               alt="Las Flores"

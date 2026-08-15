@@ -87,14 +87,14 @@ function CartaPage() {
   return (
     <div className="min-h-screen bg-piedra text-nogal font-sans flex flex-col">
       {/* Unified Top Nav Bar - Premium Style (Matches Homepage & Reservas) */}
-      <nav className="bg-[#f8f4e6] text-nogal px-4 md:px-10 py-3 flex items-center justify-between shadow-xs border-b border-nogal/10 sticky top-0 z-50">
-        <div className="flex-1 flex justify-start items-center">
+      <nav className="bg-[#f8f4e6] text-nogal px-4 md:px-10 py-3 flex items-center justify-between gap-3 shadow-xs border-b border-nogal/10 sticky top-0 z-50">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={true} />
         </div>
 
         <Link
           to="/"
-          className="flex-none pointer-events-auto"
+          className="flex-1 flex justify-center pointer-events-auto"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <img
@@ -104,7 +104,7 @@ function CartaPage() {
           />
         </Link>
 
-        <div className="flex-1 flex justify-end items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
+        <div className="flex items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
           {totalItems > 0 && (
             <button
               onClick={() => setIsCartOpen(true)}

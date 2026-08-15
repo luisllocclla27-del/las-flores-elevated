@@ -631,18 +631,18 @@ function ReservasPage() {
     <div className="min-h-screen bg-[#f8f4e6] flex flex-col text-[#2c2a29] font-sans">
       {/* Navigation Bar */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
           isScrolled
             ? "bg-[#f8f4e6]/95 backdrop-blur-md text-nogal shadow-md border-b border-nogal/10"
             : "bg-transparent text-piedra border-b border-transparent"
         }`}
       >
-        <div className="flex-1 flex justify-start items-center">
+        <div className="flex items-center">
           <SiteNavigationMenu isScrolled={isScrolled} />
         </div>
         <Link
           to="/"
-          className="flex-none pointer-events-auto"
+          className="flex-1 flex justify-center pointer-events-auto"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           <img
@@ -656,7 +656,7 @@ function ReservasPage() {
             }
           />
         </Link>
-        <div className="flex-1 flex justify-end items-center gap-6 text-xs uppercase tracking-widest font-semibold pointer-events-auto">
+        <div className="flex items-center gap-6 text-xs uppercase tracking-widest font-semibold pointer-events-auto">
           {totalItems > 0 && (
             <button onClick={() => setCartOpen(true)} className="relative hover:opacity-70 transition-opacity">
               <ShoppingCart size={20} />
