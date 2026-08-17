@@ -138,7 +138,7 @@ const GALLERY_CATEGORIES: Category[] = [
 
 function GaleriaPage() {
   const { totalItems, setIsOpen: setCartOpen } = useCart();
-  const [activeCategory, setActiveCategory] = useState<string>("arte-cultura");
+  const [activeCategory, setActiveCategory] = useState<string>("festividades");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -221,8 +221,8 @@ function GaleriaPage() {
       <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="/imagenes-reales/hero-paginas/hero-galeria.webp"
-            alt="Galería Las Flores"
+            src="/imagenes-reales/seccion-festividades/Festividades.webp"
+            alt="Festividades Las Flores"
             loading="eager"
             decoding="async"
             className="w-full h-full object-cover opacity-65 filter brightness-105 saturate-[1.1]"
