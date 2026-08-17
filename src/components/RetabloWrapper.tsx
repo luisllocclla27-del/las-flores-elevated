@@ -316,25 +316,15 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Contenedor del Logo en Pan de Oro */}
-                  <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-2 border-[#f0d9b5]/50 flex items-center justify-center mb-3 bg-[#3b1f10]/95 p-3 shadow-xl ring-1 ring-[#d4a373]/20">
+                  {/* Círculo con Logo Oficial Único */}
+                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#d4a373]/60 flex items-center justify-center bg-[#3b1f10] p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
                     <img
-                      src="/images.png"
+                      src="/favicon.png"
                       alt="Logo Las Flores"
                       className="w-full h-full object-contain"
-                      style={{
-                        filter: "brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(940%) hue-rotate(345deg) brightness(98%) contrast(90%)",
-                      }}
                       draggable={false}
                     />
                   </div>
-                  <span className="text-[#f0d9b5] font-serif italic text-[11px] lg:text-[12px] tracking-[0.25em] uppercase font-semibold text-center drop-shadow">
-                    Las Flores
-                  </span>
-                  <div className="w-8 h-[1px] bg-[#d4a373]/40 my-1" />
-                  <span className="text-[#d4a373]/70 font-sans text-[8px] tracking-[0.3em] uppercase">
-                    Ayacucho
-                  </span>
                 </div>
               </div>
             </div>
@@ -391,25 +381,15 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Contenedor del Logo en Pan de Oro */}
-                  <div className="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-2 border-[#f0d9b5]/50 flex items-center justify-center mb-3 bg-[#3b1f10]/95 p-3 shadow-xl ring-1 ring-[#d4a373]/20">
+                  {/* Círculo con Logo Oficial Único */}
+                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#d4a373]/60 flex items-center justify-center bg-[#3b1f10] p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
                     <img
-                      src="/images.png"
+                      src="/favicon.png"
                       alt="Logo Las Flores"
                       className="w-full h-full object-contain"
-                      style={{
-                        filter: "brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(940%) hue-rotate(345deg) brightness(98%) contrast(90%)",
-                      }}
                       draggable={false}
                     />
                   </div>
-                  <span className="text-[#f0d9b5] font-serif italic text-[11px] lg:text-[12px] tracking-[0.25em] uppercase font-semibold text-center drop-shadow">
-                    Las Flores
-                  </span>
-                  <div className="w-8 h-[1px] bg-[#d4a373]/40 my-1" />
-                  <span className="text-[#d4a373]/70 font-sans text-[8px] tracking-[0.3em] uppercase">
-                    Ayacucho
-                  </span>
                 </div>
               </div>
             </div>
