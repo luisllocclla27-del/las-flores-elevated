@@ -316,12 +316,15 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Círculo con Logo Oficial Único */}
-                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#d4a373]/60 flex items-center justify-center bg-[#3b1f10] p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
+                  {/* Medallón Pan de Oro con Logo Oficial Transparente */}
+                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#f0d9b5]/60 flex items-center justify-center bg-[#3b1f10]/95 p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
                     <img
-                      src="/favicon.png"
+                      src="/images.png"
                       alt="Logo Las Flores"
                       className="w-full h-full object-contain"
+                      style={{
+                        filter: "brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(940%) hue-rotate(345deg) brightness(98%) contrast(90%)",
+                      }}
                       draggable={false}
                     />
                   </div>
@@ -381,12 +384,15 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Círculo con Logo Oficial Único */}
-                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#d4a373]/60 flex items-center justify-center bg-[#3b1f10] p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
+                  {/* Medallón Pan de Oro con Logo Oficial Transparente */}
+                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#f0d9b5]/60 flex items-center justify-center bg-[#3b1f10]/95 p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
                     <img
-                      src="/favicon.png"
+                      src="/images.png"
                       alt="Logo Las Flores"
                       className="w-full h-full object-contain"
+                      style={{
+                        filter: "brightness(0) saturate(100%) invert(88%) sepia(21%) saturate(940%) hue-rotate(345deg) brightness(98%) contrast(90%)",
+                      }}
                       draggable={false}
                     />
                   </div>
