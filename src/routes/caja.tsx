@@ -531,21 +531,61 @@ function CashierDashboardRoute() {
     })
     .reduce((sum, o) => sum + Number(o.total || 0), 0);
 
+  // Timer en vivo para que el promedio y los tiempos de espera se actualicen cada 15 segundos
+  const [currentTimestamp, setCurrentTimestamp] = useState(Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTimestamp(Date.now());
+    }, 15000);
+    return () => clearInterval(timer);
+  }, []);
+
   const pendingOrders = orders.filter((o) => getNormalizedStatus(o.status) === "pendiente");
   const inKitchenOrders = orders.filter((o) => getNormalizedStatus(o.status) === "en_preparacion");
   const onWayOrders = orders.filter((o) => getNormalizedStatus(o.status) === "en_camino");
   const activeOrdersCount = pendingOrders.length + inKitchenOrders.length + onWayOrders.length;
 
   const avgWaitMins = (() => {
-    const active = [...pendingOrders, ...inKitchenOrders];
-    if (active.length === 0) return 0;
-    const now = Date.now();
-    const totalMins = active.reduce((sum, o) => {
-      if (!o.created_at) return sum;
-      const created = new Date(o.created_at).getTime();
-      return sum + Math.max(0, Math.floor((now - created) / (1000 * 60)));
-    }, 0);
-    return Math.round(totalMins / active.length);
+    const active = [...pendingOrders, ...inKitchenOrders, ...onWayOrders];
+    
+    // 1. Si hay pedidos en cola activa, calcular el tiempo de espera real transcurrido en vivo
+    if (active.length > 0) {
+      const totalMins = active.reduce((sum, o) => {
+        if (!o.created_at) return sum;
+        const created = new Date(o.created_at).getTime();
+        return sum + Math.max(1, Math.floor((currentTimestamp - created) / (1000 * 60)));
+      }, 0);
+      return Math.max(1, Math.round(totalMins / active.length));
+    }
+
+    // 2. Si la cola está libre, calcular el promedio de despacho real de las órdenes entregadas hoy
+    const deliveredToday = orders.filter((o) => {
+      if (getNormalizedStatus(o.status) !== "entregado") return false;
+      const ordDateStr = o.created_at ? getLocalYYYYMMDD(new Date(o.created_at)) : "";
+      return ordDateStr === todayStr;
+    });
+
+    if (deliveredToday.length > 0) {
+      const validDeliveredTimes = deliveredToday
+        .map((o) => {
+          if (!o.created_at) return 0;
+          const created = new Date(o.created_at).getTime();
+          const completed = o.updated_at ? new Date(o.updated_at).getTime() : created;
+          const diff = Math.floor((completed - created) / (1000 * 60));
+          if (diff >= 5 && diff <= 90) return diff;
+          // Estimado según tipo de pedido
+          return o.order_type === "pickup" ? 15 : 25;
+        })
+        .filter((mins) => mins > 0);
+
+      if (validDeliveredTimes.length > 0) {
+        const sum = validDeliveredTimes.reduce((acc, m) => acc + m, 0);
+        return Math.round(sum / validDeliveredTimes.length);
+      }
+    }
+
+    // 3. Estándar operativo si no hay órdenes hoy
+    return 20;
   })();
 
   const todayReservationsCount = reservations.filter((r) => {

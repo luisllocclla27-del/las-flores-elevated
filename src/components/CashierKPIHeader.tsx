@@ -105,7 +105,7 @@ export function CashierKPIHeader({
           </div>
           <div className="min-w-0">
             <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
-              Promedio Espera
+              {activeOrdersCount > 0 ? "Espera en Cola" : "Promedio Despacho"}
             </span>
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-blue-950">
               {avgWaitMins} min
