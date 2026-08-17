@@ -562,6 +562,7 @@ export function CartSidebar() {
                 .join(", ")
             : "";
           return {
+            product_id: i.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(i.id) ? i.id : undefined,
             product_name: opts ? `${i.name} (${opts})` : i.name,
             unit_price: i.price,
             quantity: i.quantity,
