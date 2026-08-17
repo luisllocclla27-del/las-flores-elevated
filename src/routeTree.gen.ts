@@ -11,8 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as UneteAlEquipoRouteImport } from './routes/unete-al-equipo'
 import { Route as TesorosAyacuchoRouteImport } from './routes/tesoros-ayacucho'
+import { Route as TerminosYCondicionesRouteImport } from './routes/terminos-y-condiciones'
 import { Route as RestauranteRouteImport } from './routes/restaurante'
 import { Route as ReservasRouteImport } from './routes/reservas'
+import { Route as PoliticaDePrivacidadRouteImport } from './routes/politica-de-privacidad'
+import { Route as LibroDeReclamacionesRouteImport } from './routes/libro-de-reclamaciones'
 import { Route as GaleriaRouteImport } from './routes/galeria'
 import { Route as FamiliaLasFloresRouteImport } from './routes/familia-las-flores'
 import { Route as EventosRouteImport } from './routes/eventos'
@@ -34,6 +37,11 @@ const TesorosAyacuchoRoute = TesorosAyacuchoRouteImport.update({
   path: '/tesoros-ayacucho',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TerminosYCondicionesRoute = TerminosYCondicionesRouteImport.update({
+  id: '/terminos-y-condiciones',
+  path: '/terminos-y-condiciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RestauranteRoute = RestauranteRouteImport.update({
   id: '/restaurante',
   path: '/restaurante',
@@ -42,6 +50,16 @@ const RestauranteRoute = RestauranteRouteImport.update({
 const ReservasRoute = ReservasRouteImport.update({
   id: '/reservas',
   path: '/reservas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PoliticaDePrivacidadRoute = PoliticaDePrivacidadRouteImport.update({
+  id: '/politica-de-privacidad',
+  path: '/politica-de-privacidad',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibroDeReclamacionesRoute = LibroDeReclamacionesRouteImport.update({
+  id: '/libro-de-reclamaciones',
+  path: '/libro-de-reclamaciones',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GaleriaRoute = GaleriaRouteImport.update({
@@ -104,8 +122,11 @@ export interface FileRoutesByFullPath {
   '/eventos': typeof EventosRoute
   '/familia-las-flores': typeof FamiliaLasFloresRoute
   '/galeria': typeof GaleriaRoute
+  '/libro-de-reclamaciones': typeof LibroDeReclamacionesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/reservas': typeof ReservasRoute
   '/restaurante': typeof RestauranteRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/tesoros-ayacucho': typeof TesorosAyacuchoRoute
   '/unete-al-equipo': typeof UneteAlEquipoRoute
   '/d/$orderId': typeof DOrderIdRoute
@@ -120,8 +141,11 @@ export interface FileRoutesByTo {
   '/eventos': typeof EventosRoute
   '/familia-las-flores': typeof FamiliaLasFloresRoute
   '/galeria': typeof GaleriaRoute
+  '/libro-de-reclamaciones': typeof LibroDeReclamacionesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/reservas': typeof ReservasRoute
   '/restaurante': typeof RestauranteRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/tesoros-ayacucho': typeof TesorosAyacuchoRoute
   '/unete-al-equipo': typeof UneteAlEquipoRoute
   '/d/$orderId': typeof DOrderIdRoute
@@ -137,8 +161,11 @@ export interface FileRoutesById {
   '/eventos': typeof EventosRoute
   '/familia-las-flores': typeof FamiliaLasFloresRoute
   '/galeria': typeof GaleriaRoute
+  '/libro-de-reclamaciones': typeof LibroDeReclamacionesRoute
+  '/politica-de-privacidad': typeof PoliticaDePrivacidadRoute
   '/reservas': typeof ReservasRoute
   '/restaurante': typeof RestauranteRoute
+  '/terminos-y-condiciones': typeof TerminosYCondicionesRoute
   '/tesoros-ayacucho': typeof TesorosAyacuchoRoute
   '/unete-al-equipo': typeof UneteAlEquipoRoute
   '/d/$orderId': typeof DOrderIdRoute
@@ -155,8 +182,11 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/familia-las-flores'
     | '/galeria'
+    | '/libro-de-reclamaciones'
+    | '/politica-de-privacidad'
     | '/reservas'
     | '/restaurante'
+    | '/terminos-y-condiciones'
     | '/tesoros-ayacucho'
     | '/unete-al-equipo'
     | '/d/$orderId'
@@ -171,8 +201,11 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/familia-las-flores'
     | '/galeria'
+    | '/libro-de-reclamaciones'
+    | '/politica-de-privacidad'
     | '/reservas'
     | '/restaurante'
+    | '/terminos-y-condiciones'
     | '/tesoros-ayacucho'
     | '/unete-al-equipo'
     | '/d/$orderId'
@@ -187,8 +220,11 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/familia-las-flores'
     | '/galeria'
+    | '/libro-de-reclamaciones'
+    | '/politica-de-privacidad'
     | '/reservas'
     | '/restaurante'
+    | '/terminos-y-condiciones'
     | '/tesoros-ayacucho'
     | '/unete-al-equipo'
     | '/d/$orderId'
@@ -204,8 +240,11 @@ export interface RootRouteChildren {
   EventosRoute: typeof EventosRoute
   FamiliaLasFloresRoute: typeof FamiliaLasFloresRoute
   GaleriaRoute: typeof GaleriaRoute
+  LibroDeReclamacionesRoute: typeof LibroDeReclamacionesRoute
+  PoliticaDePrivacidadRoute: typeof PoliticaDePrivacidadRoute
   ReservasRoute: typeof ReservasRoute
   RestauranteRoute: typeof RestauranteRoute
+  TerminosYCondicionesRoute: typeof TerminosYCondicionesRoute
   TesorosAyacuchoRoute: typeof TesorosAyacuchoRoute
   UneteAlEquipoRoute: typeof UneteAlEquipoRoute
   DOrderIdRoute: typeof DOrderIdRoute
@@ -228,6 +267,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TesorosAyacuchoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/terminos-y-condiciones': {
+      id: '/terminos-y-condiciones'
+      path: '/terminos-y-condiciones'
+      fullPath: '/terminos-y-condiciones'
+      preLoaderRoute: typeof TerminosYCondicionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/restaurante': {
       id: '/restaurante'
       path: '/restaurante'
@@ -240,6 +286,20 @@ declare module '@tanstack/react-router' {
       path: '/reservas'
       fullPath: '/reservas'
       preLoaderRoute: typeof ReservasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-de-privacidad': {
+      id: '/politica-de-privacidad'
+      path: '/politica-de-privacidad'
+      fullPath: '/politica-de-privacidad'
+      preLoaderRoute: typeof PoliticaDePrivacidadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/libro-de-reclamaciones': {
+      id: '/libro-de-reclamaciones'
+      path: '/libro-de-reclamaciones'
+      fullPath: '/libro-de-reclamaciones'
+      preLoaderRoute: typeof LibroDeReclamacionesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/galeria': {
@@ -324,8 +384,11 @@ const rootRouteChildren: RootRouteChildren = {
   EventosRoute: EventosRoute,
   FamiliaLasFloresRoute: FamiliaLasFloresRoute,
   GaleriaRoute: GaleriaRoute,
+  LibroDeReclamacionesRoute: LibroDeReclamacionesRoute,
+  PoliticaDePrivacidadRoute: PoliticaDePrivacidadRoute,
   ReservasRoute: ReservasRoute,
   RestauranteRoute: RestauranteRoute,
+  TerminosYCondicionesRoute: TerminosYCondicionesRoute,
   TesorosAyacuchoRoute: TesorosAyacuchoRoute,
   UneteAlEquipoRoute: UneteAlEquipoRoute,
   DOrderIdRoute: DOrderIdRoute,
