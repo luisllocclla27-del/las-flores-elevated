@@ -24,67 +24,50 @@ const STORAGE_KEY = "las_flores_yape_config";
 const BROADCAST_EVENT = "las_flores_yape_updated";
 
 export async function getYapeConfig(): Promise<YapeConfig> {
-  try {
-    const { data, error } = await supabase
-      .from("app_settings")
-      .select("value")
-      .eq("key", "yape_config")
-      .single();
-
-    if (!error && data?.value) {
-      const parsed = typeof data.value === "string" ? JSON.parse(data.value) : data.value;
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-      return parsed;
-    }
-  } catch (err) {
-    // Fallback
-  }
-
+  if (typeof window === "undefined") return DEFAULT_YAPE_CONFIG;
   const local = localStorage.getItem(STORAGE_KEY);
   if (local) {
     try {
       return JSON.parse(local);
     } catch {}
   }
-
   return DEFAULT_YAPE_CONFIG;
 }
 
 export async function saveYapeConfig(config: YapeConfig): Promise<boolean> {
+  if (typeof window === "undefined") return true;
+
   localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
   
-  // 1. Notificar inmediatamente a las demás pestañas/ventanas abiertas del mismo navegador
+  // Notificar inmediatamente a las demás pestañas del navegador
   window.dispatchEvent(new CustomEvent(BROADCAST_EVENT, { detail: config }));
 
   try {
-    // 2. Transmitir en vivo por canal Realtime de Supabase (WebSockets) a todos los clientes conectados
-    const channel = supabase.channel("realtime-yape-broadcast");
-    await channel.send({
-      type: "broadcast",
-      event: "yape_change",
-      payload: config,
+    const channel = supabase.channel("yape_sync_room");
+    channel.subscribe((status) => {
+      if (status === "SUBSCRIBED") {
+        channel.send({
+          type: "broadcast",
+          event: "yape_change",
+          payload: config,
+        }).finally(() => {
+          supabase.removeChannel(channel);
+        });
+      }
     });
-
-    // 3. Persistir en la tabla app_settings de Supabase
-    await supabase
-      .from("app_settings")
-      .upsert({
-        key: "yape_config",
-        value: config,
-        updated_at: new Date().toISOString(),
-      }, { onConflict: "key" });
-
   } catch (err) {
-    console.warn("Realtime sync fallback:", err);
+    console.warn("Realtime broadcast error:", err);
   }
 
   return true;
 }
 
 /**
- * Suscriptor en Tiempo Real (Realtime Supabase + Eventos de ventana)
+ * Suscriptor en Tiempo Real (Realtime Supabase Broadcast + Eventos de ventana)
  */
 export function subscribeToYapeConfig(callback: (config: YapeConfig) => void) {
+  if (typeof window === "undefined") return () => {};
+
   // Listener de evento local (mismo navegador / multi-pestaña)
   const handleLocal = (e: any) => {
     if (e.detail) callback(e.detail);
@@ -100,33 +83,22 @@ export function subscribeToYapeConfig(callback: (config: YapeConfig) => void) {
   };
   window.addEventListener("storage", handleStorage);
 
-  // Canal Supabase Realtime Broadcast & Postgres Changes
-  const channel = supabase
-    .channel("realtime-yape-broadcast")
+  // Canal Supabase Realtime Broadcast
+  const channel = supabase.channel("yape_sync_listener");
+  
+  channel
     .on("broadcast", { event: "yape_change" }, (payload) => {
       if (payload.payload) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(payload.payload));
         callback(payload.payload as YapeConfig);
       }
     })
-    .on(
-      "postgres_changes",
-      { event: "*", schema: "public", table: "app_settings", filter: "key=eq.yape_config" },
-      (payload) => {
-        if (payload.new && (payload.new as any).value) {
-          const val = (payload.new as any).value;
-          const parsed = typeof val === "string" ? JSON.parse(val) : val;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
-          callback(parsed as YapeConfig);
-        }
-      }
-    )
     .subscribe();
 
-  // Retornar función de desuscripción limpia
   return () => {
     window.removeEventListener(BROADCAST_EVENT, handleLocal);
     window.removeEventListener("storage", handleStorage);
     supabase.removeChannel(channel);
   };
 }
+
