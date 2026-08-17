@@ -7,7 +7,7 @@ import type { User } from "@supabase/supabase-js";
 import { signInWithGoogle, signInWithFacebook, signOut, createReservation, updateUserProfile, supabase } from "@/lib/supabase";
 import { sendReservationEmail } from "@/lib/emailService";
 import { playSuccessChime } from "@/lib/soundUtils";
-import { Calendar, CheckCircle2, User as UserIcon, MapPin, Search, ShoppingCart, ChevronLeft, Check, AlertCircle, Sparkles, Sun, Wine, Utensils, Users, Award, Share2, CalendarPlus, QrCode, Heart, Coffee } from "lucide-react";
+import { Calendar, CheckCircle2, User as UserIcon, MapPin, Search, ShoppingCart, ChevronLeft, Check, AlertCircle, Sparkles, Sun, Wine, Utensils, Users, Award, Share2, CalendarPlus, QrCode, Heart, Coffee, ShieldCheck, X } from "lucide-react";
 import { LoginModal } from "@/components/LoginModal";
 import { getBlockedZonesForReservation, listRestaurantZones } from "@/features/zones/api";
 
