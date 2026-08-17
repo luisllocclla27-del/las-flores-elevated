@@ -398,7 +398,7 @@ export async function sendReviewRequestEmail(customerData: { name: string; email
             Le invitamos cordialmente a compartir su valoración en nuestra ficha oficial de Google Maps.
           </p>
 
-          <a href="https://www.google.com/maps/place/Restaurante+Las+Flores/@-13.1629067,-74.220488,17z/data=!4m8!3m7!1s0x911287600027a52b:0x1c3e!8m2!3d-13.1629067!4d-74.220488!9m1!1b1" target="_blank" style="background-color: #2C4A3E; color: #FFFFFF; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
+          <a href="https://www.google.com/maps/place/Restaurante+Las+Flores/@-13.1629067,-74.222784,17z/data=!4m8!3m7!1s0x911287600027a52b:0x1c3e775f879b7bbe!8m2!3d-13.1629067!4d-74.2179131!9m1!1b1!16s%2Fg%2F11bw_7shlg" target="_blank" style="background-color: #2C4A3E; color: #FFFFFF; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: inline-block;">
             Compartir Reseña en Google Maps
           </a>
         </div>
