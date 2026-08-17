@@ -135,9 +135,10 @@ function CashierDashboardRoute() {
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
 
-  // Floating Stacked Toast Alerts
+  // Floating Stacked Toast Alerts (Máximo 2 visibles simultáneamente)
   interface NotificationItem {
     id: string;
+    entityId: string; // ID único del pedido o reserva para evitar duplicaciones
     type: "order" | "reservation";
     title: string;
     subtitle: string;
@@ -154,12 +155,19 @@ function CashierDashboardRoute() {
       playOrderChime();
     }
 
-    setNotifications((prev) => [item, ...prev.slice(0, 7)]); // Máximo 8 apiladas
+    setNotifications((prev) => {
+      // Si ya existe una notificación para esta misma orden o reserva, no duplicar
+      if (prev.some((n) => n.entityId === notif.entityId)) {
+        return prev;
+      }
+      // Mantener exactamente máximo 2 visibles en pantalla
+      return [item, ...prev.slice(0, 1)];
+    });
 
-    // Auto colapsar/cerrar en 8.5 segundos para dar tiempo suficiente de lectura
+    // Auto colapsar/cerrar en 7 segundos
     setTimeout(() => {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, 8500);
+    }, 7000);
   };
 
   const checkAuth = async () => {
@@ -216,6 +224,7 @@ function CashierDashboardRoute() {
             const newOrders = ordData.filter((o: any) => !prevIds.has(o.id));
             newOrders.forEach((newest: any) => {
               addNotification({
+                entityId: newest.id || newest.order_number,
                 type: "order",
                 title: "¡NUEVO PEDIDO RECIBIDO!",
                 subtitle: `#${newest.order_number || "LF-NUEVO"}`,
@@ -273,6 +282,7 @@ function CashierDashboardRoute() {
             const newRes = updatedResData.filter((r: any) => !prevResIds.has(r.id));
             newRes.forEach((newest: any) => {
               addNotification({
+                entityId: newest.id,
                 type: "reservation",
                 title: "¡NUEVA RESERVA DE MESA!",
                 subtitle: newest.client_name || "Cliente Reserva",
@@ -311,6 +321,7 @@ function CashierDashboardRoute() {
           if (payload.eventType === "INSERT") {
             const n = payload.new as any;
             addNotification({
+              entityId: n.id || n.order_number,
               type: "order",
               title: "¡NUEVO PEDIDO RECIBIDO!",
               subtitle: `#${n.order_number || "LF-NUEVO"}`,
@@ -328,6 +339,7 @@ function CashierDashboardRoute() {
           if (payload.eventType === "INSERT") {
             const n = payload.new as any;
             addNotification({
+              entityId: n.id,
               type: "reservation",
               title: "¡NUEVA RESERVA DE MESA!",
               subtitle: n.client_name || "Cliente Reserva",
