@@ -130,9 +130,21 @@ export function openCulqiCheckout(config: CulqiSettings): Promise<CulqiToken> {
     // Definir handlers globales
     (window as any).culqi = function() {
       if (window.Culqi.token) {
-        resolve(window.Culqi.token);
+        const tkn = window.Culqi.token;
+        try {
+          if (typeof window.Culqi.close === "function") {
+            window.Culqi.close();
+          }
+        } catch (_) {}
+        resolve(tkn);
       } else if (window.Culqi.error) {
-        reject(window.Culqi.error);
+        const err = window.Culqi.error;
+        try {
+          if (typeof window.Culqi.close === "function") {
+            window.Culqi.close();
+          }
+        } catch (_) {}
+        reject(err);
       }
     };
 
