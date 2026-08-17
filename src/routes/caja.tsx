@@ -270,6 +270,7 @@ function CashierDashboardRoute() {
   useEffect(() => { soundEnabledRef.current = soundEnabled; }, [soundEnabled]);
 
   useEffect(() => {
+    // 1. Supabase Realtime WebSocket
     const channel = supabase
       .channel("cashier-realtime-all")
       .on(
@@ -296,8 +297,14 @@ function CashierDashboardRoute() {
       )
       .subscribe();
 
+    // 2. Polling silencioso de respaldo cada 5 segundos para garantizar 100% de frescura
+    const interval = setInterval(() => {
+      fetchData(true);
+    }, 5000);
+
     return () => {
       supabase.removeChannel(channel);
+      clearInterval(interval);
     };
   }, []);
 
