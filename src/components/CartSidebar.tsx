@@ -494,12 +494,22 @@ export function CartSidebar() {
         
         console.log("🔵 CLIENTE: Payload:", payload);
         
-        const chargeResult = await processCulqiCharge({ data: payload });
+        let chargeResult: any = null;
 
-        console.log("🔵 CLIENTE: Respuesta recibida:", chargeResult);
+        try {
+          const apiRes = await fetch("/api/culqi-charge", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          chargeResult = await apiRes.json();
+        } catch (fetchErr) {
+          // Fallback a createServerFn
+          chargeResult = await processCulqiCharge({ data: payload });
+        }
 
-        if (!chargeResult.success) {
-          throw new Error(chargeResult.error || "Error al procesar el pago con Culqi");
+        if (!chargeResult || !chargeResult.success) {
+          throw new Error(chargeResult?.error || "Error al procesar el pago con Culqi");
         }
 
         culqiChargeId = chargeResult.chargeId || null;
