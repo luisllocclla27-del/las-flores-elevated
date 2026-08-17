@@ -125,7 +125,9 @@ async function culqiRequest(endpoint: string, options: RequestInit = {}): Promis
   const data = await response.json();
 
   if (!response.ok || data.object === "error") {
-    throw new Error(data.merchant_message || data.user_message || "Error en petición a Culqi");
+    const errorMsg = data.user_message || data.merchant_message || data.message || "Error en petición a Culqi";
+    console.error("Detalle error Culqi API:", JSON.stringify(data));
+    throw new Error(errorMsg);
   }
 
   return data;
