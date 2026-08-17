@@ -662,7 +662,7 @@ function CashierDashboardRoute() {
               }`}
             >
               <ShoppingBag size={16} className={viewMode === "orders" ? "text-[#D4AF37]" : "text-gray-400"} />
-              <span>Comandas & Pedidos ({pendingOrders.length} Pendientes)</span>
+              <span>Delivery ({pendingOrders.length} Pendientes)</span>
             </button>
 
             <button
@@ -674,7 +674,7 @@ function CashierDashboardRoute() {
               }`}
             >
               <Calendar size={16} className={viewMode === "reservations" ? "text-[#D4AF37]" : "text-gray-400"} />
-              <span>Reservas de Mesas ({todayReservationsCount} Hoy)</span>
+              <span>Reservas ({todayReservationsCount} Hoy)</span>
             </button>
 
             <button
