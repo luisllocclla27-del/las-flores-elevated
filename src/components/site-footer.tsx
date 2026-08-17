@@ -66,30 +66,30 @@ export function SiteFooter() {
               <Link to="/familia-las-flores" className="hover:text-chilca transition-colors">
                 Familia Las Flores
               </Link>
-              <a href="#" className="hover:text-chilca transition-colors">
+              <Link to="/politica-de-privacidad" className="hover:text-chilca transition-colors">
                 Política de Privacidad
-              </a>
-              <a href="#" className="hover:text-chilca transition-colors">
+              </Link>
+              <Link to="/terminos-y-condiciones" className="hover:text-chilca transition-colors">
                 Términos y Condiciones
-              </a>
+              </Link>
               <Link to="/unete-al-equipo" className="hover:text-chilca transition-colors font-semibold">
                 Únete al Equipo
               </Link>
             </div>
 
-            <a
-              href="#"
-              className="flex items-center gap-3 mt-4 hover:opacity-80 transition-opacity bg-white text-nogal py-2 px-3 rounded-sm"
+            <Link
+              to="/libro-de-reclamaciones"
+              className="flex items-center gap-3 mt-4 hover:opacity-90 transition-all bg-white text-nogal py-2 px-3 rounded-md shadow-sm border border-black/10 group"
             >
-              <BookOpen size={24} className="text-eucalipto" />
+              <BookOpen size={24} className="text-eucalipto group-hover:scale-110 transition-transform" />
               <div className="leading-none text-left">
-                <span className="text-[10px] uppercase font-bold text-eucalipto">Libro de</span>
+                <span className="text-[10px] uppercase font-bold text-eucalipto tracking-wider">Libro de</span>
                 <br />
-                <span className="text-[10px] uppercase font-bold text-eucalipto">
+                <span className="text-[10px] uppercase font-extrabold text-eucalipto tracking-wider">
                   Reclamaciones
                 </span>
               </div>
-            </a>
+            </Link>
           </div>
 
           {/* Central info (Address, Email, Phone) */}
