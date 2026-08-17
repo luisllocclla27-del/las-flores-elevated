@@ -407,6 +407,7 @@ function UneteAlEquipoPage() {
               )}
             </div>
           </div>
+        </div>
         )}
       </section>
 
