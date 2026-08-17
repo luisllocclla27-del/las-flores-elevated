@@ -479,7 +479,9 @@ export function AdminComplaintsSection() {
                 <span className="text-[10px] uppercase font-extrabold text-emerald-800 block tracking-wider">
                   Pedido Concreto del Consumidor (Solución solicitada)
                 </span>
-                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{selectedComplaint.consumerRequest}</p>
+                <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
+                  {selectedComplaint.consumer_request || (selectedComplaint as any).consumerRequest}
+                </p>
               </div>
             </div>
 
