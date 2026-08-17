@@ -316,8 +316,8 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Medallón Pan de Oro con Logo Oficial Transparente */}
-                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#f0d9b5]/60 flex items-center justify-center bg-[#3b1f10]/95 p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
+                  {/* Medallón Pan de Oro con Logo Oficial Transparente - Tamaño Ampliado */}
+                  <div className="w-36 h-36 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-[3px] border-[#f0d9b5]/70 flex items-center justify-center bg-[#3b1f10]/95 p-5 lg:p-6 shadow-2xl ring-4 ring-[#d4a373]/25 transition-transform">
                     <img
                       src="/images.png"
                       alt="Logo Las Flores"
@@ -384,8 +384,8 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
               {/* Madera caoba con doble filete dorado y Sello del Logo Oficial */}
               <div className="relative w-full h-full retablo-frame flex items-center justify-center p-3">
                 <div className="w-full h-full border-2 border-[#d4a373]/40 flex flex-col items-center justify-center p-4 bg-[#2d1b15]/50 shadow-inner">
-                  {/* Medallón Pan de Oro con Logo Oficial Transparente */}
-                  <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-full border-2 border-[#f0d9b5]/60 flex items-center justify-center bg-[#3b1f10]/95 p-4 shadow-2xl ring-2 ring-[#d4a373]/30">
+                  {/* Medallón Pan de Oro con Logo Oficial Transparente - Tamaño Ampliado */}
+                  <div className="w-36 h-36 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-[3px] border-[#f0d9b5]/70 flex items-center justify-center bg-[#3b1f10]/95 p-5 lg:p-6 shadow-2xl ring-4 ring-[#d4a373]/25 transition-transform">
                     <img
                       src="/images.png"
                       alt="Logo Las Flores"
