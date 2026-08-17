@@ -1062,7 +1062,7 @@ function Index() {
               Platos Típicos
             </span>
             <h2 className="font-serif text-3xl md:text-5xl leading-[1.1] text-balance">
-              La despensa de la sierra en cinco sabores
+              La despensa de la sierra en cuatro sabores
             </h2>
             <p className="mt-4 text-base text-piedra/70 leading-[1.6] max-w-2xl">
               Recetas que definen la identidad ayacuchana. El fruto del fogón y las festividades que
