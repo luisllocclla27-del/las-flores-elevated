@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { BookOpen, Send, CheckCircle2, AlertCircle, ShoppingCart, HelpCircle, ShieldCheck } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { supabase } from "@/lib/supabase";
+import { sendComplaintEmail } from "@/lib/emailService";
 
 export const Route = createFileRoute("/libro-de-reclamaciones")({
   head: () => ({
@@ -90,6 +91,25 @@ function LibroReclamacionesPage() {
       if (dbError) {
         console.warn("Supabase complaints insert fallback:", dbError.message);
       }
+
+      // Enviar correo de confirmación al cliente y a contacto@restaurantelasflores.com
+      await sendComplaintEmail({
+        code: generatedCode,
+        fullName: form.fullName,
+        docType: form.docType,
+        docNumber: form.docNumber,
+        phone: form.phone,
+        email: form.email,
+        address: form.address,
+        isMinor: form.isMinor,
+        parentName: form.parentName,
+        claimedType: form.claimedType,
+        claimedAmount: form.claimedAmount,
+        claimedDescription: form.claimedDescription,
+        claimType: form.claimType,
+        detail: form.detail,
+        consumerRequest: form.consumerRequest,
+      });
 
       setSubmittedCode(generatedCode);
       window.scrollTo({ top: 300, behavior: "smooth" });

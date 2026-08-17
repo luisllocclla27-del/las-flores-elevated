@@ -424,3 +424,100 @@ export async function sendReviewRequestEmail(customerData: { name: string; email
     });
   }
 }
+
+/**
+ * 4. Enviar Confirmación de Hoja de Reclamación (Libro de Reclamaciones Indecopi)
+ */
+export async function sendComplaintEmail(complaintData: {
+  code: string;
+  fullName: string;
+  docType: string;
+  docNumber: string;
+  phone: string;
+  email: string;
+  address: string;
+  isMinor: boolean;
+  parentName?: string;
+  claimedType: string;
+  claimedAmount?: string | number;
+  claimedDescription: string;
+  claimType: string;
+  detail: string;
+  consumerRequest: string;
+}): Promise<void> {
+  const emailHtml = `
+    <div style="background-color: #FAF6ED; padding: 28px; max-width: 620px; margin: 0 auto; font-family: Arial, sans-serif; border: 1px solid #D4AF3740; border-radius: 12px; color: #1B2A24;">
+      
+      <!-- Cabecera -->
+      <div style="text-align: center; border-bottom: 2px solid #2C4A3E; padding-bottom: 16px; margin-bottom: 20px;">
+        <h1 style="color: #2C4A3E; font-size: 20px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1px;">
+          Restaurante Turístico Las Flores
+        </h1>
+        <p style="margin: 0; font-size: 11px; color: #666666;">
+          Libro de Reclamaciones Virtual — Conforme a la Ley N° 29571 (Indecopi)
+        </p>
+      </div>
+
+      <!-- Constancia -->
+      <div style="background-color: #FFFFFF; padding: 18px; border-radius: 8px; border: 1px solid #E2D9C8; margin-bottom: 20px;">
+        <div style="text-align: center; margin-bottom: 14px;">
+          <span style="font-size: 11px; font-weight: bold; color: #888888; text-transform: uppercase; letter-spacing: 1px;">Código de Hoja de Reclamación</span>
+          <p style="font-size: 22px; font-weight: 900; color: #2C4A3E; margin: 4px 0 0 0; font-family: monospace; letter-spacing: 2px;">
+            ${complaintData.code}
+          </p>
+          <span style="font-size: 11px; color: #555555; display: block; margin-top: 4px;">
+            Tipo: <strong>${complaintData.claimType.toUpperCase()}</strong> | Fecha: ${new Date().toLocaleDateString("es-PE")}
+          </span>
+        </div>
+
+        <div style="font-size: 13px; line-height: 1.6; color: #333333; border-top: 1px dashed #DDD; padding-top: 12px;">
+          <p style="margin: 4px 0;"><strong>Consumidor:</strong> ${complaintData.fullName}</p>
+          <p style="margin: 4px 0;"><strong>Documento:</strong> ${complaintData.docType} ${complaintData.docNumber}</p>
+          <p style="margin: 4px 0;"><strong>Teléfono:</strong> ${complaintData.phone} | <strong>Correo:</strong> ${complaintData.email}</p>
+          <p style="margin: 4px 0;"><strong>Bien Contratado:</strong> ${complaintData.claimedType === "producto" ? "Producto" : "Servicio"} — ${complaintData.claimedDescription}</p>
+          ${complaintData.claimedAmount ? `<p style="margin: 4px 0;"><strong>Monto Reclamado:</strong> S/ ${complaintData.claimedAmount}</p>` : ""}
+          <p style="margin: 8px 0 4px 0;"><strong>Detalle de los Hechos:</strong></p>
+          <div style="background-color: #F8F9FA; padding: 10px; border-radius: 6px; font-size: 12px; color: #444; border: 1px solid #EEE;">
+            ${complaintData.detail}
+          </div>
+          <p style="margin: 8px 0 4px 0;"><strong>Pedido del Consumidor:</strong></p>
+          <div style="background-color: #F8F9FA; padding: 10px; border-radius: 6px; font-size: 12px; color: #444; border: 1px solid #EEE;">
+            ${complaintData.consumerRequest}
+          </div>
+        </div>
+      </div>
+
+      <!-- Plazo Legal -->
+      <div style="background-color: #E8F0EC; border-left: 4px solid #2C4A3E; padding: 12px; border-radius: 6px; font-size: 12px; color: #1B2A24; margin-bottom: 20px;">
+        Conforme al marco legal vigente de Indecopi, Restaurante Las Flores dará respuesta formal y motivada a esta solicitud en un plazo máximo de <strong>15 días hábiles</strong>.
+      </div>
+
+      <div style="text-align: center; font-size: 11px; color: #777777;">
+        <p style="margin: 0;">Restaurante Las Flores S.A.C. — RUC 20608514921</p>
+        <p style="margin: 2px 0 0 0;">Jr. José Olaya 106, Huamanga, Ayacucho • contacto@restaurantelasflores.com</p>
+      </div>
+
+    </div>
+  `;
+
+  // 1. Enviar constancia al cliente
+  if (complaintData.email && complaintData.email.includes("@")) {
+    await sendEmail({
+      from: SENDERS.NOTIFICACIONES,
+      replyTo: OFFICIAL_EMAIL,
+      to: complaintData.email,
+      subject: `Constancia de Libro de Reclamaciones — ${complaintData.code}`,
+      html: emailHtml,
+    });
+  }
+
+  // 2. Enviar notificación urgente a la administración
+  await sendEmail({
+    from: SENDERS.NOTIFICACIONES,
+    replyTo: complaintData.email,
+    to: OFFICIAL_EMAIL,
+    subject: `🚨 [Libro de Reclamaciones] Nuevo ${complaintData.claimType.toUpperCase()} Registrado: ${complaintData.code}`,
+    html: emailHtml,
+  });
+}
+
