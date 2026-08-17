@@ -36,6 +36,7 @@ import { CustomerHistoryModal } from "./CustomerHistoryModal";
 import { LoginModal } from "./LoginModal";
 import { openCulqiCheckout, formatAmountToCents, getCulqiErrorMessage, type CulqiToken } from "../lib/culqiClient";
 import { processCulqiCharge } from "../lib/culqiApi";
+import { getYapeConfig, type YapeConfig } from "../lib/yapeService";
 import type { User } from "@supabase/supabase-js";
 
 type Step = "cart" | "delivery" | "payment" | "success" | "profile";
@@ -93,6 +94,21 @@ export function CartSidebar() {
   const [paymentMethod, setPaymentMethod] = useState<"yape" | "culqi" | "efectivo">("yape");
   const [yapeTitular, setYapeTitular] = useState("");
   const [yapeOperacion, setYapeOperacion] = useState("");
+  const [yapeConfig, setYapeConfig] = useState<YapeConfig>({
+    mode: "business",
+    businessName: "Corporación Las Flores SAC",
+    businessQrUrl: "/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg",
+    businessPhone: "967 456 230",
+    personalName: "Luis Gerardo Llocclla Saune",
+    personalQrUrl: "/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg",
+    personalPhone: "980 723 422",
+  });
+
+  useEffect(() => {
+    if (isOpen) {
+      getYapeConfig().then((cfg) => setYapeConfig(cfg));
+    }
+  }, [isOpen]);
   const [culqiToken, setCulqiToken] = useState<CulqiToken | null>(null);
   const [culqiProcessing, setCulqiProcessing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -1273,7 +1289,7 @@ export function CartSidebar() {
                       className="w-36 h-36 rounded-xl p-3 mb-3 border border-nogal/10 bg-white shadow-xs"
                     >
                       <img
-                        src="/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg"
+                        src={yapeConfig.mode === "personal" ? yapeConfig.personalQrUrl : yapeConfig.businessQrUrl}
                         alt="QR Yape o Plin"
                         className="w-full h-full object-contain rounded-lg"
                       />
@@ -1281,9 +1297,14 @@ export function CartSidebar() {
                     <p className="font-serif font-bold text-sm text-black/80">
                       Escanea con Yape o Plin
                     </p>
-                    <p className="text-xs text-black/50 mt-0.5">
-                      A nombre de <strong>Corporación Las Flores SAC</strong>
+                    <p className="text-xs text-black/60 mt-0.5 text-center">
+                      A nombre de <strong className="text-[#2D473C] font-bold">{yapeConfig.mode === "personal" ? yapeConfig.personalName : yapeConfig.businessName}</strong>
                     </p>
+                    {(yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone) && (
+                      <span className="text-[11px] text-gray-500 font-mono mt-0.5">
+                        Número: {yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <Label>Titular de la cuenta origen *</Label>
