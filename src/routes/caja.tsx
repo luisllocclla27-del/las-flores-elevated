@@ -29,7 +29,7 @@ import {
   Building2,
   UserCheck,
 } from "lucide-react";
-import { getYapeConfig, saveYapeConfig, type YapeConfig } from "../lib/yapeService";
+import { getYapeConfig, saveYapeConfig, subscribeToYapeConfig, DEFAULT_YAPE_CONFIG, type YapeConfig } from "../lib/yapeService";
 
 const getLocalYYYYMMDD = (d?: Date | string) => {
   if (!d) return "";
@@ -142,18 +142,18 @@ function CashierDashboardRoute() {
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
   const [isYapeModalOpen, setIsYapeModalOpen] = useState(false);
 
-  const [yapeConfig, setYapeConfig] = useState<YapeConfig>({
-    mode: "business",
-    businessName: "Corporación Las Flores SAC",
-    businessQrUrl: "/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg",
-    businessPhone: "967 456 230",
-    personalName: "Ivinovith Chu*",
-    personalQrUrl: "/QRyape/952bf29a-d177-4682-a5d9-9ae02dd4744b.jpg",
-    personalPhone: "980 723 422",
-  });
+  const [yapeConfig, setYapeConfig] = useState<YapeConfig>(DEFAULT_YAPE_CONFIG);
 
   useEffect(() => {
     getYapeConfig().then((cfg) => setYapeConfig(cfg));
+
+    const unsubscribe = subscribeToYapeConfig((newConfig) => {
+      setYapeConfig(newConfig);
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   // Floating Stacked Toast Alerts (Máximo 2 visibles simultáneamente)
