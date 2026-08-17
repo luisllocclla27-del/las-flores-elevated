@@ -25,26 +25,17 @@ export const processCulqiCharge = createServerFn()
     };
   })
   .handler(async ({ data: payload }) => {
-    console.log("🟡 processCulqiCharge called with payload:", payload);
-  
   try {
-    // Verificar que estamos en el servidor
     if (typeof window !== "undefined") {
       throw new Error("Esta función solo puede ejecutarse en el servidor");
     }
 
-    console.log("🟡 Verificando variables de entorno...");
     const secretKey = process.env.CULQI_SECRET_KEY;
-    console.log("🟡 CULQI_SECRET_KEY:", secretKey ? `${secretKey.substring(0, 15)}...` : "❌ NO DEFINIDA");
-
     if (!secretKey) {
       throw new Error("CULQI_SECRET_KEY no está definida en el servidor");
     }
 
-    // Importación dinámica para evitar que se cargue en el cliente
-    console.log("🟡 Importando culqiServer...");
     const { createCharge } = await import("./culqiServer");
-    console.log("🟡 culqiServer importado exitosamente");
     
     // Validar datos de entrada
     if (!payload.tokenId || !payload.amount || !payload.email) {
@@ -54,8 +45,6 @@ export const processCulqiCharge = createServerFn()
     if (payload.amount <= 0) {
       throw new Error("El monto debe ser mayor a cero");
     }
-
-    console.log("🟡 Datos validados, preparando metadata...");
 
     // Preparar metadata para Culqi
     const metadata: Record<string, any> = {
@@ -99,9 +88,7 @@ export const processCulqiCharge = createServerFn()
       antifraud_details: antifraudDetails,
     };
 
-    console.log("🟡 Llamando a createCharge...");
     const charge = await createCharge(chargePayload);
-    console.log("🟢 Charge creado exitosamente");
 
     // Verificar que el cargo fue exitoso
     if (!charge || !charge.id) {
@@ -126,9 +113,7 @@ export const processCulqiCharge = createServerFn()
       },
     };
   } catch (error: any) {
-    console.error("🔴 Error procesando cargo Culqi:", error);
-    console.error("🔴 Error stack:", error.stack);
-    console.error("🔴 Error details:", JSON.stringify(error, null, 2));
+    console.error("Error procesando cargo Culqi:", error.message);
     
     // Retornar error estructurado
     return {

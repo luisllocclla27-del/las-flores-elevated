@@ -364,7 +364,7 @@ function FamiliaLasFloresPage() {
               { key: "salon", label: "Salón" },
               { key: "barra", label: "Barra" },
               { key: "reposteria", label: "Repostería" },
-            ] as { key: string; label: string }[]).map((cat) => (
+            ] as { key: "all" | "administracion" | "cocina" | "salon" | "barra" | "reposteria"; label: string }[]).map((cat) => (
               <button
                 key={cat.key}
                 onClick={() => setActiveCategory(cat.key)}
@@ -393,7 +393,7 @@ function FamiliaLasFloresPage() {
             { key: "salon", label: "Salón" },
             { key: "barra", label: "Barra" },
             { key: "reposteria", label: "Repostería" },
-          ] as { key: string; label: string }[]).map((cat) => (
+          ] as { key: "all" | "administracion" | "cocina" | "salon" | "barra" | "reposteria"; label: string }[]).map((cat) => (
             <button
               key={cat.key}
               onClick={() => setActiveCategory(cat.key)}

@@ -138,8 +138,6 @@ async function culqiRequest(endpoint: string, options: RequestInit = {}): Promis
  */
 export async function createCharge(payload: CreateChargePayload): Promise<CulqiCharge> {
   try {
-    console.log("🔵 Creando cargo en Culqi con payload:", JSON.stringify(payload, null, 2));
-
     const chargeData = {
       amount: payload.amount,
       currency_code: payload.currency_code,
@@ -150,19 +148,14 @@ export async function createCharge(payload: CreateChargePayload): Promise<CulqiC
       antifraud_details: payload.antifraud_details,
     };
 
-    console.log("🔵 Charge data enviado a Culqi:", JSON.stringify(chargeData, null, 2));
-
     const charge = await culqiRequest("/charges", {
       method: "POST",
       body: JSON.stringify(chargeData),
     });
 
-    console.log("🟢 Respuesta de Culqi:", JSON.stringify(charge, null, 2));
-
     return charge as CulqiCharge;
   } catch (error: any) {
-    console.error("🔴 Error al crear cargo en Culqi:", error);
-    console.error("🔴 Error stack:", error.stack);
+    console.error("Error al crear cargo en Culqi:", error.message);
     throw new Error(error.message || "Error al procesar el pago con Culqi");
   }
 }

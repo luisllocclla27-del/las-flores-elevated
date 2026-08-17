@@ -559,11 +559,7 @@ export function CartSidebar() {
           };
         }),
       };
-      
-      console.log("🟣 ORDER DATA A ENVIAR:", orderData);
-      console.log("🟣 ORDER DATA JSON:", JSON.stringify(orderData, null, 2));
       const createdOrd = await createOrder(orderData);
-      console.log("🟣 ORDER CREADA:", createdOrd);
 
       // Reproducir sonido cálido de confirmación
       playSuccessChime();
@@ -1372,7 +1368,7 @@ export function CartSidebar() {
                 </div>
               )}
 
-              {paymentMethod === "card" && (
+              {paymentMethod === "culqi" && (
                 <div className="bg-white rounded-2xl p-5 border border-[#0057A8]/15 shadow-sm space-y-4 animate-in fade-in duration-300">
                   <div
                     className="rounded-lg px-4 py-2.5 flex items-center justify-between"

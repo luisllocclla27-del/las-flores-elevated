@@ -38,7 +38,7 @@ function UneteAlEquipoPage() {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
   const [selectedWorkMode, setSelectedWorkMode] = useState<string>("all");
 
-  const { totalItems, setCartOpen } = useCart();
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
 
   useEffect(() => {
     const handleScroll = () => {
