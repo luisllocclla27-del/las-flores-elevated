@@ -47,16 +47,6 @@ const productosPorTemporada: Record<string, Producto[]> = {
       usos: ["Fresco", "Jugos", "Mermeladas", "Postres"],
     },
     {
-      nombre: "Níspero",
-      nombreCientifico: "Eriobotrya japonica",
-      descripcion:
-        "Fruta dulce y jugosa de pulpa anaranjada. Excelente fuente de vitamina A y antioxidantes.",
-      temporada: "Verano",
-      meses: "Enero - Marzo",
-      imagen: "/imagenes-reales/productosAyacucho/Níspero.webp",
-      usos: ["Fresco", "Jugos", "Compotas", "Ensaladas de frutas"],
-    },
-    {
       nombre: "Durazno",
       nombreCientifico: "Prunus persica",
       descripcion: "Fruta dulce de hueso cosechada en esta época.",
@@ -70,30 +60,39 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Pouteria lucuma",
       descripcion: "Fruta nativa cremosa ideal para postres tradicionales.",
       temporada: "Verano",
-      meses: "Diciembre - Marzo",
+      meses: "Diciembre - Mayo",
       imagen: "/imagenes-reales/productosAyacucho/lucuma.webp",
       usos: ["Helados", "Postres", "Batidos", "Dulces"],
-    },
-    {
-      nombre: "Palta",
-      nombreCientifico: "Persea americana",
-      descripcion: "Variedades locales que inician su maduración óptima.",
-      temporada: "Verano",
-      meses: "Diciembre - Marzo",
-      imagen: "/imagenes-reales/productosAyacucho/palta.webp",
-      usos: ["Ensaladas", "Acompañamientos", "Sopas", "Salsas"],
     },
     {
       nombre: "Maíz Choclo",
       nombreCientifico: "Zea mays",
       descripcion: "Cosechas tiernas perfectas para humitas.",
       temporada: "Verano",
-      meses: "Diciembre - Marzo",
+      meses: "Enero - Mayo",
       imagen: "/imagenes-reales/productosAyacucho/choclo.webp",
       usos: ["Sancochado", "Humitas", "Sopas", "Guisos"],
+    },
+    {
+      nombre: "Sanky",
+      nombreCientifico: "Corryocactus brevistylus",
+      descripcion: "Fruto ácido de cactácea silvestre que madura antes de las lluvias, para bebidas y jugos.",
+      temporada: "Verano",
+      meses: "Enero - Mayo",
+      imagen: "/imagenes-reales/productosAyacucho/sanky.webp",
+      usos: ["Jugos", "Bebidas", "Postres", "Mermeladas"],
     }
   ],
   Otoño: [
+    {
+      nombre: "Palta",
+      nombreCientifico: "Persea americana",
+      descripcion: "Variedades locales que inician su maduración óptima.",
+      temporada: "Otoño",
+      meses: "Marzo y Septiembre",
+      imagen: "/imagenes-reales/productosAyacucho/palta.webp",
+      usos: ["Ensaladas", "Acompañamientos", "Sopas", "Salsas"],
+    },
     {
       nombre: "Papa Nativa",
       nombreCientifico: "Solanum spp.",
@@ -119,7 +118,7 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Amaranthus caudatus",
       descripcion: "Súper grano que se seca y cosecha en estos meses.",
       temporada: "Otoño",
-      meses: "Marzo - Mayo",
+      meses: "Abril - Junio",
       imagen: "/imagenes-reales/productosAyacucho/kiwicha.webp",
       usos: ["Bebidas", "Postres", "Sopas", "Desayunos"],
     },
@@ -128,7 +127,7 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Oxalis tuberosa",
       descripcion: "Tubérculo dulce andino tradicional que sale junto a la papa.",
       temporada: "Otoño",
-      meses: "Marzo - Mayo",
+      meses: "Marzo - Junio",
       imagen: "/imagenes-reales/productosAyacucho/oca.webp",
       usos: ["Sancochado", "Guisos", "Mermeladas", "Postres"],
     },
@@ -137,7 +136,7 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Tropaeolum tuberosum",
       descripcion: "Tubérculo medicinal cosechado al decaer las lluvias.",
       temporada: "Otoño",
-      meses: "Marzo - Mayo",
+      meses: "Abril - Junio",
       imagen: "/imagenes-reales/productosAyacucho/mashua.webp",
       usos: ["Sancochado", "Guisos", "Postres medicinales"],
     },
@@ -146,9 +145,28 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Ullucus tuberosus",
       descripcion: "Infaltable en los guisos, fresco de la cosecha estacional.",
       temporada: "Otoño",
-      meses: "Marzo - Mayo",
+      meses: "Marzo - Julio",
       imagen: "/imagenes-reales/productosAyacucho/olluco.webp",
       usos: ["Guisos", "Sopas", "Acompañamientos"],
+    },
+    {
+      nombre: "Calabaza",
+      nombreCientifico: "Cucurbita maxima",
+      descripcion: "Frutos tiernos ideales para las mazamorras primaverales.",
+      temporada: "Otoño",
+      meses: "Marzo - Agosto",
+      imagen: "/imagenes-reales/productosAyacucho/calabaza.webp",
+      usos: ["Mazamorras", "Sopas", "Guisos", "Dulces"],
+    },
+    {
+      nombre: "Airampo",
+      nombreCientifico: "Opuntia soehrensii",
+      descripcion:
+        "Cactus cuya fruta produce un colorante natural rojo intenso. Usado en bebidas tradicionales.",
+      temporada: "Otoño",
+      meses: "Marzo y Junio",
+      imagen: "/imagenes-reales/productosAyacucho/Airampo.webp",
+      usos: ["Bebidas", "Colorante natural", "Postres", "Chicha"],
     }
   ],
   Invierno: [
@@ -171,11 +189,20 @@ const productosPorTemporada: Record<string, Producto[]> = {
       usos: ["Sopas", "Guisos", "Mazamorras", "Acompañamientos"],
     },
     {
+      nombre: "Arveja Verde",
+      nombreCientifico: "Pisum sativum",
+      descripcion: "Primeras vainas verdes recolectadas en los valles.",
+      temporada: "Invierno",
+      meses: "Abril - Agosto",
+      imagen: "/imagenes-reales/productosAyacucho/arveja.webp",
+      usos: ["Guisos", "Sopas", "Arroces", "Ensaladas"],
+    },
+    {
       nombre: "Charqui",
       nombreCientifico: "Lama glama",
       descripcion: "Carne deshidratada de camélido u ovino típica de la estación.",
       temporada: "Invierno",
-      meses: "Junio - Agosto",
+      meses: "Mayo - Agosto",
       imagen: "/imagenes-reales/productosAyacucho/charqui.webp",
       usos: ["Sopas", "Olluquito", "Guisos", "Saltados"],
     },
@@ -184,22 +211,22 @@ const productosPorTemporada: Record<string, Producto[]> = {
       nombreCientifico: "Hordeum vulgare",
       descripcion: "Grano seco recolectado para harinas (máchica) y bebidas.",
       temporada: "Invierno",
-      meses: "Junio - Agosto",
+      meses: "Octubre - Noviembre",
       imagen: "/imagenes-reales/productosAyacucho/cebada.webp",
       usos: ["Máchica", "Bebidas calientes", "Refrescos", "Sopas"],
-    },
-    {
-      nombre: "Airampo",
-      nombreCientifico: "Opuntia soehrensii",
-      descripcion:
-        "Cactus cuya fruta produce un colorante natural rojo intenso. Usado en bebidas tradicionales.",
-      temporada: "Invierno",
-      meses: "Junio - Agosto",
-      imagen: "/imagenes-reales/productosAyacucho/Airampo.webp",
-      usos: ["Bebidas", "Colorante natural", "Postres", "Chicha"],
     }
   ],
   Primavera: [
+    {
+      nombre: "Níspero",
+      nombreCientifico: "Eriobotrya japonica",
+      descripcion:
+        "Fruta dulce y jugosa de pulpa anaranjada. Excelente fuente de vitamina A y antioxidantes.",
+      temporada: "Primavera",
+      meses: "Septiembre - Noviembre",
+      imagen: "/imagenes-reales/productosAyacucho/Níspero.webp",
+      usos: ["Fresco", "Jugos", "Compotas", "Ensaladas de frutas"],
+    },
     {
       nombre: "Habas Verdes",
       nombreCientifico: "Vicia faba",
@@ -211,47 +238,20 @@ const productosPorTemporada: Record<string, Producto[]> = {
       usos: ["Sopas", "Guisos", "Ensaladas", "Saltados"],
     },
     {
-      nombre: "Arveja Verde",
-      nombreCientifico: "Pisum sativum",
-      descripcion: "Primeras vainas verdes recolectadas en los valles.",
-      temporada: "Primavera",
-      meses: "Septiembre - Noviembre",
-      imagen: "/imagenes-reales/productosAyacucho/arveja.webp",
-      usos: ["Guisos", "Sopas", "Arroces", "Ensaladas"],
-    },
-    {
       nombre: "Hierba Buena",
       nombreCientifico: "Mentha spicata",
       descripcion: "Hierbas aromáticas frescas que reviven con el calor, para mondingo.",
       temporada: "Primavera",
-      meses: "Septiembre - Noviembre",
+      meses: "Septiembre - Marzo",
       imagen: "/imagenes-reales/productosAyacucho/hierba-buena.webp",
       usos: ["Mondongo", "Sopas", "Bebidas", "Aderezos"],
-    },
-    {
-      nombre: "Calabaza",
-      nombreCientifico: "Cucurbita maxima",
-      descripcion: "Frutos tiernos ideales para las mazamorras primaverales.",
-      temporada: "Primavera",
-      meses: "Septiembre - Noviembre",
-      imagen: "/imagenes-reales/productosAyacucho/calabaza.webp",
-      usos: ["Mazamorras", "Sopas", "Guisos", "Dulces"],
-    },
-    {
-      nombre: "Sanky",
-      nombreCientifico: "Corryocactus brevistylus",
-      descripcion: "Fruto ácido de cactácea silvestre que madura antes de las lluvias, para bebidas y jugos.",
-      temporada: "Primavera",
-      meses: "Septiembre - Noviembre",
-      imagen: "/imagenes-reales/productosAyacucho/sanky.webp",
-      usos: ["Jugos", "Bebidas", "Postres", "Mermeladas"],
     },
     {
       nombre: "Muña",
       nombreCientifico: "Minthostachys mollis",
       descripcion: "Hierba digestiva ancestral en su punto más aromático, bebidas.",
       temporada: "Primavera",
-      meses: "Septiembre - Noviembre",
+      meses: "Septiembre - Marzo",
       imagen: "/imagenes-reales/productosAyacucho/muña.webp",
       usos: ["Infusiones", "Sopas", "Aderezos", "Digestivos"],
     }
@@ -323,7 +323,7 @@ function TesorosAyacuchoPage() {
       {/* Hero */}
       <header className="relative min-h-[60vh] w-full overflow-hidden bg-eucalipto flex items-center pt-32 pb-24">
         <img
-          src="/imagenes-reales/hero-paginas/hero-tesoros-ayacucho.webp"
+          src="/imagenes-reales/productosAyacucho/temporadas.webp"
           alt="Tesoros de Ayacucho — productos nativos de temporada"
           loading="eager"
           decoding="async"
