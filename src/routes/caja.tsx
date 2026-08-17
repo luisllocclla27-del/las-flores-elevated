@@ -212,13 +212,16 @@ function CashierDashboardRoute() {
       if (!ordErr && ordData) {
         setOrders((prev) => {
           if (prev.length > 0 && ordData.length > prev.length) {
-            const newest = ordData[0];
-            addNotification({
-              type: "order",
-              title: "¡NUEVO PEDIDO RECIBIDO!",
-              subtitle: `#${newest.order_number || "LF-NUEVO"}`,
-              detail: `${newest.client_name || "Cliente"} — S/ ${Number(newest.total || 0).toFixed(2)}`,
-              data: newest,
+            const prevIds = new Set(prev.map((o: any) => o.id));
+            const newOrders = ordData.filter((o: any) => !prevIds.has(o.id));
+            newOrders.forEach((newest: any) => {
+              addNotification({
+                type: "order",
+                title: "¡NUEVO PEDIDO RECIBIDO!",
+                subtitle: `#${newest.order_number || "LF-NUEVO"}`,
+                detail: `${newest.client_name || "Cliente"} — S/ ${Number(newest.total || 0).toFixed(2)}`,
+                data: newest,
+              });
             });
           }
           return ordData;
@@ -266,13 +269,16 @@ function CashierDashboardRoute() {
 
         setReservations((prev) => {
           if (prev.length > 0 && updatedResData.length > prev.length) {
-            const newest = [...updatedResData].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())[0];
-            addNotification({
-              type: "reservation",
-              title: "¡NUEVA RESERVA DE MESA!",
-              subtitle: newest.client_name || "Cliente Reserva",
-              detail: `${newest.reservation_date || "Fecha"} • ${newest.reservation_time || ""} • ${newest.guest_count || 1} pers.`,
-              data: newest,
+            const prevResIds = new Set(prev.map((r: any) => r.id));
+            const newRes = updatedResData.filter((r: any) => !prevResIds.has(r.id));
+            newRes.forEach((newest: any) => {
+              addNotification({
+                type: "reservation",
+                title: "¡NUEVA RESERVA DE MESA!",
+                subtitle: newest.client_name || "Cliente Reserva",
+                detail: `${newest.reservation_date || "Fecha"} • ${newest.reservation_time || ""} • ${newest.guest_count || 1} pers.`,
+                data: newest,
+              });
             });
           }
           return updatedResData;
