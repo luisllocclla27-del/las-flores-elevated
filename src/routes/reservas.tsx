@@ -466,8 +466,23 @@ function ReservasPage() {
     }
 
     setForm((f) => ({ ...f, time, serviceType }));
+  };
+
+  const handleContinueToStep2 = () => {
+    if (!form.guests) {
+      alert("Por favor, selecciona la cantidad de personas.");
+      return;
+    }
+    if (!form.date) {
+      alert("Por favor, selecciona una fecha.");
+      return;
+    }
+    if (!form.time) {
+      alert("Por favor, selecciona un horario para tu reserva.");
+      return;
+    }
     setMainStep(2);
-    window.scrollTo({ top: 500, behavior: "smooth" });
+    window.scrollTo({ top: 450, behavior: "smooth" });
   };
 
   const handleStep2Submit = (e: React.FormEvent) => {
@@ -1036,6 +1051,22 @@ function ReservasPage() {
                     );
                   })}
                 </div>
+              </div>
+
+              {/* Botón de Continuar a Datos de Contacto (Paso 2) */}
+              <div className="pt-6 border-t border-[#d4a373]/20">
+                <button
+                  type="button"
+                  onClick={handleContinueToStep2}
+                  disabled={!form.time}
+                  className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer ${
+                    form.time
+                      ? "bg-[#2e5339] hover:bg-[#23412c] text-white"
+                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  }`}
+                >
+                  <span>{form.time ? `CONTINUAR CON RESERVA (${form.time}h) →` : "SELECCIONA UN HORARIO PARA CONTINUAR"}</span>
+                </button>
               </div>
             </div>
           </div>
