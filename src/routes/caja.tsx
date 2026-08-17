@@ -135,9 +135,32 @@ function CashierDashboardRoute() {
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
   const [isStockModalOpen, setIsStockModalOpen] = useState(false);
 
-  // Floating Toast Alerts
-  const [newOrderNotification, setNewOrderNotification] = useState<any | null>(null);
-  const [newReservationNotification, setNewReservationNotification] = useState<any | null>(null);
+  // Floating Stacked Toast Alerts
+  interface NotificationItem {
+    id: string;
+    type: "order" | "reservation";
+    title: string;
+    subtitle: string;
+    detail: string;
+    data: any;
+  }
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+
+  const addNotification = (notif: Omit<NotificationItem, "id">) => {
+    const id = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
+    const item: NotificationItem = { ...notif, id };
+
+    if (soundEnabledRef.current) {
+      playOrderChime();
+    }
+
+    setNotifications((prev) => [item, ...prev.slice(0, 4)]); // Máximo 5 apiladas
+
+    // Auto colapsar/cerrar en 4 segundos
+    setTimeout(() => {
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    }, 4500);
+  };
 
   const checkAuth = async () => {
     try {
@@ -190,10 +213,13 @@ function CashierDashboardRoute() {
         setOrders((prev) => {
           if (prev.length > 0 && ordData.length > prev.length) {
             const newest = ordData[0];
-            if (soundEnabled) {
-              playOrderChime();
-            }
-            setNewOrderNotification(newest);
+            addNotification({
+              type: "order",
+              title: "¡NUEVO PEDIDO RECIBIDO!",
+              subtitle: `#${newest.order_number || "LF-NUEVO"}`,
+              detail: `${newest.client_name || "Cliente"} — S/ ${Number(newest.total || 0).toFixed(2)}`,
+              data: newest,
+            });
           }
           return ordData;
         });
@@ -241,10 +267,13 @@ function CashierDashboardRoute() {
         setReservations((prev) => {
           if (prev.length > 0 && updatedResData.length > prev.length) {
             const newest = [...updatedResData].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())[0];
-            if (soundEnabled) {
-              playOrderChime();
-            }
-            setNewReservationNotification(newest);
+            addNotification({
+              type: "reservation",
+              title: "¡NUEVA RESERVA DE MESA!",
+              subtitle: newest.client_name || "Cliente Reserva",
+              detail: `${newest.reservation_date || "Fecha"} • ${newest.reservation_time || ""} • ${newest.guest_count || 1} pers.`,
+              data: newest,
+            });
           }
           return updatedResData;
         });
@@ -262,10 +291,6 @@ function CashierDashboardRoute() {
     checkAuth();
   }, []);
 
-  // Supabase Realtime para actualizaciones en vivo — el polling HTTP fue eliminado porque es
-  // redundante cuando el canal WebSocket ya está activo, y causaba suscripciones duplicadas
-  // cada vez que soundEnabled cambiaba (Bug #1 & #2 corregidos).
-  // soundEnabled se lee via ref para evitar stale closures sin re-crear el canal
   const soundEnabledRef = useRef(soundEnabled);
   useEffect(() => { soundEnabledRef.current = soundEnabled; }, [soundEnabled]);
 
@@ -278,8 +303,14 @@ function CashierDashboardRoute() {
         { event: "*", schema: "public", table: "orders" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            if (soundEnabledRef.current) playOrderChime();
-            setNewOrderNotification(payload.new);
+            const n = payload.new as any;
+            addNotification({
+              type: "order",
+              title: "¡NUEVO PEDIDO RECIBIDO!",
+              subtitle: `#${n.order_number || "LF-NUEVO"}`,
+              detail: `${n.client_name || "Cliente"} — S/ ${Number(n.total || 0).toFixed(2)}`,
+              data: n,
+            });
           }
           fetchData(true);
         }
@@ -289,8 +320,14 @@ function CashierDashboardRoute() {
         { event: "*", schema: "public", table: "reservations" },
         (payload) => {
           if (payload.eventType === "INSERT") {
-            if (soundEnabledRef.current) playOrderChime();
-            setNewReservationNotification(payload.new);
+            const n = payload.new as any;
+            addNotification({
+              type: "reservation",
+              title: "¡NUEVA RESERVA DE MESA!",
+              subtitle: n.client_name || "Cliente Reserva",
+              detail: `${n.reservation_date || "Fecha"} • ${n.reservation_time || ""} • ${n.guest_count || 1} pers.`,
+              data: n,
+            });
           }
           fetchData(true);
         }
@@ -488,71 +525,72 @@ function CashierDashboardRoute() {
   return (
     <div className="min-h-screen bg-[#F9F8F3] text-[#231A14] pb-20 font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">
       
-      {/* Realtime Floating Banner Toast for Orders */}
-      {newOrderNotification && (
-        <div className="fixed top-4 right-4 z-50 bg-[#2D473C] text-white p-4 rounded-2xl shadow-2xl border-2 border-[#D4AF37] flex items-center gap-4 animate-in slide-in-from-top-5 duration-300 max-w-md">
-          <div className="w-12 h-12 rounded-xl bg-white/10 text-white flex border-2 border-white/20 items-center justify-center font-bold shrink-0 animate-bounce">
-            <ShoppingBag size={22} className="text-[#D4AF37]" />
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-sans font-black uppercase tracking-wider text-[#D4AF37] block">
-              ¡NUEVO PEDIDO RECIBIDO!
-            </span>
-            <h4 className="font-sans font-black text-base text-white">
-              #{newOrderNotification.order_number || "LF-NUEVO"}
-            </h4>
-            <p className="text-xs text-emerald-100 truncate font-medium">
-              {newOrderNotification.client_name || "Cliente"} — S/ {Number(newOrderNotification.total || 0).toFixed(2)}
-            </p>
-          </div>
-
-          <button
-            onClick={() => setNewOrderNotification(null)}
-            className="p-1 text-gray-300 hover:text-white rounded-full hover:bg-white/10"
-          >
-            <X size={18} />
-          </button>
-        </div>
-      )}
-
-      {/* Realtime Floating Banner Toast for Reservations */}
-      {newReservationNotification && (
-        <div
-          onClick={() => {
-            setViewMode("reservations");
-            setReservationStatusFilter("pendiente");
-            setNewReservationNotification(null);
-          }}
-          className="fixed top-20 right-4 z-50 bg-[#2D473C] text-white p-4 rounded-2xl shadow-2xl border-2 border-emerald-400 flex items-center gap-4 animate-in slide-in-from-top-5 duration-300 max-w-md cursor-pointer hover:bg-[#243B31] transition-all"
-        >
-          <div className="w-12 h-12 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold shrink-0 animate-bounce p-2.5">
-            <Calendar size={24} className="text-white" />
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <span className="text-[10px] font-sans font-black uppercase tracking-wider text-emerald-300 block">
-              ¡NUEVA RESERVA RECIBIDA!
-            </span>
-            <h4 className="font-serif font-bold text-base text-white">
-              {newReservationNotification.client_name || "Cliente Reserva"}
-            </h4>
-            <p className="text-xs text-emerald-100 truncate font-medium">
-              {newReservationNotification.reservation_date} • {newReservationNotification.guest_count || 1} personas
-            </p>
-          </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              setNewReservationNotification(null);
+      {/* Floating Stacked Toast Notifications */}
+      <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-sm sm:max-w-md w-full pointer-events-none">
+        {notifications.map((notif) => (
+          <div
+            key={notif.id}
+            onClick={() => {
+              if (notif.type === "reservation") {
+                setViewMode("reservations");
+                setReservationStatusFilter("pendiente");
+              } else {
+                setViewMode("orders");
+              }
+              setNotifications((prev) => prev.filter((n) => n.id !== notif.id));
             }}
-            className="p-1 text-gray-300 hover:text-white rounded-full hover:bg-white/10"
+            className={`pointer-events-auto p-4 rounded-2xl shadow-2xl border-2 flex items-center gap-3.5 animate-in slide-in-from-top-4 duration-300 cursor-pointer transition-all hover:scale-102 ${
+              notif.type === "order"
+                ? "bg-[#1E2E27] text-white border-[#F97316]"
+                : "bg-[#17382B] text-white border-[#10B981]"
+            }`}
           >
-            <X size={18} />
-          </button>
-        </div>
-      )}
+            {/* Ícono distintivo */}
+            <div
+              className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 font-bold ${
+                notif.type === "order"
+                  ? "bg-gradient-to-br from-orange-500 to-amber-600 text-white shadow-lg shadow-orange-500/30 animate-bounce"
+                  : "bg-gradient-to-br from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/30 animate-bounce"
+              }`}
+            >
+              {notif.type === "order" ? (
+                <ShoppingBag size={22} className="text-white" />
+              ) : (
+                <Calendar size={22} className="text-white" />
+              )}
+            </div>
+
+            {/* Texto de la comanda/reserva */}
+            <div className="flex-1 min-w-0">
+              <span
+                className={`text-[10px] font-sans font-black uppercase tracking-wider block ${
+                  notif.type === "order" ? "text-orange-400" : "text-emerald-300"
+                }`}
+              >
+                {notif.title}
+              </span>
+              <h4 className="font-serif font-black text-sm text-white truncate">
+                {notif.subtitle}
+              </h4>
+              <p className="text-xs text-gray-300 truncate font-medium mt-0.5">
+                {notif.detail}
+              </p>
+            </div>
+
+            {/* Botón cerrar */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setNotifications((prev) => prev.filter((n) => n.id !== notif.id));
+              }}
+              className="p-1.5 text-gray-400 hover:text-white rounded-full hover:bg-white/10 shrink-0 transition-colors"
+              title="Cerrar notificación"
+            >
+              <X size={16} />
+            </button>
+          </div>
+        ))}
+      </div>
 
       {/* Main Content Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
