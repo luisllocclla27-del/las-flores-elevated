@@ -1154,58 +1154,6 @@ function ReservasPage() {
                 </div>
               </div>
 
-              {/* Comentario sobre la reserva */}
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-700 mb-1">
-                  Introduce un comentario sobre la reserva
-                </label>
-                <textarea
-                  rows={2}
-                  value={form.comments}
-                  onChange={(e) => setForm({ ...form, comments: e.target.value })}
-                  placeholder="Detalles especiales para tu visita..."
-                  className="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-[#2e5339]"
-                />
-              </div>
-
-              {/* Intolerancias o Alergias */}
-              <div>
-                <label className="block text-xs uppercase tracking-wider font-semibold text-gray-700 mb-2">
-                  ¿Tiene algún comensal alguna intolerancia/alergia?
-                </label>
-                <div className="flex items-center gap-6 text-sm">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="allergies"
-                      value="Sí"
-                      checked={form.hasAllergies === "Sí"}
-                      onChange={(e) => setForm({ ...form, hasAllergies: e.target.value })}
-                    />
-                    <span>Sí</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="allergies"
-                      value="No"
-                      checked={form.hasAllergies === "No"}
-                      onChange={(e) => setForm({ ...form, hasAllergies: e.target.value })}
-                    />
-                    <span>No</span>
-                  </label>
-                </div>
-                {form.hasAllergies === "Sí" && (
-                  <input
-                    type="text"
-                    value={form.allergiesText}
-                    onChange={(e) => setForm({ ...form, allergiesText: e.target.value })}
-                    placeholder="Especifica las intolerancias o alergias alimentarias"
-                    className="mt-3 w-full bg-white border border-gray-300 rounded-lg px-3.5 py-2 text-sm focus:outline-none focus:border-[#2e5339]"
-                  />
-                )}
-              </div>
-
               {/* Checkboxes de Términos y Marketing */}
               <div className="space-y-3 pt-2 text-xs text-gray-600">
                 <label className="flex items-start gap-2.5 cursor-pointer">
@@ -1235,7 +1183,7 @@ function ReservasPage() {
                 </label>
               </div>
 
-              {/* Botón Reservar */}
+              {/* Botón Continuar */}
               <div className="pt-4">
                 <button
                   type="submit"
@@ -1248,9 +1196,9 @@ function ReservasPage() {
           </div>
         )}
 
-        {/* ── STEP 3: ADICIONAL (Preguntas de Ocasión & Requerimientos) ── */}
+        {/* ── STEP 3: ADICIONAL (Ocasión, Alergias y Preferencias Unificadas) ── */}
         {mainStep === 3 && (
-          <div className="bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-[#d4a373]/20 animate-in fade-in duration-400 space-y-8">
+          <div className="bg-white p-6 md:p-10 rounded-2xl shadow-xl border border-[#d4a373]/20 animate-in fade-in duration-400 space-y-7">
             {/* Top Back Link */}
             <div>
               <button
@@ -1263,7 +1211,7 @@ function ReservasPage() {
             </div>
 
             <div className="space-y-6">
-              {/* Pregunta: Ocasión Especial */}
+              {/* Pregunta 1: Ocasión Especial */}
               <div>
                 <h3 className="font-serif text-sm uppercase tracking-widest text-[#2e5339] font-bold mb-3">
                   ¿Nos visitas por alguna ocasión en particular?
@@ -1294,22 +1242,43 @@ function ReservasPage() {
                 </div>
               </div>
 
-              {/* Pregunta: Accesibilidad / Requerimientos */}
+              {/* Pregunta 2: Intolerancias o Alergias Alimentarias */}
               <div>
                 <label className="block text-xs uppercase tracking-wider font-bold text-[#2e5339] mb-2">
-                  ¿Comensales con requerimientos de accesibilidad o movilidad? (Opcional)
+                  ¿Algún comensal tiene alergias o intolerancias alimentarias? (Opcional)
+                </label>
+                <input
+                  type="text"
+                  value={form.allergiesText}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    setForm({
+                      ...form,
+                      allergiesText: val,
+                      hasAllergies: val.trim() ? "Sí" : "No",
+                    });
+                  }}
+                  placeholder="Ej. Celíaco (sin gluten), intolerante a la lactosa, mariscos..."
+                  className="w-full bg-[#fdf8f0] border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#2e5339]"
+                />
+              </div>
+
+              {/* Pregunta 3: Comentarios de accesibilidad o detalles especiales */}
+              <div>
+                <label className="block text-xs uppercase tracking-wider font-bold text-[#2e5339] mb-2">
+                  ¿Requerimientos de accesibilidad o comentario especial? (Opcional)
                 </label>
                 <textarea
                   rows={2}
                   value={form.disability}
                   onChange={(e) => setForm({ ...form, disability: e.target.value })}
-                  placeholder="Ej. Silla de ruedas, rampa de acceso preferencial..."
+                  placeholder="Ej. Silla de ruedas, rampa preferencial, mesa tranquila..."
                   className="w-full bg-white border border-gray-300 rounded-xl p-3 text-sm focus:outline-none focus:border-[#2e5339]"
                 />
               </div>
 
               {/* Botón Finalizar */}
-              <div className="pt-4">
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={handleFinalizeReservation}
