@@ -154,12 +154,12 @@ function CashierDashboardRoute() {
       playOrderChime();
     }
 
-    setNotifications((prev) => [item, ...prev.slice(0, 4)]); // Máximo 5 apiladas
+    setNotifications((prev) => [item, ...prev.slice(0, 7)]); // Máximo 8 apiladas
 
-    // Auto colapsar/cerrar en 4 segundos
+    // Auto colapsar/cerrar en 8.5 segundos para dar tiempo suficiente de lectura
     setTimeout(() => {
       setNotifications((prev) => prev.filter((n) => n.id !== id));
-    }, 4500);
+    }, 8500);
   };
 
   const checkAuth = async () => {
