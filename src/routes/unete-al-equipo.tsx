@@ -171,8 +171,279 @@ function UneteAlEquipoPage() {
         </div>
       </section>
 
-      {/* ── PRINCIPIOS DE CULTURA ── */}
-      <section className="py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-white/60 border-b border-black/5">
+      {/* ── SECCIÓN DE VACANTES Y FORMULARIO (PRIMERO, PARA CONVERSIÓN INMEDIATA) ── */}
+      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-[1400px] mx-auto w-full flex-1">
+        <div className="mb-10 text-center md:text-left">
+          <h2 className="font-serif text-3xl md:text-4xl text-ink mb-2">Convocatorias Abiertas</h2>
+          <p className="text-ink/60 text-sm">
+            Explora las oportunidades laborales disponibles y envía tu postulación.
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="py-20 flex flex-col items-center justify-center text-ink/50 gap-4">
+            <Loader2 size={36} className="animate-spin text-eucalipto" />
+            <p className="text-sm font-medium">Cargando convocatorias disponibles…</p>
+          </div>
+        ) : error ? (
+          <div className="p-8 rounded-2xl bg-red-50 border border-red-200 text-center max-w-md mx-auto">
+            <AlertCircle size={40} className="text-red-500 mx-auto mb-3" />
+            <p className="text-sm text-red-700 mb-4">{error}</p>
+            <button
+              onClick={loadOffers}
+              className="px-5 py-2.5 bg-eucalipto text-cream font-bold text-xs rounded-xl hover:bg-eucalipto/90 transition-all"
+            >
+              Reintentar
+            </button>
+          </div>
+        ) : offers.length === 0 ? (
+          <div className="p-12 rounded-2xl bg-white border border-black/10 text-center max-w-lg mx-auto shadow-sm">
+            <Briefcase size={48} className="text-ink/30 mx-auto mb-4" />
+            <h3 className="font-serif font-bold text-2xl text-ink mb-2">Sin convocatorias activas</h3>
+            <p className="text-sm text-ink/60 leading-relaxed">
+              En este momento no tenemos convocatorias abiertas. ¡Vuelve pronto a revisar nuestras publicaciones!
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Lista lateral de vacantes */}
+            <div className="lg:col-span-5 space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-black/10">
+                <span className="text-xs uppercase tracking-wider font-bold text-ink/60">
+                  {offers.length} {offers.length === 1 ? "Puesto disponible" : "Puestos disponibles"}
+                </span>
+                <span className="text-[11px] text-eucalipto font-medium">
+                  Actualizado en vivo
+                </span>
+              </div>
+
+              <div className="space-y-3 max-h-[750px] overflow-y-auto pr-1">
+                {offers.map((offer) => {
+                  const isSelected = selectedOffer?.id === offer.id;
+                  const isExpiringSoon = offer.application_deadline && (() => {
+                    const diffDays = Math.ceil((new Date(offer.application_deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                    return diffDays >= 0 && diffDays <= 5;
+                  })();
+
+                  return (
+                    <div
+                      key={offer.id}
+                      onClick={() => {
+                        setSelectedOffer(offer);
+                        setActiveDetailTab("details");
+                      }}
+                      className={`p-5 rounded-2xl border transition-all cursor-pointer text-left relative overflow-hidden ${
+                        isSelected
+                          ? "bg-white border-eucalipto shadow-md ring-2 ring-eucalipto/20"
+                          : "bg-white/70 border-black/10 hover:border-black/25 hover:bg-white"
+                      }`}
+                    >
+                      {isSelected && (
+                        <div className="absolute top-0 left-0 bottom-0 w-1.5 bg-eucalipto" />
+                      )}
+
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h3 className="font-serif font-bold text-lg text-ink leading-tight">
+                          {offer.title}
+                        </h3>
+                        <span className="text-[10px] uppercase tracking-wider font-bold px-2.5 py-1 rounded-full bg-cream border border-black/10 text-ink/80 shrink-0">
+                          {offer.contract_type}
+                        </span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink/60 mb-3">
+                        <span className="flex items-center gap-1">
+                          <Users size={13} className="text-eucalipto" />
+                          {offer.department}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <MapPin size={13} className="text-eucalipto" />
+                          {offer.location || "Ayacucho"}
+                        </span>
+                        {offer.salary_range && (
+                          <span className="font-semibold text-eucalipto">
+                            {offer.salary_range}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-xs text-ink/75 line-clamp-2 leading-relaxed mb-3">
+                        {offer.description}
+                      </p>
+
+                      <div className="flex items-center justify-between text-[11px] pt-2 border-t border-black/5">
+                        {offer.application_deadline ? (
+                          <span className={`flex items-center gap-1 ${isExpiringSoon ? "text-amber-700 font-bold" : "text-ink/50"}`}>
+                            <Clock size={12} />
+                            <span>Cierra: {new Date(offer.application_deadline).toLocaleDateString("es-PE", { day: "numeric", month: "short" })}</span>
+                          </span>
+                        ) : (
+                          <span className="text-ink/40">Convocatoria continua</span>
+                        )}
+                        <span className="text-eucalipto font-bold flex items-center gap-1 group">
+                          Ver detalle
+                          <ChevronRight size={14} />
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Panel de Detalle o Formulario de Postulación */}
+            <div className="lg:col-span-7 sticky top-24">
+              {selectedOffer ? (
+                <div className="bg-white rounded-3xl border border-black/10 shadow-lg overflow-hidden">
+                  {/* Pestañas Detalle vs Postulación */}
+                  <div className="flex border-b border-black/10 bg-cream/30">
+                    <button
+                      type="button"
+                      onClick={() => setActiveDetailTab("details")}
+                      className={`flex-1 py-4 px-6 text-xs uppercase tracking-wider font-bold transition-all border-b-2 ${
+                        activeDetailTab === "details"
+                          ? "border-eucalipto text-eucalipto bg-white font-extrabold"
+                          : "border-transparent text-ink/50 hover:text-ink hover:bg-white/50"
+                      }`}
+                    >
+                      1. Detalle del Puesto
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveDetailTab("apply")}
+                      className={`flex-1 py-4 px-6 text-xs uppercase tracking-wider font-bold transition-all border-b-2 flex items-center justify-center gap-1.5 ${
+                        activeDetailTab === "apply"
+                          ? "border-eucalipto text-eucalipto bg-white font-extrabold"
+                          : "border-transparent text-ink/50 hover:text-ink hover:bg-white/50"
+                      }`}
+                    >
+                      <Send size={14} />
+                      <span>2. Postular Ahora</span>
+                    </button>
+                  </div>
+
+                  <div className="p-6 md:p-8 max-h-[700px] overflow-y-auto">
+                    {activeDetailTab === "details" ? (
+                      <div className="space-y-6 text-sm">
+                        <div>
+                          <span className="text-xs uppercase tracking-widest font-bold text-eucalipto block mb-1">
+                            {selectedOffer.department} • {selectedOffer.contract_type}
+                          </span>
+                          <h3 className="font-serif text-2xl md:text-3xl font-bold text-ink mb-2">
+                            {selectedOffer.title}
+                          </h3>
+                          <div className="flex flex-wrap gap-3 text-xs text-ink/70">
+                            <span className="bg-cream px-3 py-1 rounded-full border border-black/5">
+                              📍 {selectedOffer.location || "Ayacucho, Perú"}
+                            </span>
+                            {selectedOffer.salary_range && (
+                              <span className="bg-green-50 text-green-800 px-3 py-1 rounded-full border border-green-200 font-bold">
+                                💰 {selectedOffer.salary_range}
+                              </span>
+                            )}
+                            {selectedOffer.application_deadline && (
+                              <span className="bg-amber-50 text-amber-900 px-3 py-1 rounded-full border border-amber-200">
+                                ⏳ Postula hasta: {new Date(selectedOffer.application_deadline).toLocaleDateString("es-PE", { day: "numeric", month: "long", year: "numeric" })}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div>
+                          <h4 className="font-bold text-ink uppercase tracking-wider mb-2 text-[11px] text-ink/60">
+                            Descripción del puesto
+                          </h4>
+                          <p className="text-ink/80 leading-relaxed whitespace-pre-line">
+                            {selectedOffer.description}
+                          </p>
+                        </div>
+
+                        {selectedOffer.responsibilities?.length > 0 && (
+                          <div>
+                            <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
+                              <CheckCircle2 size={16} />
+                              <span>Responsabilidades Principales</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {selectedOffer.responsibilities.map((resp, i) => (
+                                <li key={i} className="flex items-start gap-2.5 bg-cream/50 p-3 rounded-xl border border-black/5 text-ink/90">
+                                  <span className="text-eucalipto font-bold mt-0.5">•</span>
+                                  <span className="flex-1">{resp}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {selectedOffer.requirements?.length > 0 && (
+                          <div>
+                            <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
+                              <ListChecks size={16} />
+                              <span>Requisitos del Candidato</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {selectedOffer.requirements.map((req, i) => (
+                                <li key={i} className="flex items-start gap-2.5 bg-cream/50 p-3 rounded-xl border border-black/5 text-ink/90">
+                                  <span className="text-eucalipto font-bold mt-0.5">•</span>
+                                  <span className="flex-1">{req}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {selectedOffer.benefits?.length > 0 && (
+                          <div>
+                            <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
+                              <Gift size={16} />
+                              <span>Beneficios & Ofrecimiento</span>
+                            </h4>
+                            <ul className="space-y-2">
+                              {selectedOffer.benefits.map((ben, i) => (
+                                <li key={i} className="flex items-start gap-2.5 bg-green-50/60 p-3 rounded-xl border border-green-200/50 text-green-900">
+                                  <span className="text-green-600 font-bold mt-0.5">✓</span>
+                                  <span className="flex-1 font-medium">{ben}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Botón de Postulación al final del detalle */}
+                        <div className="pt-4 border-t border-black/10">
+                          <button
+                            type="button"
+                            onClick={() => setActiveDetailTab("apply")}
+                            className="w-full py-4 bg-eucalipto text-cream font-bold text-sm rounded-xl shadow-md hover:bg-eucalipto/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
+                          >
+                            <span>Postular a esta vacante</span>
+                            <Send size={16} />
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="animate-in fade-in">
+                        <JobApplicationForm offer={selectedOffer} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="p-12 rounded-3xl bg-white border border-black/10 text-center text-ink/50 shadow-sm space-y-4">
+                  <Briefcase size={44} className="mx-auto text-ink/30" />
+                  <h3 className="font-serif font-bold text-xl text-ink">Explora las vacantes</h3>
+                  <p className="text-sm text-ink/60 max-w-sm mx-auto">
+                    Haz clic en cualquier vacante de la lista para explorar sus detalles, requisitos y enviar tu postulación.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* ── PRINCIPIOS DE CULTURA (DEBAJO, COMO RESPALDO DE VALORES) ── */}
+      <section className="py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-white/60 border-t border-b border-black/5">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="font-serif text-3xl md:text-4xl text-ink mb-3">Nuestra Cultura Laboral</h2>
@@ -213,246 +484,6 @@ function UneteAlEquipoPage() {
             </div>
           </div>
         </div>
-      </section>
-
-      {/* ── SECCIÓN DE VACANTES Y FORMULARIO ── */}
-      <section className="py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-[1400px] mx-auto w-full flex-1">
-        <div className="mb-10 text-center md:text-left">
-          <h2 className="font-serif text-3xl md:text-4xl text-ink mb-2">Convocatorias Abiertas</h2>
-          <p className="text-ink/60 text-sm">
-            Explora las oportunidades laborales disponibles y envía tu postulación.
-          </p>
-        </div>
-
-        {loading ? (
-          <div className="py-20 flex flex-col items-center justify-center text-ink/50 gap-4">
-            <Loader2 size={36} className="animate-spin text-eucalipto" />
-            <p className="text-sm font-medium">Cargando convocatorias disponibles…</p>
-          </div>
-        ) : error ? (
-          <div className="p-8 rounded-2xl bg-red-50 border border-red-200 text-center max-w-md mx-auto">
-            <AlertCircle size={40} className="text-red-500 mx-auto mb-3" />
-            <p className="text-sm text-red-700 mb-4">{error}</p>
-            <button
-              onClick={loadOffers}
-              className="px-5 py-2.5 bg-eucalipto text-cream font-bold text-xs rounded-xl hover:bg-eucalipto/90 transition-all"
-            >
-              Reintentar
-            </button>
-          </div>
-        ) : offers.length === 0 ? (
-          <div className="p-12 rounded-2xl bg-white border border-black/10 text-center max-w-lg mx-auto">
-            <Briefcase size={48} className="text-ink/30 mx-auto mb-4" />
-            <h3 className="font-serif font-bold text-2xl text-ink mb-2">Sin convocatorias activas</h3>
-            <p className="text-sm text-ink/60 leading-relaxed">
-              En este momento no tenemos convocatorias abiertas. ¡Vuelve pronto a revisar nuestras publicaciones!
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-8">
-            {/* Filtros dinámicos (solo si hay más de 1 opción) */}
-            {(departments.length > 1 || workModes.length > 1) && (
-              <div className="flex flex-wrap items-center gap-4 p-4 rounded-2xl bg-white border border-black/5 shadow-xs">
-                <span className="text-xs font-bold uppercase tracking-wider text-ink/60">Filtrar por:</span>
-
-                {departments.length > 1 && (
-                  <select
-                    value={selectedDepartment}
-                    onChange={(e) => setSelectedDepartment(e.target.value)}
-                    className="px-3.5 py-2 rounded-xl bg-cream border border-black/10 text-xs font-semibold text-ink outline-none cursor-pointer focus:border-eucalipto"
-                  >
-                    <option value="all">Todas las áreas ({departments.length})</option>
-                    {departments.map((dept) => (
-                      <option key={dept} value={dept}>
-                        {dept}
-                      </option>
-                    ))}
-                  </select>
-                )}
-
-                {workModes.length > 1 && (
-                  <select
-                    value={selectedWorkMode}
-                    onChange={(e) => setSelectedWorkMode(e.target.value)}
-                    className="px-3.5 py-2 rounded-xl bg-cream border border-black/10 text-xs font-semibold text-ink outline-none cursor-pointer focus:border-eucalipto"
-                  >
-                    <option value="all">Todas las modalidades</option>
-                    {workModes.map((mode) => (
-                      <option key={mode} value={mode}>
-                        {mode === "onsite" ? "Presencial" : mode === "hybrid" ? "Híbrido" : "Remoto"}
-                      </option>
-                    ))}
-                  </select>
-                )}
-              </div>
-            )}
-
-            {/* Layout Master-Detail: Lista de Vacantes (Izq) y Panel Interactivo con 2 Tabs (Der) */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Columna Izquierda (Master): Tarjetas de Ofertas */}
-              <div className="lg:col-span-5 space-y-4">
-                <div className="grid grid-cols-1 gap-4">
-                  {filteredOffers.map((offer) => (
-                    <JobCard
-                      key={offer.id}
-                      offer={offer}
-                      isSelected={selectedOffer?.id === offer.id}
-                      onSelect={(o) => {
-                        setSelectedOffer(o);
-                        setActiveDetailTab("details");
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Columna Derecha (Detail Panel): Detalle & Formulario en 2 Pestañas */}
-              <div className="lg:col-span-7 sticky top-28">
-                {selectedOffer ? (
-                  <div className="rounded-3xl bg-white border border-black/10 shadow-xl overflow-hidden transition-all">
-                    {/* Encabezado del Panel */}
-                    <div className="p-6 lg:p-8 bg-[#fcfaf5] border-b border-black/10">
-                      <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                        <span className="text-xs font-bold uppercase tracking-wider text-eucalipto bg-eucalipto/10 px-3.5 py-1 rounded-full">
-                          {selectedOffer.department} • {selectedOffer.location}
-                        </span>
-                        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-black/5 text-ink/80 border border-black/5">
-                          {selectedOffer.work_mode === "onsite"
-                            ? "Presencial"
-                            : selectedOffer.work_mode === "hybrid"
-                            ? "Híbrido"
-                            : "Remoto"}
-                        </span>
-                      </div>
-                      <h3 className="font-serif font-bold text-2xl lg:text-3xl text-ink leading-tight">
-                        {selectedOffer.title}
-                      </h3>
-                    </div>
-
-                    {/* Barra de Pestañas (Tabs) */}
-                    <div className="flex border-b border-black/10 bg-white">
-                      <button
-                        type="button"
-                        onClick={() => setActiveDetailTab("details")}
-                        className={`flex-1 py-3.5 px-4 text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 border-b-2 ${
-                          activeDetailTab === "details"
-                            ? "border-eucalipto text-eucalipto bg-eucalipto/5"
-                            : "border-transparent text-ink/60 hover:text-ink hover:bg-black/5"
-                        }`}
-                      >
-                        <FileText size={16} />
-                        <span>1. Detalles y Requisitos</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setActiveDetailTab("apply")}
-                        className={`flex-1 py-3.5 px-4 text-xs font-bold uppercase tracking-wider transition-all flex items-center justify-center gap-2 border-b-2 ${
-                          activeDetailTab === "apply"
-                            ? "border-eucalipto text-eucalipto bg-eucalipto/5"
-                            : "border-transparent text-ink/60 hover:text-ink hover:bg-black/5"
-                        }`}
-                      >
-                        <Send size={16} />
-                        <span>2. Postular Ahora</span>
-                      </button>
-                    </div>
-
-                    {/* Cuerpo de la Pestaña Activa */}
-                    <div className="p-6 lg:p-8">
-                      {activeDetailTab === "details" ? (
-                        <div className="space-y-6 text-xs text-ink/80 leading-relaxed animate-in fade-in">
-                          <div>
-                            <h4 className="font-bold text-ink uppercase tracking-wider mb-2 text-[11px] text-eucalipto">
-                              Descripción del Puesto
-                            </h4>
-                            <p className="text-sm text-ink/90 leading-relaxed font-sans">
-                              {selectedOffer.description || selectedOffer.summary}
-                            </p>
-                          </div>
-
-                          {selectedOffer.responsibilities?.length > 0 && (
-                            <div>
-                              <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
-                                <CheckCircle2 size={16} />
-                                <span>Responsabilidades Principales</span>
-                              </h4>
-                              <ul className="space-y-2">
-                                {selectedOffer.responsibilities.map((resp, i) => (
-                                  <li key={i} className="flex items-start gap-2.5 bg-cream/50 p-3 rounded-xl border border-black/5 text-ink/90">
-                                    <span className="text-eucalipto font-bold mt-0.5">•</span>
-                                    <span className="flex-1">{resp}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-
-                          {selectedOffer.requirements?.length > 0 && (
-                            <div>
-                              <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
-                                <ListChecks size={16} />
-                                <span>Requisitos del Candidato</span>
-                              </h4>
-                              <ul className="space-y-2">
-                                {selectedOffer.requirements.map((req, i) => (
-                                  <li key={i} className="flex items-start gap-2.5 bg-cream/50 p-3 rounded-xl border border-black/5 text-ink/90">
-                                    <span className="text-eucalipto font-bold mt-0.5">•</span>
-                                    <span className="flex-1">{req}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-
-                          {selectedOffer.benefits?.length > 0 && (
-                            <div>
-                              <h4 className="font-bold text-ink uppercase tracking-wider mb-3 text-[11px] flex items-center gap-1.5 text-eucalipto">
-                                <Gift size={16} />
-                                <span>Beneficios & Ofrecimiento</span>
-                              </h4>
-                              <ul className="space-y-2">
-                                {selectedOffer.benefits.map((ben, i) => (
-                                  <li key={i} className="flex items-start gap-2.5 bg-green-50/60 p-3 rounded-xl border border-green-200/50 text-green-900">
-                                    <span className="text-green-600 font-bold mt-0.5">✓</span>
-                                    <span className="flex-1 font-medium">{ben}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-
-                          {/* Botón de Postulación al final del detalle */}
-                          <div className="pt-4 border-t border-black/10">
-                            <button
-                              type="button"
-                              onClick={() => setActiveDetailTab("apply")}
-                              className="w-full py-4 bg-eucalipto text-cream font-bold text-sm rounded-xl shadow-md hover:bg-eucalipto/90 active:scale-[0.99] transition-all flex items-center justify-center gap-2"
-                            >
-                              <span>Postular a esta vacante</span>
-                              <Send size={16} />
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="animate-in fade-in">
-                          <JobApplicationForm offer={selectedOffer} />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="p-12 rounded-3xl bg-white border border-black/10 text-center text-ink/50 shadow-sm space-y-4">
-                    <Briefcase size={44} className="mx-auto text-ink/30" />
-                    <h3 className="font-serif font-bold text-xl text-ink">Explora las vacantes</h3>
-                    <p className="text-sm text-ink/60 max-w-sm mx-auto">
-                      Haz clic en cualquier vacante de la lista para explorar sus detalles, requisitos y enviar tu postulación.
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
       </section>
 
       {/* ── CIERRE EDITORIAL CON FOTO DEL EQUIPO ── */}
