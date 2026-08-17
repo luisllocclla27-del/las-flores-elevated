@@ -384,29 +384,35 @@ export async function createReservation(payload: any) {
 export async function createOrder(payload: OrderPayload & { discount_amount?: number; coupon_code?: string }) {
   const { items, ...orderData } = payload;
 
-  try {
-    const { data: rpcData, error: rpcError } = await supabase.rpc("create_order_secure", {
-      p_client_name: orderData.client_name,
-      p_client_email: orderData.client_email,
-      p_client_phone: orderData.client_phone,
-      p_order_type: orderData.order_type,
-      p_payment_method: orderData.payment_method,
-      p_items: items.map(item => ({ id: item.product_id, quantity: item.quantity })),
-      p_address: orderData.address || null,
-      p_reference: orderData.reference || null,
-      p_latitude: orderData.latitude || null,
-      p_longitude: orderData.longitude || null,
-      p_distance_km: orderData.distance_km || 0,
-      p_delivery_fee: orderData.delivery_fee || 0,
-      p_coupon_code: payload.coupon_code || null,
-      p_notes: orderData.notes || null
-    });
+  const hasValidUuids = items.length > 0 && items.every(
+    item => item.product_id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.product_id)
+  );
 
-    if (!rpcError && rpcData) {
-      return rpcData;
+  if (hasValidUuids) {
+    try {
+      const { data: rpcData, error: rpcError } = await supabase.rpc("create_order_secure", {
+        p_client_name: orderData.client_name,
+        p_client_email: orderData.client_email,
+        p_client_phone: orderData.client_phone,
+        p_order_type: orderData.order_type,
+        p_payment_method: orderData.payment_method,
+        p_items: items.map(item => ({ id: item.product_id, quantity: item.quantity })),
+        p_address: orderData.address || null,
+        p_reference: orderData.reference || null,
+        p_latitude: orderData.latitude || null,
+        p_longitude: orderData.longitude || null,
+        p_distance_km: orderData.distance_km || 0,
+        p_delivery_fee: orderData.delivery_fee || 0,
+        p_coupon_code: payload.coupon_code || null,
+        p_notes: orderData.notes || null
+      });
+
+      if (!rpcError && rpcData) {
+        return rpcData;
+      }
+    } catch (_) {
+      // Proceder con inserción directa
     }
-  } catch (e) {
-    console.warn("RPC create_order_secure no disponible, ejecutando inserción directa:", e);
   }
 
   // Fallback de inserción directa si la RPC aún no ha sido aplicada en la BD
