@@ -62,20 +62,20 @@ export function SiteNavigationMenu({
         className={`fixed inset-y-0 left-0 h-[100dvh] max-h-[100dvh] w-[min(100vw,420px)] z-[100] bg-piedra flex flex-col shadow-2xl pointer-events-auto transition-transform duration-300 ease-out overflow-hidden ${isOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
       >
-        {/* ── Header con logo + cerrar ── */}
-        <div className="flex items-center justify-between px-8 pt-6 pb-4 shrink-0">
+        {/* ── Header con logo centrado + botón cerrar ── */}
+        <div className="relative flex items-center justify-center px-8 pt-6 pb-4 shrink-0">
           <img
             src="/images.png"
             alt="Restaurante Las Flores"
-            className="h-10 md:h-12 w-auto object-contain"
+            className="h-10 md:h-12 w-auto object-contain mx-auto"
             style={{ filter: 'brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)' }}
           />
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 border border-nogal/20 text-nogal hover:bg-nogal/8 transition-colors rounded-md"
+            className="absolute right-8 top-6 p-2 border border-nogal/20 text-nogal hover:bg-nogal/8 transition-colors rounded-md cursor-pointer"
             aria-label="Cerrar menú"
           >
-            <X size={22} />
+            <X size={20} />
           </button>
         </div>
 
