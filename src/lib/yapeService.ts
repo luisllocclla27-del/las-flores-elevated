@@ -15,8 +15,8 @@ const DEFAULT_YAPE_CONFIG: YapeConfig = {
   businessName: "Corporación Las Flores SAC",
   businessQrUrl: "/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg",
   businessPhone: "967 456 230",
-  personalName: "Luis Gerardo Llocclla Saune",
-  personalQrUrl: "/QRyape/2a6c600f-3d18-46b8-b46a-1bfceb3c4d11.jpg",
+  personalName: "Ivinovith Chu*",
+  personalQrUrl: "/QRyape/952bf29a-d177-4682-a5d9-9ae02dd4744b.jpg",
   personalPhone: "980 723 422",
 };
 
