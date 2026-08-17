@@ -106,11 +106,10 @@ export function CompleteProfileModal({
       };
       if (birthdateFormatted) {
         updatePayload.birth_date = birthdateFormatted;
-        updatePayload.birthdate = birthdateFormatted;
       }
       if (name.trim()) updatePayload.full_name = name.trim();
 
-      let { data: updatedData, error: updateErr } = await supabase
+      const { data: updatedData, error: updateErr } = await supabase
         .from("profiles")
         .update(updatePayload)
         .eq("id", userId)
@@ -118,42 +117,29 @@ export function CompleteProfileModal({
 
       let isSavedInDb = updatedData && updatedData.length > 0;
 
-      // Si UPDATE falla por columna birthdate inexistente
+      // Fallback a UPSERT si la fila aún no existía en profiles
       if (!isSavedInDb || updateErr) {
-        delete updatePayload.birthdate;
+        const upsertPayload: Record<string, any> = {
+          id: userId,
+          email: cleanEmail,
+          phone: cleanPhone,
+          role: "client",
+          updated_at: new Date().toISOString(),
+        };
+        if (birthdateFormatted) {
+          upsertPayload.birth_date = birthdateFormatted;
+        }
+        if (name.trim()) upsertPayload.full_name = name.trim();
 
-        const { data: updatedData2, error: updateErr2 } = await supabase
+        const { error: finalUpsertErr } = await supabase
           .from("profiles")
-          .update(updatePayload)
-          .eq("id", userId)
-          .select();
+          .upsert(upsertPayload);
 
-        isSavedInDb = updatedData2 && updatedData2.length > 0;
-
-        // Fallback a UPSERT completo si la fila no existía
-        if (!isSavedInDb || updateErr2) {
-          const upsertPayload: Record<string, any> = {
-            id: userId,
-            email: cleanEmail,
-            phone: cleanPhone,
-            role: "client",
-            updated_at: new Date().toISOString(),
-          };
-          if (birthdateFormatted) {
-            upsertPayload.birth_date = birthdateFormatted;
-          }
-          if (name.trim()) upsertPayload.full_name = name.trim();
-
-          const { error: finalUpsertErr } = await supabase
-            .from("profiles")
-            .upsert(upsertPayload);
-
-          if (finalUpsertErr) {
-            console.error("Error al guardar en base de datos:", finalUpsertErr);
-            setErrorMsg(`No se pudo guardar en la BD (${finalUpsertErr.message}). Reintenta.`);
-            setSaving(false);
-            return;
-          }
+        if (finalUpsertErr) {
+          console.error("Error al guardar en base de datos:", finalUpsertErr);
+          setErrorMsg(`No se pudo guardar en la BD (${finalUpsertErr.message}). Reintenta.`);
+          setSaving(false);
+          return;
         }
       }
 
