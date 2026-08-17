@@ -436,12 +436,17 @@ export async function createOrder(payload: OrderPayload & { discount_amount?: nu
       payloadToInsert[key] = value;
     }
   }
+  
+  console.log("🔵 PAYLOAD FINAL A INSERTAR EN SUPABASE:", JSON.stringify(payloadToInsert, null, 2));
 
   const { data: insertedData, error: orderError } = await supabase
     .from("orders")
     .insert([payloadToInsert])
     .select()
     .single();
+    
+  console.log("🔴 SUPABASE ERROR:", orderError);
+  console.log("🔴 SUPABASE ERROR JSON:", JSON.stringify(orderError, null, 2));
 
   if (orderError) {
     throw new Error(orderError.message || "Error al crear el pedido.");

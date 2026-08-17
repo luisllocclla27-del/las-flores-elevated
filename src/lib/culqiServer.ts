@@ -1,9 +1,8 @@
 /**
  * Culqi Server-Side Service
  * Maneja el procesamiento de cargos en el backend usando la llave privada
+ * Usa la API REST de Culqi directamente para compatibilidad con ESM
  */
-
-import Culqi from "culqi-node";
 
 // Tipos para las respuestas de Culqi API
 export interface CulqiCharge {
@@ -90,25 +89,46 @@ export interface CreateChargePayload {
   };
 }
 
-let culqiInstance: any = null;
+/**
+ * URL base de la API de Culqi
+ */
+const CULQI_API_URL = "https://api.culqi.com/v2";
 
 /**
- * Obtiene la instancia de Culqi configurada con la llave privada
+ * Obtiene la llave secreta de Culqi
  */
-function getCulqiInstance() {
-  if (culqiInstance) return culqiInstance;
-
+function getSecretKey(): string {
   const secretKey = process.env.CULQI_SECRET_KEY;
 
   if (!secretKey) {
     throw new Error("CULQI_SECRET_KEY no está definida en las variables de entorno");
   }
 
-  culqiInstance = new Culqi({
-    privateKey: secretKey,
+  return secretKey;
+}
+
+/**
+ * Realiza una petición a la API de Culqi
+ */
+async function culqiRequest(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const secretKey = getSecretKey();
+  
+  const response = await fetch(`${CULQI_API_URL}${endpoint}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${secretKey}`,
+      ...options.headers,
+    },
   });
 
-  return culqiInstance;
+  const data = await response.json();
+
+  if (!response.ok || data.object === "error") {
+    throw new Error(data.merchant_message || data.user_message || "Error en petición a Culqi");
+  }
+
+  return data;
 }
 
 /**
@@ -118,7 +138,7 @@ function getCulqiInstance() {
  */
 export async function createCharge(payload: CreateChargePayload): Promise<CulqiCharge> {
   try {
-    const culqi = getCulqiInstance();
+    console.log("🔵 Creando cargo en Culqi con payload:", JSON.stringify(payload, null, 2));
 
     const chargeData = {
       amount: payload.amount,
@@ -130,15 +150,19 @@ export async function createCharge(payload: CreateChargePayload): Promise<CulqiC
       antifraud_details: payload.antifraud_details,
     };
 
-    const charge = await culqi.charges.create(chargeData);
+    console.log("🔵 Charge data enviado a Culqi:", JSON.stringify(chargeData, null, 2));
 
-    if (!charge || charge.object === "error") {
-      throw new Error(charge.merchant_message || "Error al procesar el cargo");
-    }
+    const charge = await culqiRequest("/charges", {
+      method: "POST",
+      body: JSON.stringify(chargeData),
+    });
+
+    console.log("🟢 Respuesta de Culqi:", JSON.stringify(charge, null, 2));
 
     return charge as CulqiCharge;
   } catch (error: any) {
-    console.error("Error al crear cargo en Culqi:", error);
+    console.error("🔴 Error al crear cargo en Culqi:", error);
+    console.error("🔴 Error stack:", error.stack);
     throw new Error(error.message || "Error al procesar el pago con Culqi");
   }
 }
@@ -148,12 +172,9 @@ export async function createCharge(payload: CreateChargePayload): Promise<CulqiC
  */
 export async function getCharge(chargeId: string): Promise<CulqiCharge> {
   try {
-    const culqi = getCulqiInstance();
-    const charge = await culqi.charges.get(chargeId);
-
-    if (!charge || charge.object === "error") {
-      throw new Error("Cargo no encontrado");
-    }
+    const charge = await culqiRequest(`/charges/${chargeId}`, {
+      method: "GET",
+    });
 
     return charge as CulqiCharge;
   } catch (error: any) {
@@ -167,8 +188,6 @@ export async function getCharge(chargeId: string): Promise<CulqiCharge> {
  */
 export async function refundCharge(chargeId: string, amount: number, reason?: string): Promise<any> {
   try {
-    const culqi = getCulqiInstance();
-    
     const refundData: any = {
       amount,
       charge_id: chargeId,
@@ -178,11 +197,10 @@ export async function refundCharge(chargeId: string, amount: number, reason?: st
       refundData.reason = reason;
     }
 
-    const refund = await culqi.refunds.create(refundData);
-
-    if (!refund || refund.object === "error") {
-      throw new Error(refund.merchant_message || "Error al procesar el reembolso");
-    }
+    const refund = await culqiRequest("/refunds", {
+      method: "POST",
+      body: JSON.stringify(refundData),
+    });
 
     return refund;
   } catch (error: any) {

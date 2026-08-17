@@ -479,7 +479,9 @@ export function CartSidebar() {
     
     if (paymentMethod === "culqi" && culqiToken) {
       try {
-        const chargeResult = await processCulqiCharge({
+        console.log("🔵 CLIENTE: Llamando a processCulqiCharge...");
+        
+        const payload = {
           tokenId: culqiToken.id,
           amount: formatAmountToCents(total),
           email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
@@ -488,7 +490,13 @@ export function CartSidebar() {
           customerName: delivery.name || "Cliente",
           customerPhone: delivery.phone,
           address: delivery.address,
-        });
+        };
+        
+        console.log("🔵 CLIENTE: Payload:", payload);
+        
+        const chargeResult = await processCulqiCharge({ data: payload });
+
+        console.log("🔵 CLIENTE: Respuesta recibida:", chargeResult);
 
         if (!chargeResult.success) {
           throw new Error(chargeResult.error || "Error al procesar el pago con Culqi");
@@ -508,10 +516,10 @@ export function CartSidebar() {
 
     const orderNum = `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     try {
-      const createdOrd = await createOrder({
+      const orderData = {
         order_number: orderNum,
         order_type: orderType,
-        status: paymentMethod === "culqi" ? "pagado" : "pendiente",
+        status: "received",
         client_name: delivery.name || "Cliente",
         client_email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
         client_phone: delivery.phone || "",
@@ -523,7 +531,7 @@ export function CartSidebar() {
         subtotal: totalPrice,
         delivery_fee: DELIVERY_FEE,
         total: total,
-        payment_method: paymentMethod,
+        payment_method: paymentMethod === "culqi" ? "card" : paymentMethod,
         notes: [
           delivery.notes,
           paymentMethod === "yape" && yapeTitular ? `Yape Titular: ${yapeTitular}` : "",
@@ -550,7 +558,12 @@ export function CartSidebar() {
             subtotal: i.price * i.quantity,
           };
         }),
-      });
+      };
+      
+      console.log("🟣 ORDER DATA A ENVIAR:", orderData);
+      console.log("🟣 ORDER DATA JSON:", JSON.stringify(orderData, null, 2));
+      const createdOrd = await createOrder(orderData);
+      console.log("🟣 ORDER CREADA:", createdOrd);
 
       // Reproducir sonido cálido de confirmación
       playSuccessChime();

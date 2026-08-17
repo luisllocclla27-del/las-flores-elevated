@@ -187,6 +187,128 @@ await verifyCulqiCharge({
 
 ---
 
+## ⚠️ ACCIÓN REQUERIDA - Arreglar Constraint en Supabase
+
+### 🐛 Problema Actual
+
+La integración de Culqi está funcionando correctamente (el pago se procesa exitosamente), pero al intentar crear la orden en Supabase aparece este error:
+
+```
+Error: new row for relation "orders" violates check constraint "orders_status_check"
+```
+
+**Causa:** La constraint `orders_status_check` en la base de datos tiene valores diferentes a los que espera la aplicación.
+
+### 🔧 Solución (Para el administrador de Supabase)
+
+#### Paso 1: Acceder a Supabase
+1. Ir a https://supabase.com/dashboard
+2. Seleccionar el proyecto `las-flores-web`
+3. En el menú lateral, hacer clic en **SQL Editor**
+
+#### Paso 2: Ejecutar el Script de Corrección
+**Copiar y pegar este script completo en el SQL Editor:**
+
+```sql
+-- Script para arreglar la constraint de status en la tabla orders
+-- Fecha: 2026-08-16
+
+-- 1. Ver la constraint actual (para referencia)
+SELECT 
+  conname AS constraint_name,
+  pg_get_constraintdef(oid) AS constraint_definition
+FROM pg_constraint
+WHERE conrelid = 'public.orders'::regclass
+  AND contype = 'c'
+  AND conname = 'orders_status_check';
+
+-- 2. Eliminar la constraint incorrecta
+ALTER TABLE public.orders 
+DROP CONSTRAINT IF EXISTS orders_status_check;
+
+-- 3. Crear la constraint correcta
+ALTER TABLE public.orders 
+ADD CONSTRAINT orders_status_check 
+CHECK (status IN ('received', 'preparing', 'on_the_way', 'delivered', 'cancelled'));
+
+-- 4. Verificar que se creó correctamente
+SELECT 
+  conname AS constraint_name,
+  pg_get_constraintdef(oid) AS constraint_definition
+FROM pg_constraint
+WHERE conrelid = 'public.orders'::regclass
+  AND conname = 'orders_status_check';
+```
+
+#### Paso 3: Ejecutar el Script
+1. **Hacer clic en el botón "Run"** (o presionar Ctrl+Enter)
+2. Verificar que no haya errores en la salida
+3. Confirmar que la última consulta muestra:
+   ```
+   CHECK ((status = ANY (ARRAY['received'::text, 'preparing'::text, 'on_the_way'::text, 'delivered'::text, 'cancelled'::text])))
+   ```
+
+#### Paso 4: Verificar que Funciona
+1. Volver a la aplicación en el navegador
+2. **Recargar la página (F5 o Ctrl+R)**
+3. Intentar hacer un pedido con Culqi
+4. El pedido debería crearse exitosamente
+
+---
+
+### 🧽 Limpieza de Código (Después de que funcione)
+
+Una vez que se confirme que todo funciona correctamente, eliminar los siguientes logs de debugging:
+
+#### Archivo: `src/components/CartSidebar.tsx`
+
+**Eliminar estas líneas:**
+```typescript
+// Línea ~563-564
+console.log("🟣 ORDER DATA A ENVIAR:", orderData);
+console.log("🟣 ORDER DATA JSON:", JSON.stringify(orderData, null, 2));
+```
+
+#### Archivo: `src/lib/supabase.ts`
+
+**Eliminar estas líneas:**
+```typescript
+// Línea ~440
+console.log("🔵 PAYLOAD FINAL A INSERTAR EN SUPABASE:", JSON.stringify(payloadToInsert, null, 2));
+
+// Línea ~448-449
+console.log("🔴 SUPABASE ERROR:", orderError);
+console.log("🔴 SUPABASE ERROR JSON:", JSON.stringify(orderError, null, 2));
+```
+
+#### Archivo: `src/lib/culqiApi.ts`
+
+**Opcional:** Los logs con emojis 🟡🟢🔴 pueden mantenerse porque ayudan a debuggear problemas de pagos. Si quieres eliminarlos, busca las líneas que empiezan con:
+```typescript
+console.log("🟡 ...");
+console.log("🟢 ...");
+console.log("🔴 ...");
+```
+
+#### Archivo: `src/lib/culqiServer.ts`
+
+**Opcional:** Los logs con emojis 🔵 pueden mantenerse para monitoreo de transacciones.
+
+---
+
+### ✅ Confirmación de que Todo Funciona
+
+Después de arreglar la constraint, el flujo completo debería ser:
+
+1. Cliente selecciona "Culqi (Tarjeta)" ✅
+2. Ingresa datos de tarjeta en modal de Culqi ✅
+3. **Pago se procesa en Culqi** ✅ (esto ya funciona)
+4. **Orden se crea en Supabase** ✅ (esto se arregla con el script)
+5. Cliente recibe confirmación ✅
+6. Orden aparece en dashboard de caja con badge "💳 Culqi" ✅
+
+---
+
 ## 📝 Notas Importantes
 
 1. **Modo Test vs Producción**
@@ -198,8 +320,9 @@ await verifyCulqiCharge({
    - Usar `formatAmountToCents(50)` para conversión
 
 3. **Estados de Orden**
-   - Culqi exitoso → `status="pagado"`
-   - Yape/Efectivo → `status="pendiente"`
+   - Todas las órdenes inician con `status="received"`
+   - El método de pago se guarda en `payment_method` ("card" para Culqi)
+   - La información de Culqi se guarda en las `notes` (token, charge ID, referencia)
 
 4. **Logs y Debugging**
    - Revisar `console.error()` en el navegador

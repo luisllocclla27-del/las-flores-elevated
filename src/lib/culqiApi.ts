@@ -10,19 +10,41 @@ import type { CreateChargePayload } from "./culqiServer";
  * Server Function para procesar un cargo con Culqi
  * Este endpoint se ejecuta SOLO en el servidor con la llave privada
  */
-export const processCulqiCharge = createServerFn("POST", async (payload: {
-  tokenId: string;
-  amount: number; // en centavos
-  email: string;
-  description: string;
-  orderNumber: string;
-  customerName: string;
-  customerPhone?: string;
-  address?: string;
-}) => {
+export const processCulqiCharge = createServerFn()
+  .validator((data: unknown) => {
+    // Pasamos los datos sin validación por ahora
+    return data as {
+      tokenId: string;
+      amount: number;
+      email: string;
+      description: string;
+      orderNumber: string;
+      customerName: string;
+      customerPhone?: string;
+      address?: string;
+    };
+  })
+  .handler(async ({ data: payload }) => {
+    console.log("🟡 processCulqiCharge called with payload:", payload);
+  
   try {
+    // Verificar que estamos en el servidor
+    if (typeof window !== "undefined") {
+      throw new Error("Esta función solo puede ejecutarse en el servidor");
+    }
+
+    console.log("🟡 Verificando variables de entorno...");
+    const secretKey = process.env.CULQI_SECRET_KEY;
+    console.log("🟡 CULQI_SECRET_KEY:", secretKey ? `${secretKey.substring(0, 15)}...` : "❌ NO DEFINIDA");
+
+    if (!secretKey) {
+      throw new Error("CULQI_SECRET_KEY no está definida en el servidor");
+    }
+
     // Importación dinámica para evitar que se cargue en el cliente
+    console.log("🟡 Importando culqiServer...");
     const { createCharge } = await import("./culqiServer");
+    console.log("🟡 culqiServer importado exitosamente");
     
     // Validar datos de entrada
     if (!payload.tokenId || !payload.amount || !payload.email) {
@@ -32,6 +54,8 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
     if (payload.amount <= 0) {
       throw new Error("El monto debe ser mayor a cero");
     }
+
+    console.log("🟡 Datos validados, preparando metadata...");
 
     // Preparar metadata para Culqi
     const metadata: Record<string, any> = {
@@ -47,6 +71,11 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
       metadata.delivery_address = payload.address;
     }
 
+    // Limpiar número de teléfono (Culqi requiere < 15 caracteres, solo dígitos)
+    const cleanPhone = payload.customerPhone 
+      ? payload.customerPhone.replace(/\D/g, "").slice(-9) // Solo dígitos, últimos 9
+      : "000000000";
+
     // Preparar datos antifraud (opcional pero recomendado)
     const antifraudDetails = payload.customerName
       ? {
@@ -54,7 +83,7 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
           last_name: payload.customerName.split(" ").slice(1).join(" ") || payload.customerName,
           address: payload.address || "N/A",
           address_city: "Ayacucho",
-          phone_number: payload.customerPhone || "000000000",
+          phone_number: cleanPhone,
           country_code: "PE",
         }
       : undefined;
@@ -70,7 +99,9 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
       antifraud_details: antifraudDetails,
     };
 
+    console.log("🟡 Llamando a createCharge...");
     const charge = await createCharge(chargePayload);
+    console.log("🟢 Charge creado exitosamente");
 
     // Verificar que el cargo fue exitoso
     if (!charge || !charge.id) {
@@ -95,13 +126,16 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
       },
     };
   } catch (error: any) {
-    console.error("Error procesando cargo Culqi:", error);
+    console.error("🔴 Error procesando cargo Culqi:", error);
+    console.error("🔴 Error stack:", error.stack);
+    console.error("🔴 Error details:", JSON.stringify(error, null, 2));
     
     // Retornar error estructurado
     return {
       success: false,
       error: error.message || "Error al procesar el pago",
       code: error.code || "UNKNOWN_ERROR",
+      details: error.toString(),
     };
   }
 });
@@ -109,9 +143,9 @@ export const processCulqiCharge = createServerFn("POST", async (payload: {
 /**
  * Server Function para verificar el estado de un cargo
  */
-export const verifyCulqiCharge = createServerFn("POST", async (payload: {
-  chargeId: string;
-}) => {
+export const verifyCulqiCharge = createServerFn()
+  .validator((data: unknown) => data as { chargeId: string })
+  .handler(async ({ data: payload }) => {
   try {
     if (!payload.chargeId) {
       throw new Error("ID de cargo requerido");
@@ -146,11 +180,9 @@ export const verifyCulqiCharge = createServerFn("POST", async (payload: {
 /**
  * Server Function para procesar reembolsos
  */
-export const refundCulqiCharge = createServerFn("POST", async (payload: {
-  chargeId: string;
-  amount: number;
-  reason?: string;
-}) => {
+export const refundCulqiCharge = createServerFn()
+  .validator((data: unknown) => data as { chargeId: string; amount: number; reason?: string })
+  .handler(async ({ data: payload }) => {
   try {
     if (!payload.chargeId || !payload.amount) {
       throw new Error("Datos de reembolso incompletos");
