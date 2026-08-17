@@ -6,17 +6,19 @@ import {
   Ticket,
   Briefcase,
   Store,
+  BookOpen,
   LogOut,
   ChevronRight,
   ShieldCheck,
 } from "lucide-react";
 
-export type AdminTab = "analytics" | "orders" | "reservations" | "menu" | "coupons" | "jobs" | "zones";
+export type AdminTab = "analytics" | "orders" | "reservations" | "menu" | "coupons" | "jobs" | "zones" | "complaints";
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
   onSelectTab: (tab: AdminTab) => void;
   applicationsCount: number;
+  complaintsCount?: number;
   onSignOut: () => void;
   userEmail?: string;
 }
@@ -25,6 +27,7 @@ export function AdminSidebar({
   activeTab,
   onSelectTab,
   applicationsCount,
+  complaintsCount = 0,
   onSignOut,
   userEmail,
 }: AdminSidebarProps) {
@@ -35,6 +38,7 @@ export function AdminSidebar({
     { id: "menu" as AdminTab, label: "Carta & Productos", icon: UtensilsCrossed },
     { id: "coupons" as AdminTab, label: "Cupones Promocionales", icon: Ticket },
     { id: "jobs" as AdminTab, label: "Bolsa de Trabajo", icon: Briefcase, badge: applicationsCount },
+    { id: "complaints" as AdminTab, label: "Libro de Reclamaciones", icon: BookOpen, badge: complaintsCount },
     { id: "zones" as AdminTab, label: "Zonas & Mesas", icon: Store },
   ];
 

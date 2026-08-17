@@ -32,6 +32,7 @@ import { AdminCategoryListModal } from "../components/AdminCategoryListModal";
 import { AdminAnalyticsSection } from "../components/AdminAnalyticsSection";
 import { AdminJobsSection } from "../components/AdminJobsSection";
 import { AdminZonesSection } from "../components/AdminZonesSection";
+import { AdminComplaintsSection } from "../components/AdminComplaintsSection";
 import { AdminSidebar, AdminTab } from "../components/AdminSidebar";
 import { removeProductById } from "../utils/adminProducts";
 
@@ -61,6 +62,7 @@ function AdminRoute() {
   const [categories, setCategories] = useState<any[]>([]);
   const [coupons, setCoupons] = useState<any[]>([]);
   const [applicationsCount, setApplicationsCount] = useState<number>(0);
+  const [complaintsCount, setComplaintsCount] = useState<number>(0);
 
   // Search & Filter states
   const [resSearch, setResSearch] = useState("");
@@ -201,6 +203,15 @@ function AdminRoute() {
         setApplicationsCount(jobAppsCount);
       }
 
+      // 8. Complaints Count (Pending)
+      const { count: pendingComplaints } = await supabase
+        .from("complaints")
+        .select("*", { count: "exact", head: true })
+        .eq("status", "pending");
+      if (pendingComplaints !== null && pendingComplaints !== undefined) {
+        setComplaintsCount(pendingComplaints);
+      }
+
     } catch (err) {
       console.error("Error fetching admin data:", err);
     } finally {
@@ -333,6 +344,7 @@ function AdminRoute() {
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         applicationsCount={applicationsCount}
+        complaintsCount={complaintsCount}
         onSignOut={handleSignOut}
         userEmail={userEmail}
       />
@@ -793,6 +805,9 @@ function AdminRoute() {
 
           {/* ================= JOBS TAB ================= */}
           {activeTab === "jobs" && <AdminJobsSection />}
+
+          {/* ================= COMPLAINTS TAB (LIBRO DE RECLAMACIONES) ================= */}
+          {activeTab === "complaints" && <AdminComplaintsSection />}
 
           {/* ================= ZONES TAB ================= */}
           {activeTab === "zones" && <AdminZonesSection />}
