@@ -248,6 +248,7 @@ function ReservasPage() {
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [pendingStepTransition, setPendingStepTransition] = useState<number | null>(null);
 
   // Blackout & Zone Status State
@@ -1208,14 +1209,22 @@ function ReservasPage() {
                     required
                     checked={form.termsAccepted}
                     onChange={(e) => setForm({ ...form, termsAccepted: e.target.checked })}
-                    className="mt-0.5"
+                    className="mt-0.5 accent-[#2e5339]"
                   />
                   <span>
                     Acepto haber leído los{" "}
-                    <a href="#" className="text-[#2e5339] underline font-bold">
-                      Términos y Condiciones
-                    </a>
-                    , así como la Política de Privacidad en donde se me informa sobre el tratamiento de datos personales.
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowTermsModal(true);
+                      }}
+                      className="text-[#2e5339] underline font-bold hover:text-[#1e3826] inline cursor-pointer"
+                    >
+                      Términos y Condiciones y Política de Privacidad
+                    </button>
+                    , en donde se me informa sobre el tratamiento de datos personales y la política de puntualidad de mesas.
                   </span>
                 </label>
                 <label className="flex items-start gap-2.5 cursor-pointer">
@@ -1223,9 +1232,9 @@ function ReservasPage() {
                     type="checkbox"
                     checked={form.marketingAccepted}
                     onChange={(e) => setForm({ ...form, marketingAccepted: e.target.checked })}
-                    className="mt-0.5"
+                    className="mt-0.5 accent-[#2e5339]"
                   />
-                  <span>Consiento la recepción de comunicaciones del restaurante por e-mail y/o SMS con fines comerciales.</span>
+                  <span>Consiento la recepción de comunicaciones del restaurante por e-mail y/o WhatsApp sobre confirmaciones y eventos especiales.</span>
                 </label>
               </div>
 
@@ -1537,6 +1546,119 @@ function ReservasPage() {
                 className="w-full bg-[#2e5339] hover:bg-[#23412c] text-white py-3.5 rounded-2xl text-xs font-bold uppercase tracking-widest transition-all shadow-md cursor-pointer"
               >
                 Ver otros horarios disponibles
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Emergente de Términos, Condiciones y Política de Privacidad */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-[9999] bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-[#FAF6ED] rounded-3xl max-w-2xl w-full max-h-[85vh] shadow-2xl border border-[#d4a373]/50 flex flex-col overflow-hidden animate-in zoom-in-95 duration-200">
+            {/* Header Modal */}
+            <div className="p-6 bg-[#2e5339] text-white flex items-center justify-between border-b border-[#d4a373]/30 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-[#d4a373]/40">
+                  <ShieldCheck size={22} className="text-[#d4a373]" />
+                </div>
+                <div>
+                  <span className="text-[9px] uppercase tracking-[0.25em] text-[#d4a373] font-bold block">
+                    Restaurante Turístico Las Flores
+                  </span>
+                  <h3 className="font-serif text-lg md:text-xl font-bold">
+                    Términos, Condiciones y Privacidad
+                  </h3>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(false)}
+                className="p-2 text-white/70 hover:text-white rounded-full hover:bg-white/10 transition-colors cursor-pointer"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            {/* Contenido con Scroll */}
+            <div className="p-6 md:p-8 overflow-y-auto space-y-6 text-xs text-gray-700 leading-relaxed font-sans">
+              
+              {/* Sección 1: Política de Reserva y Tolerancia */}
+              <div className="space-y-2">
+                <h4 className="font-serif text-sm font-bold text-[#2e5339] uppercase tracking-wide flex items-center gap-2">
+                  <span>1. Política de Puntualidad y Tolerancia</span>
+                </h4>
+                <p>
+                  Para garantizar la mejor experiencia gastronómica a todos nuestros comensales, las reservas cuentan con un tiempo de <strong>tolerancia máxima de 15 minutos</strong> a partir de la hora reservada. Pasado este lapso, la mesa podrá ser liberada para comensales en lista de espera.
+                </p>
+                <p>
+                  Si prevé un retraso en su llegada, le solicitamos comunicarse con anticipación a nuestro canal oficial de WhatsApp (<strong>+51 980 723 422</strong>) para conservar su asignación de mesa.
+                </p>
+              </div>
+
+              {/* Sección 2: Capacidad y Asignación de Ambientes */}
+              <div className="space-y-2">
+                <h4 className="font-serif text-sm font-bold text-[#2e5339] uppercase tracking-wide flex items-center gap-2">
+                  <span>2. Asignación de Ambientes y Salones</span>
+                </h4>
+                <p>
+                  Las solicitudes de ubicación específica (Salón Principal, Terraza, Balcón Panorámico, Jardín) se priorizan según disponibilidad confirmada. En fechas festivas o eventos corporativos, la administración se reserva el derecho de optimizar la distribución de mesas respetando la capacidad solicitada.
+                </p>
+                <p>
+                  Para reservas de <strong>grupos mayores a 8 personas</strong>, se requiere confirmación personalizada para la disposición del menú y servicio coordinado.
+                </p>
+              </div>
+
+              {/* Sección 3: Alergias y Restricciones Alimentarias */}
+              <div className="space-y-2">
+                <h4 className="font-serif text-sm font-bold text-[#2e5339] uppercase tracking-wide flex items-center gap-2">
+                  <span>3. Restricciones Alimentarias y Alergias</span>
+                </h4>
+                <p>
+                  Restaurante Las Flores prepara cada plato con insumos frescos de la región. Si algún integrante de su grupo posee alergias severas (gluten, mariscos, frutos secos, lactosa), es indispensable indicarlo en el campo de observaciones y reconfirmarlo a su anfitrión al llegar.
+                </p>
+              </div>
+
+              {/* Sección 4: Política de Privacidad y Tratamiento de Datos (Ley N° 29733) */}
+              <div className="space-y-2">
+                <h4 className="font-serif text-sm font-bold text-[#2e5339] uppercase tracking-wide flex items-center gap-2">
+                  <span>4. Protección de Datos Personales (Ley N° 29733)</span>
+                </h4>
+                <p>
+                  De conformidad con la Ley de Protección de Datos Personales del Perú (Ley N° 29733), los datos recopilados (nombre, correo electrónico, teléfono) serán utilizados exclusivamente para la gestión, confirmación y recordatorio de su reserva, así como el envío del comprobante de pase digital.
+                </p>
+                <p>
+                  Sus datos personales están almacenados con altos estándares de seguridad y cifrado, y no serán compartidos ni comercializados con terceros bajo ninguna circunstancia.
+                </p>
+              </div>
+
+              {/* Sección 5: Modificaciones y Cancelaciones */}
+              <div className="space-y-2">
+                <h4 className="font-serif text-sm font-bold text-[#2e5339] uppercase tracking-wide flex items-center gap-2">
+                  <span>5. Modificaciones y Cancelaciones</span>
+                </h4>
+                <p>
+                  Usted puede cancelar o modificar su reserva sin ningún costo hasta con <strong>2 horas de anticipación</strong> mediante el enlace recibido en su correo electrónico o comunicándose con nuestra central de atención.
+                </p>
+              </div>
+
+            </div>
+
+            {/* Footer con botón de Aceptar */}
+            <div className="p-4 md:p-6 bg-white border-t border-[#d4a373]/30 flex items-center justify-between gap-4 shrink-0">
+              <span className="text-[11px] text-gray-500 hidden sm:inline">
+                Restaurante Las Flores — Ayacucho, Perú
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setForm((f) => ({ ...f, termsAccepted: true }));
+                  setShowTermsModal(false);
+                }}
+                className="w-full sm:w-auto bg-[#2e5339] hover:bg-[#23412c] text-white px-8 py-3 rounded-xl text-xs font-bold uppercase tracking-widest transition-all shadow-md active:scale-98 cursor-pointer flex items-center justify-center gap-2 ml-auto"
+              >
+                <Check size={16} />
+                <span>Entendido y Aceptar</span>
               </button>
             </div>
           </div>
