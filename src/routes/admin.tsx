@@ -98,6 +98,7 @@ function AdminRoute() {
       .on("postgres_changes", { event: "*", schema: "public", table: "reservations" }, () => fetchData())
       .on("postgres_changes", { event: "*", schema: "public", table: "products" }, () => fetchData())
       .on("postgres_changes", { event: "*", schema: "public", table: "coupons" }, () => fetchData())
+      .on("postgres_changes", { event: "*", schema: "public", table: "complaints" }, () => fetchData())
       .subscribe();
 
     return () => {
@@ -807,7 +808,9 @@ function AdminRoute() {
           {activeTab === "jobs" && <AdminJobsSection />}
 
           {/* ================= COMPLAINTS TAB (LIBRO DE RECLAMACIONES) ================= */}
-          {activeTab === "complaints" && <AdminComplaintsSection />}
+          {activeTab === "complaints" && (
+            <AdminComplaintsSection onPendingCountChange={(cnt) => setComplaintsCount(cnt)} />
+          )}
 
           {/* ================= ZONES TAB ================= */}
           {activeTab === "zones" && <AdminZonesSection />}

@@ -74,7 +74,11 @@ export const COMPLAINT_STATUS_LABELS: Record<ComplaintStatus, { label: string; c
   },
 };
 
-export function AdminComplaintsSection() {
+interface AdminComplaintsSectionProps {
+  onPendingCountChange?: (count: number) => void;
+}
+
+export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaintsSectionProps = {}) {
   const [complaints, setComplaints] = useState<ComplaintItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -100,7 +104,10 @@ export function AdminComplaintsSection() {
       if (error) {
         console.warn("Error fetching complaints table:", error.message);
       } else if (data) {
-        setComplaints(data as ComplaintItem[]);
+        const list = data as ComplaintItem[];
+        setComplaints(list);
+        const pendingCount = list.filter((c) => c.status === "pending").length;
+        onPendingCountChange?.(pendingCount);
       }
     } catch (err) {
       console.error(err);
@@ -148,13 +155,14 @@ export function AdminComplaintsSection() {
 
       if (error) throw error;
 
-      setComplaints((prev) =>
-        prev.map((c) =>
-          c.id === selectedComplaint.id
-            ? { ...c, status: newStatus, admin_response: adminResponse.trim() || null }
-            : c
-        )
+      const updatedList = complaints.map((c) =>
+        c.id === selectedComplaint.id
+          ? { ...c, status: newStatus, admin_response: adminResponse.trim() || null }
+          : c
       );
+      setComplaints(updatedList);
+      const pendingCount = updatedList.filter((c) => c.status === "pending").length;
+      onPendingCountChange?.(pendingCount);
 
       setSelectedComplaint((prev) =>
         prev ? { ...prev, status: newStatus, admin_response: adminResponse.trim() || null } : null
