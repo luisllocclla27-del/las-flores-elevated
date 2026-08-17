@@ -1,8 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Obtención de variables de entorno de Supabase
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "https://twbhugvklizzpjbpdosj.supabase.co";
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_ma96bleVnsLnK1KHW5uz1Q_rSizdLsP";
+// Obtención de variables de entorno de Supabase (nunca hardcodear claves)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error("[Supabase] VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY deben estar definidas en .env.local");
+}
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -410,62 +414,13 @@ export async function createOrder(payload: OrderPayload & { discount_amount?: nu
       if (!rpcError && rpcData) {
         return rpcData;
       }
-    } catch (_) {
-      // Proceder con inserción directa
+    } catch (rpcCatchErr) {
+      console.error("[createOrder] Error en RPC create_order_secure:", rpcCatchErr);
+      throw new Error("No se pudo procesar el pedido de forma segura. Intenta nuevamente.");
     }
+  } else {
+    throw new Error("Los productos del pedido no tienen identificadores válidos.");
   }
-
-  // Fallback de inserción directa si la RPC aún no ha sido aplicada en la BD
-  try {
-    const { data: authUser } = await supabase.auth.getUser();
-    if (authUser?.user?.id) {
-      orderData.user_id = authUser.user.id;
-    }
-  } catch (e) {
-    // Sin sesión activa
-  }
-
-  if (!orderData.status) {
-    orderData.status = "received";
-  }
-
-  const orderId = (typeof crypto !== "undefined" && crypto.randomUUID)
-    ? crypto.randomUUID()
-    : `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
-
-  const payloadToInsert: Record<string, any> = {
-    id: orderId,
-  };
-
-  for (const [key, value] of Object.entries(orderData)) {
-    if (value !== undefined && value !== null && value !== "") {
-      payloadToInsert[key] = value;
-    }
-  }
-  
-  const { data: insertedData, error: orderError } = await supabase
-    .from("orders")
-    .insert([payloadToInsert])
-    .select()
-    .single();
-
-  if (orderError) {
-    throw new Error(orderError.message || "Error al crear el pedido.");
-  }
-
-  if (items && items.length > 0) {
-    const itemsToInsert = items.map(item => ({
-      order_id: insertedData.id,
-      product_id: item.product_id,
-      product_name: item.product_name,
-      unit_price: item.unit_price,
-      quantity: item.quantity,
-      subtotal: item.subtotal
-    }));
-    await supabase.from("order_items").insert(itemsToInsert);
-  }
-
-  return insertedData;
 }
 
 /**

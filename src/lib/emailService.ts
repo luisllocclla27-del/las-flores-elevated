@@ -50,7 +50,8 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
       return true;
     }
   } catch (err) {
-    // Si la Edge Function aún no fue desplegada, continuar silenciosamente sin romper la UI
+    console.warn(`[Email Service]: Error al enviar correo a ${Array.isArray(payload.to) ? payload.to.join(", ") : payload.to}:`, err);
+    return false;
   }
 
   console.info(
@@ -58,7 +59,7 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
       Array.isArray(payload.to) ? payload.to.join(", ") : payload.to
     }: "${payload.subject}".`
   );
-  return true;
+  return false;
 }
 
 /**

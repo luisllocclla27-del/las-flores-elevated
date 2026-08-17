@@ -495,7 +495,6 @@ export function CartSidebar() {
     
     if (paymentMethod === "culqi" && culqiToken) {
       try {
-        console.log("🔵 CLIENTE: Llamando a processCulqiCharge...");
         
         const payload = {
           tokenId: culqiToken.id,
@@ -508,7 +507,6 @@ export function CartSidebar() {
           address: delivery.address,
         };
         
-        console.log("🔵 CLIENTE: Payload:", payload);
         
         let chargeResult: any = null;
 
@@ -531,7 +529,6 @@ export function CartSidebar() {
         culqiChargeId = chargeResult.chargeId || null;
         culqiReferenceCode = chargeResult.referenceCode || null;
         
-        console.log("Cargo Culqi procesado exitosamente:", chargeResult);
       } catch (culqiError: any) {
         console.error("Error procesando cargo Culqi:", culqiError);
         alert(`Error al procesar el pago: ${culqiError.message || "Por favor, intenta nuevamente."}`);
@@ -1241,7 +1238,7 @@ export function CartSidebar() {
                 {(
                   [
                     { id: "yape", label: "Yape / Plin", image: "/imagenes-reales/metodo-pagos/yape.webp" },
-                    { id: "culqi", label: "Tarjeta", image: "/imagenes-reales/metodo-pagos/targeta.webp" },
+                    { id: "culqi", label: "Tarjeta", image: "/imagenes-reales/metodo-pagos/tarjeta.webp" },
                     { id: "efectivo", label: "Efectivo", image: "/imagenes-reales/metodo-pagos/dinero.webp" },
                   ] as const
                 ).map(({ id, label, image }) => {

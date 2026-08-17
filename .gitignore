@@ -35,6 +35,10 @@ dist-ssr
 
 .vercel
 .env*
+!.env.example
+scratch_scrape/
+supabase/*.txt
+
 # Local isolated worktrees
 .worktrees/
 *.mov

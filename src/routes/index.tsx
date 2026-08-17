@@ -855,7 +855,7 @@ function Index() {
           className="absolute inset-0 w-full h-full object-cover opacity-75 scale-[1.02] pointer-events-none"
         >
           <source src="/inicio/videoweb.mp4" type="video/mp4" />
-          <source src="/inicio/videoweb.mov" type="video/quicktime" />
+
           {/* Imagen de reserva si el navegador restringe video */}
           <img
             src={ayacuchoHero}
