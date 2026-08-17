@@ -1055,18 +1055,33 @@ function ReservasPage() {
 
               {/* Botón de Continuar a Datos de Contacto (Paso 2) */}
               <div className="pt-6 border-t border-[#d4a373]/20">
-                <button
-                  type="button"
-                  onClick={handleContinueToStep2}
-                  disabled={!form.time}
-                  className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer ${
-                    form.time
-                      ? "bg-[#2e5339] hover:bg-[#23412c] text-white"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-                >
-                  <span>{form.time ? `CONTINUAR CON RESERVA (${form.time}h) →` : "SELECCIONA UN HORARIO PARA CONTINUAR"}</span>
-                </button>
+                {(() => {
+                  const hasGuests = Boolean(form.guests && form.guests.trim());
+                  const hasDate = Boolean(form.date && form.date.trim());
+                  const hasTime = Boolean(form.time && form.time.trim());
+                  const isStep1Complete = hasGuests && hasDate && hasTime;
+
+                  let buttonLabel = "CONTINUAR A DATOS DE CONTACTO →";
+                  if (!hasGuests) buttonLabel = "1. SELECCIONA N° DE PERSONAS";
+                  else if (!hasDate) buttonLabel = "2. SELECCIONA UNA FECHA";
+                  else if (!hasTime) buttonLabel = "3. SELECCIONA UN HORARIO";
+                  else buttonLabel = `CONTINUAR CON RESERVA (${form.guests}p • ${form.date} • ${form.time}h) →`;
+
+                  return (
+                    <button
+                      type="button"
+                      onClick={handleContinueToStep2}
+                      disabled={!isStep1Complete}
+                      className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest text-sm transition-all shadow-md active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer ${
+                        isStep1Complete
+                          ? "bg-[#2e5339] hover:bg-[#23412c] text-white cursor-pointer"
+                          : "bg-gray-200 text-gray-500 cursor-not-allowed border border-gray-300/60 opacity-80"
+                      }`}
+                    >
+                      <span>{buttonLabel}</span>
+                    </button>
+                  );
+                })()}
               </div>
             </div>
           </div>
