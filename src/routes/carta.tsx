@@ -8,6 +8,7 @@ import { useLiveMenuCategories, Dish } from "@/lib/liveProducts";
 import { CartSidebar } from "@/components/CartSidebar";
 import { useCart } from "@/context/CartContext";
 import { AnimatedCartButton } from "@/components/AnimatedCartButton";
+import { MobileCategoryFilter } from "@/components/MobileCategoryFilter";
 
 export const Route = createFileRoute("/carta")({
   head: () => ({
@@ -82,6 +83,15 @@ function CartaPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const currentCategories = liveCategories.length > 0 ? liveCategories : staticCategories;
+
+  const goToMenuContent = () => {
+    if (window.innerWidth < 768) {
+      window.scrollTo({
+        top: document.getElementById("menu-content")?.offsetTop || 0,
+        behavior: "smooth",
+      });
+    }
+  };
   const active = currentCategories.find((c) => c.id === activeId) || currentCategories[0];
 
   return (
@@ -144,24 +154,32 @@ function CartaPage() {
         <h1 className="font-serif text-4xl md:text-6xl text-nogal font-normal leading-tight">Nuestra Carta</h1>
       </div>
 
+      {/* Filtros móvil: carrusel + botón "..." con hoja de todas las categorías */}
+      <div className="md:hidden sticky top-[56px] z-20 w-full bg-piedra border-b border-nogal/10">
+        <div className="pl-6">
+          <MobileCategoryFilter
+            categories={currentCategories.map((c) => ({ key: c.id, label: c.label }))}
+            activeKey={activeId}
+            onSelect={(key) => {
+              setActiveId(key);
+              goToMenuContent();
+            }}
+            accentColor="#A32638"
+            accentTextColor="#F9F0DE"
+          />
+        </div>
+      </div>
+
       {/* Main Content with Sidebar */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto w-full flex-1">
-        {/* Vertical Category Sidebar (Desktop) / Horizontal Tabs (Mobile) */}
-        <aside className="w-full md:w-72 bg-piedra border-b md:border-b-0 md:border-r border-nogal/10 flex-shrink-0 sticky top-[56px] md:top-24 md:h-[calc(100vh-100px)] overflow-x-auto md:overflow-y-auto z-20 scrollbar-none">
-          <div className="flex flex-row md:flex-col py-0 md:py-8 w-max min-w-full md:w-auto md:pr-8">
+        {/* Vertical Category Sidebar (solo escritorio) */}
+        <aside className="hidden md:block w-72 bg-piedra border-r border-nogal/10 flex-shrink-0 sticky top-24 h-[calc(100vh-100px)] overflow-y-auto z-20 scrollbar-none">
+          <div className="flex flex-col py-8 pr-8">
             {currentCategories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => {
-                  setActiveId(cat.id);
-                  if (window.innerWidth < 768) {
-                    window.scrollTo({
-                      top: document.getElementById("menu-content")?.offsetTop || 0,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className={`text-center md:text-left whitespace-nowrap md:whitespace-normal px-6 md:px-8 py-4 md:py-3.5 text-[11px] font-bold uppercase tracking-[0.15em] transition-all border-b-4 md:border-b-0 md:border-l-4 md:rounded-r-full ${
+                onClick={() => setActiveId(cat.id)}
+                className={`text-left whitespace-normal px-8 py-3.5 text-xs font-bold uppercase tracking-[0.15em] transition-all border-l-4 rounded-r-full ${
                   activeId === cat.id
                     ? "border-cochinilla text-cochinilla bg-cochinilla/10"
                     : "border-transparent text-nogal/50 hover:text-nogal hover:bg-nogal/5"

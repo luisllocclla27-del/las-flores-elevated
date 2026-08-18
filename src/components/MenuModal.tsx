@@ -4,6 +4,7 @@ import { ShoppingCartIcon } from "@animateicons/react/lucide";
 import { useCart } from "../context/CartContext";
 import { BreakfastCustomizationModal } from "./BreakfastCustomizationModal";
 import { useLiveMenuCategories } from "../lib/liveProducts";
+import { MobileCategoryFilter } from "./MobileCategoryFilter";
 
 /* ─── Paleta de Lujo (Eucalipto & Crema) ─── */
 const R = {
@@ -243,19 +244,32 @@ export function MenuModal({ open, onClose }: MenuModalProps) {
 
       {/* Content Layout */}
       <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-        {/* Vertical Categories Sidebar (Desktop) / Horizontal Tabs (Mobile) */}
+        {/* Filtros móvil: carrusel + botón "..." con hoja de todas las categorías */}
+        <div className="md:hidden flex-shrink-0 border-b border-black/5 z-10" style={{ background: R.crema }}>
+          <div className="pl-3">
+            <MobileCategoryFilter
+              categories={currentCategories.map((c) => ({ key: c.id, label: c.label }))}
+              activeKey={activeId}
+              onSelect={setActiveId}
+              accentColor={R.eucalipto}
+              accentTextColor={R.crema}
+            />
+          </div>
+        </div>
+
+        {/* Vertical Categories Sidebar (solo escritorio) */}
         <div
-          className="w-full md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-black/5 overflow-x-auto md:overflow-y-auto z-10 scrollbar-none"
+          className="hidden md:block w-72 flex-shrink-0 border-r border-black/5 overflow-y-auto z-10 scrollbar-none"
           style={{ background: R.crema }}
         >
-          <div className="flex flex-row md:flex-col p-3 md:p-4 gap-1 w-max min-w-full md:w-auto">
+          <div className="flex flex-col p-4 gap-1">
             {currentCategories.map((cat) => {
               const isActive = activeId === cat.id;
               return (
                 <button
                   key={cat.id}
                   onClick={() => setActiveId(cat.id)}
-                  className={`text-center md:text-left whitespace-nowrap md:whitespace-normal px-5 md:px-6 py-3.5 md:py-3.5 text-[11px] md:text-xs font-bold uppercase tracking-[0.15em] transition-all rounded-xl ${
+                  className={`text-left whitespace-normal px-6 py-3.5 text-xs font-bold uppercase tracking-[0.15em] transition-all rounded-xl ${
                     isActive
                       ? "bg-eucalipto text-piedra shadow-xs font-bold"
                       : "text-nogal/60 hover:text-eucalipto hover:bg-black/5 font-medium"

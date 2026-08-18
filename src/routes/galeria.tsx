@@ -5,6 +5,7 @@ import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
 import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { AnimatedCartButton } from "@/components/AnimatedCartButton";
+import { MobileCategoryFilter } from "@/components/MobileCategoryFilter";
 
 export const Route = createFileRoute("/galeria")({
   head: () => ({
@@ -244,25 +245,12 @@ function GaleriaPage() {
 
       {/* ── FILTROS MÓVIL: sticky pegado al header (solo < lg) ── */}
       <div className="block lg:hidden sticky top-[56px] z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6">
-          <div
-            className="flex items-center gap-2.5 overflow-x-auto py-3 scrollbar-none"
-            style={{ WebkitOverflowScrolling: "touch" }}
-          >
-            {GALLERY_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                className={`flex-shrink-0 whitespace-nowrap px-5 py-2 rounded-full text-xs font-bold transition-all ${
-                  activeCategory === cat.id
-                    ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
-                    : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
+        <div className="max-w-7xl mx-auto pl-6">
+          <MobileCategoryFilter
+            categories={GALLERY_CATEGORIES.map((cat) => ({ key: cat.id, label: cat.label }))}
+            activeKey={activeCategory}
+            onSelect={setActiveCategory}
+          />
         </div>
       </div>
 
