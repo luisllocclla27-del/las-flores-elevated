@@ -14,9 +14,9 @@ import {
   Compass, 
   HelpCircle, 
   ExternalLink,
-  Sparkles,
-  ShoppingCart
+  Sparkles
 } from "lucide-react";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
@@ -151,17 +151,14 @@ function ContactoPage() {
           
           {/* Carrito */}
           {totalItems > 0 && (
-            <button
+            <AnimatedCartButton
               onClick={() => setCartOpen(true)}
-              className={`relative transition-colors ${
+              className={`transition-colors ${
                 isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
               }`}
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            </button>
+              size={20}
+              color={isScrolled ? "#8B7355" : "#F5F5DC"}
+            />
           )}
         </div>
       </nav>

@@ -2,8 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
 import { SiteFooter } from "@/components/site-footer";
-import { ShieldCheck, Lock, Eye, FileText, CheckCircle2, ShoppingCart, ArrowLeft } from "lucide-react";
+import { ShieldCheck, Lock, Eye, FileText, CheckCircle2, ArrowLeft } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/politica-de-privacidad")({
   head: () => ({
@@ -75,15 +76,12 @@ function PoliticaPrivacidadPage() {
             </a>
 
             {totalItems > 0 && (
-              <button
+              <AnimatedCartButton
                 onClick={() => setCartOpen(true)}
-                className="relative p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
-              >
-                <ShoppingCart size={20} />
-                <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {totalItems}
-                </span>
-              </button>
+                className="p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
+                size={20}
+                color="#8B7355"
+              />
             )}
           </div>
         </div>

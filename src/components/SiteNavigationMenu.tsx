@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Menu, X, Facebook, Instagram, Phone, Mail, MessageCircle } from 'lucide-react';
+import { X, Facebook, Instagram, Phone, Mail, MessageCircle } from 'lucide-react';
+import { MenuIcon } from '@animateicons/react/lucide';
 import { Link } from '@tanstack/react-router';
 import { UserAuthButton } from './UserAuthButton';
 
@@ -34,6 +35,12 @@ export function SiteNavigationMenu({
     : isScrolled
       ? 'text-nogal'
       : 'text-piedra';
+  
+  const iconColor = isAlwaysDark
+    ? '#8B7355'
+    : isScrolled
+      ? '#8B7355'
+      : '#F5F5DC';
 
   return (
     <>
@@ -41,10 +48,14 @@ export function SiteNavigationMenu({
       <div className="flex items-center gap-1">
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center justify-center p-0.5 rounded-md hover:bg-black/10 transition-colors pointer-events-auto"
+          className="flex items-center justify-center p-0.5 pointer-events-auto"
           aria-label="Menú principal"
         >
-          <Menu size={26} className={textColor} />
+          <MenuIcon 
+            size={26} 
+            color={iconColor}
+            style={{ transform: 'scaleX(-1)' }}
+          />
         </button>
         <UserAuthButton textColorClass={textColor} />
       </div>

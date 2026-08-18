@@ -7,9 +7,10 @@ const platoCuyImg = "/gastronomia/cuy-chactado.webp"; // placeholder
 const platoMaizImg = "/gastronomia/chicharron.webp"; // placeholder
 import { SiteFooter } from "@/components/site-footer";
 import { useState, useTransition, useEffect, useRef } from "react";
-import { Calendar, CreditCard, ChevronRight, Check, ShoppingCart, ChevronDown } from "lucide-react";
+import { Calendar, CreditCard, ChevronRight, Check, ChevronDown } from "lucide-react";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { useCart } from "@/context/CartContext";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 import { MenuModal } from "@/components/MenuModal";
 import { FamiliaLasFloresSection } from "../components/FamiliaLasFloresSection";
@@ -374,15 +375,12 @@ function RestaurantePage() {
             Reservar
           </Link>
           {totalItems > 0 && (
-            <button
+            <AnimatedCartButton
               onClick={() => setCartOpen(true)}
-              className="relative hover:text-chilca transition-colors ml-1"
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            </button>
+              className="hover:text-chilca transition-colors ml-1"
+              size={20}
+              color={isScrolled ? "#8B7355" : "#F5F5DC"}
+            />
           )}
         </div>
       </nav>

@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { useLiveMenuCategories, Dish } from "@/lib/liveProducts";
 import { CartSidebar } from "@/components/CartSidebar";
 import { useCart } from "@/context/CartContext";
-import { ShoppingCart } from "lucide-react";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/carta")({
   head: () => ({
@@ -129,15 +129,12 @@ function CartaPage() {
 
           {/* Carrito: Aparece al lado derecho después de los botones */}
           {totalItems > 0 && (
-            <button
+            <AnimatedCartButton
               onClick={() => setIsCartOpen(true)}
-              className="relative hover:text-chilca transition-colors text-nogal"
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            </button>
+              className="hover:text-chilca transition-colors text-nogal"
+              size={20}
+              color="#8B7355"
+            />
           )}
         </div>
       </nav>

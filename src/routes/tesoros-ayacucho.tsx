@@ -3,7 +3,8 @@ import { SiteFooter } from "@/components/site-footer";
 import { useState, useEffect } from "react";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { useCart } from "@/context/CartContext";
-import { ShoppingCart, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/tesoros-ayacucho")({
   head: () => ({
@@ -306,15 +307,12 @@ function TesorosAyacuchoPage() {
             Reservar
           </Link>
           {totalItems > 0 && (
-            <button
+            <AnimatedCartButton
               onClick={() => setCartOpen(true)}
-              className="relative hover:text-chilca transition-colors"
-            >
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
-                {totalItems}
-              </span>
-            </button>
+              className="hover:text-chilca transition-colors"
+              size={20}
+              color={isScrolled ? "#8B7355" : "#F5F5DC"}
+            />
           )}
 
         </div>

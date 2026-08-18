@@ -7,7 +7,8 @@ import type { User } from "@supabase/supabase-js";
 import { signInWithGoogle, signInWithFacebook, signOut, createReservation, updateUserProfile, supabase } from "@/lib/supabase";
 import { sendReservationEmail } from "@/lib/emailService";
 import { playSuccessChime } from "@/lib/soundUtils";
-import { Calendar, CheckCircle2, User as UserIcon, MapPin, Search, ShoppingCart, ChevronLeft, Check, AlertCircle, Sparkles, Sun, Wine, Utensils, Users, Award, Share2, CalendarPlus, QrCode, Heart, Coffee, ShieldCheck, X } from "lucide-react";
+import { Calendar, CheckCircle2, User as UserIcon, MapPin, Search, ChevronLeft, Check, AlertCircle, Sparkles, Sun, Wine, Utensils, Users, Award, Share2, CalendarPlus, QrCode, Heart, Coffee, ShieldCheck, X } from "lucide-react";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { LoginModal } from "@/components/LoginModal";
 import { getBlockedZonesForReservation, listRestaurantZones } from "@/features/zones/api";
 
@@ -674,12 +675,12 @@ function ReservasPage() {
         </Link>
         <div className="flex items-center gap-6 text-xs uppercase tracking-widest font-semibold pointer-events-auto">
           {totalItems > 0 && (
-            <button onClick={() => setCartOpen(true)} className="relative hover:opacity-70 transition-opacity">
-              <ShoppingCart size={20} />
-              <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                {totalItems}
-              </span>
-            </button>
+            <AnimatedCartButton
+              onClick={() => setCartOpen(true)}
+              className="hover:opacity-70 transition-opacity"
+              size={20}
+              color="#8B7355"
+            />
           )}
 
         </div>

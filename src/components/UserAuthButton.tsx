@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import {
-  User,
   Loader2,
   BarChart3,
   UtensilsCrossed,
 } from "lucide-react";
+import { UserIcon } from "@animateicons/react/lucide";
 import { supabase, signInWithGoogle, signInWithFacebook } from "../lib/supabase";
 import { LoginModal } from "./LoginModal";
 
@@ -142,7 +142,7 @@ export function UserAuthButton({ textColorClass }: UserAuthButtonProps) {
   // ── Loading ────────────────────────────────────────────────────────
   if (loading) {
     return (
-      <button className={`flex items-center justify-center p-1 rounded-md pointer-events-auto ${textColorClass}`}>
+      <button className={`flex items-center justify-center p-1 pointer-events-auto ${textColorClass}`}>
         <Loader2 size={24} className="animate-spin opacity-60" />
       </button>
     );
@@ -155,14 +155,14 @@ export function UserAuthButton({ textColorClass }: UserAuthButtonProps) {
         <button
           onClick={handleLoginClick}
           disabled={signingIn}
-          className={`flex items-center justify-center p-1 rounded-md hover:bg-black/10 transition-colors pointer-events-auto ${textColorClass}`}
+          className={`flex items-center justify-center p-1 pointer-events-auto ${textColorClass}`}
           aria-label="Iniciar sesión"
           title="Iniciar sesión"
         >
           {signingIn ? (
             <Loader2 size={24} className="animate-spin" />
           ) : (
-            <User size={26} strokeWidth={2} />
+            <UserIcon size={26} />
           )}
         </button>
 

@@ -7,7 +7,8 @@ import { JobApplicationForm } from "../features/jobs/components/JobApplicationFo
 import { listPublicJobOffers } from "../features/jobs/api";
 import { sortPublicOffers } from "../features/jobs/rules";
 import type { PublicJobOffer } from "../features/jobs/types";
-import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift, ShoppingCart } from "lucide-react";
+import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift } from "lucide-react";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { FamiliaLasFloresSection } from "../components/FamiliaLasFloresSection";
 import { useCart } from "@/context/CartContext";
 
@@ -126,15 +127,12 @@ function UneteAlEquipoPage() {
             </a>
 
             {totalItems > 0 && (
-              <button
+              <AnimatedCartButton
                 onClick={() => setCartOpen(true)}
-                className="relative p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
-              >
-                <ShoppingCart size={20} />
-                <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {totalItems}
-                </span>
-              </button>
+                className="p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
+                size={20}
+                color="#8B7355"
+              />
             )}
           </div>
         </div>

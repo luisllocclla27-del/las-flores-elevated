@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
 import { MenuModal } from "@/components/MenuModal";
-import { Quote, Heart, Award, Utensils, Sparkles, ArrowRight, Star, ShoppingCart } from "lucide-react";
+import { Quote, Heart, Award, Utensils, Sparkles, ArrowRight, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/familia-las-flores")({
   head: () => ({
@@ -304,17 +305,14 @@ function FamiliaLasFloresPage() {
             
             {/* Carrito */}
             {totalItems > 0 && (
-              <button
+              <AnimatedCartButton
                 onClick={() => setCartOpen(true)}
-                className={`relative transition-colors ${
+                className={`transition-colors ${
                   isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
                 }`}
-              >
-                <ShoppingCart size={20} />
-                <span className="absolute -top-2 -right-2 bg-chilca text-nogal text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {totalItems}
-                </span>
-              </button>
+                size={20}
+                color={isScrolled ? "#8B7355" : "#F5F5DC"}
+              />
             )}
           </div>
         </div>
