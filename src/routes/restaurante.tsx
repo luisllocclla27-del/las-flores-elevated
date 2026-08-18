@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 const equipoImg = "/imagenes-reales/EQUIPO/02042026-DSC04926.webp";
-const casaImg = "/inicio/Equipolasflores.webp";
+const casaImg = "/imagenes-reales/EQUIPO/Gregoria.webp";
 const cocinaImg = "/imagenes-reales/EQUIPO/02042026-DSC05081-opt.webp";
 const platoPucaImg = "/gastronomia/puca-picante.webp"; // placeholder
 const platoCuyImg = "/gastronomia/cuy-chactado.webp"; // placeholder
@@ -391,7 +391,7 @@ function RestaurantePage() {
       >
         <img
           src={casaImg}
-          alt="Equipo de Las Flores - Restaurante ayacuchano"
+          alt="Gregoria, parte de la familia detrás de cada plato"
           width={1920}
           fetchPriority="high"
           height={800}

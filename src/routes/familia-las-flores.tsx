@@ -322,7 +322,7 @@ function FamiliaLasFloresPage() {
       <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
-            src="/imagenes-reales/EQUIPO/02042026-DSC05038-opt.webp"
+            src="/inicio/Equipolasflores.webp"
             alt="Familia Las Flores"
             loading="eager"
             decoding="async"

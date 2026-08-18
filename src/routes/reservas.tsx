@@ -688,18 +688,18 @@ function ReservasPage() {
 
       {/* Header Banner */}
       {!selectedZona && (
-        <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">
+        <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-0 bg-eucalipto-dark text-piedra overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
-              src="/imagenes-reales/hero-paginas/hero-reservas.webp"
+              src="/inicio/reserva.webp"
               alt="Restaurante Las Flores Ayacucho"
               loading="eager"
               decoding="async"
-              className="w-full h-full object-cover opacity-65 filter brightness-105 saturate-[1.1]"
+              className="w-full h-full object-cover opacity-100 filter brightness-95 contrast-105 saturate-[1.05]"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/25 to-black/35" />
           </div>
-          <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6">
+          <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 px-4 sm:px-6">
             <span className="text-chilca font-medium uppercase tracking-[0.3em] text-xs flex items-center justify-center gap-2">
               <Sparkles size={14} />
               Tu Mesa · Tu Momento · Las Flores
