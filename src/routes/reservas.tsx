@@ -815,7 +815,7 @@ function ReservasPage() {
         </main>
       )}
 
-      {/* PHASE 2: HERO DEL AMBIENTE ELEGIDO (Pantalla completa sin márgenes / 100vh Full Viewport Height) */}
+      {/* PHASE 2: HERO DEL AMBIENTE ELEGIDO (Banner compacto, sin forzar scroll de pantalla completa) */}
       {selectedZona && (
         <div ref={wizardRef} className="animate-in fade-in duration-500">
           {/* Edge-to-Edge Split Hero Banner (Altura reducida para mostrar formulario abajo) */}
@@ -834,38 +834,31 @@ function ReservasPage() {
             </div>
 
             {/* Contenido a la derecha con fondo pergamino y altura completa */}
-            <div className="p-8 md:p-14 lg:p-24 flex flex-col justify-between h-full pt-20 lg:pt-24">
-              <div>
-                <button
-                  type="button"
-                  onClick={handleClearZone}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#2e5339] font-bold uppercase tracking-widest hover:underline mb-8 group"
-                >
-                  <span className="transition-transform group-hover:-translate-x-1">←</span>
-                  <span>Ver todos los ambientes</span>
-                </button>
+            <div className="p-8 md:p-14 lg:p-24 flex flex-col justify-center h-full pt-20 lg:pt-24">
+              <button
+                type="button"
+                onClick={handleClearZone}
+                className="inline-flex items-center gap-1.5 text-xs text-[#2e5339] font-bold uppercase tracking-widest hover:underline mb-8 group"
+              >
+                <span className="transition-transform group-hover:-translate-x-1">←</span>
+                <span>Ver todos los ambientes</span>
+              </button>
 
-                <span className="block text-xs font-bold uppercase tracking-[0.25em] text-[#d4a373] mb-2">
-                  Ambiente Seleccionado
-                </span>
+              <span className="block text-xs font-bold uppercase tracking-[0.25em] text-[#d4a373] mb-2">
+                Ambiente Seleccionado
+              </span>
 
-                <h1 className="font-sans text-4xl md:text-6xl text-[#2e5339] font-bold mb-4 leading-tight">
-                  {selectedZona.nombre}
-                </h1>
+              <h1 className="font-sans text-4xl md:text-6xl text-[#2e5339] font-bold mb-4 leading-tight">
+                {selectedZona.nombre}
+              </h1>
 
-                <span className="inline-block bg-[#2e5339]/10 text-[#2e5339] border border-[#2e5339]/20 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
-                  {selectedZona.capacidad}
-                </span>
+              <span className="inline-block bg-[#2e5339]/10 text-[#2e5339] border border-[#2e5339]/20 text-xs font-bold uppercase tracking-widest px-4 py-1.5 rounded-full mb-6">
+                {selectedZona.capacidad}
+              </span>
 
-                <p className="text-sm md:text-base text-gray-700 font-light leading-relaxed mb-8 max-w-xl">
-                  {selectedZona.descripcion}
-                </p>
-              </div>
-
-              <div className="pt-6 border-t border-[#d4a373]/30 flex items-center gap-2 text-xs uppercase tracking-widest text-[#d4a373] font-semibold">
-                <MapPin size={16} className="text-[#2e5339]" />
-                <span>Las Flores Ayacucho · {selectedZona.nombre}</span>
-              </div>
+              <p className="text-sm md:text-base text-gray-700 font-light leading-relaxed max-w-xl">
+                {selectedZona.descripcion}
+              </p>
             </div>
           </div>
 

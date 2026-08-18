@@ -104,8 +104,8 @@ function PoliticaPrivacidadPage() {
       </section>
 
       {/* ── CONTENIDO PRINCIPAL EDITORIAL ── */}
-      <main className="py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
-        <div className="bg-white rounded-3xl p-8 md:p-12 border border-black/10 shadow-lg space-y-10 text-xs md:text-sm text-nogal/85 leading-relaxed font-sans">
+      <main className="doc-legible py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
+        <div className="bg-white rounded-3xl p-8 md:p-12 border border-black/10 shadow-lg space-y-10 text-sm md:text-base text-nogal/85 leading-relaxed">
           
           {/* Introducción */}
           <div className="border-b border-black/10 pb-6 space-y-3">
@@ -165,19 +165,19 @@ function PoliticaPrivacidadPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-cream/50 border border-black/5 space-y-1">
                 <span className="font-bold text-eucalipto block">Gestión Operativa</span>
-                <p className="text-xs text-nogal/75">Confirmación de reservas, despacho de delivery, rastreo en vivo y emisión de comprobantes de pago.</p>
+                <p className="text-sm text-nogal/75">Confirmación de reservas, despacho de delivery, rastreo en vivo y emisión de comprobantes de pago.</p>
               </div>
               <div className="p-4 rounded-2xl bg-cream/50 border border-black/5 space-y-1">
                 <span className="font-bold text-eucalipto block">Seguridad del Comensal</span>
-                <p className="text-xs text-nogal/75">Adaptación de insumos ante alergias alimentarias o preparación de accesos para movilidad reducida.</p>
+                <p className="text-sm text-nogal/75">Adaptación de insumos ante alergias alimentarias o preparación de accesos para movilidad reducida.</p>
               </div>
               <div className="p-4 rounded-2xl bg-cream/50 border border-black/5 space-y-1">
                 <span className="font-bold text-eucalipto block">Atención al Cliente</span>
-                <p className="text-xs text-nogal/75">Respuesta a consultas, solicitudes, coordinación por WhatsApp y atención de reclamos.</p>
+                <p className="text-sm text-nogal/75">Respuesta a consultas, solicitudes, coordinación por WhatsApp y atención de reclamos.</p>
               </div>
               <div className="p-4 rounded-2xl bg-cream/50 border border-black/5 space-y-1">
                 <span className="font-bold text-eucalipto block">Comunicaciones Oficiales</span>
-                <p className="text-xs text-nogal/75">Envío de novedades sobre eventos y festividades solo si el usuario ha brindado su consentimiento previo.</p>
+                <p className="text-sm text-nogal/75">Envío de novedades sobre eventos y festividades solo si el usuario ha brindado su consentimiento previo.</p>
               </div>
             </div>
           </section>

@@ -196,7 +196,7 @@ function LibroReclamacionesPage() {
       </section>
 
       {/* ── CONTENIDO PRINCIPAL ── */}
-      <main className="py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
+      <main className="doc-legible py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
         {submittedCode ? (
           /* CONSTANCIA DE REGISTRO EXITOSO */
           <div className="bg-white rounded-3xl p-8 md:p-14 border border-[#d4a373]/40 shadow-xl text-center space-y-6 animate-in zoom-in-95 duration-300">
@@ -214,7 +214,7 @@ function LibroReclamacionesPage() {
             <div className="p-6 rounded-2xl bg-[#fdf8f0] border border-[#d4a373]/40 max-w-md mx-auto space-y-2">
               <span className="text-xs font-bold text-gray-500 uppercase tracking-widest block">Código de Seguimiento</span>
               <span className="font-mono text-2xl font-black text-eucalipto block tracking-wider">{submittedCode}</span>
-              <span className="text-[11px] text-gray-600 block pt-1">
+              <span className="text-xs text-gray-600 block pt-1">
                 Fecha y hora de registro: {new Date().toLocaleDateString("es-PE")} - {new Date().toLocaleTimeString("es-PE")}
               </span>
             </div>
@@ -241,7 +241,7 @@ function LibroReclamacionesPage() {
                 <span className="bg-cream px-3 py-1 rounded-full border border-black/5 font-semibold">Razón Social: RESTAURANTE LAS FLORES S.A.C.</span>
               </div>
               <p>RUC: <strong>20608514921</strong> • Domicilio: Jr. Lima 304, Centro Histórico de Huamanga, Ayacucho, Perú.</p>
-              <p className="text-[11px] text-gray-500 italic">
+              <p className="text-xs text-gray-500 italic">
                 * Conforme al D.S. N° 011-2011-PCM y la Ley N° 29571, ponemos a su disposición este formato para registrar formalmente su Reclamo o Queja.
               </p>
             </div>
@@ -440,7 +440,7 @@ function LibroReclamacionesPage() {
                         />
                         <div>
                           <span className="font-bold text-xs uppercase block text-ink">Reclamo</span>
-                          <span className="text-[11px] text-gray-600 leading-tight block">Disconformidad relacionada directamente a los productos o servicios expendidos.</span>
+                          <span className="text-xs text-gray-600 leading-tight block">Disconformidad relacionada directamente a los productos o servicios expendidos.</span>
                         </div>
                       </label>
 
@@ -455,7 +455,7 @@ function LibroReclamacionesPage() {
                         />
                         <div>
                           <span className="font-bold text-xs uppercase block text-ink">Queja</span>
-                          <span className="text-[11px] text-gray-600 leading-tight block">Disconformidad no relacionada directamente a los productos, sino al trato o atención al público.</span>
+                          <span className="text-xs text-gray-600 leading-tight block">Disconformidad no relacionada directamente a los productos, sino al trato o atención al público.</span>
                         </div>
                       </label>
                     </div>

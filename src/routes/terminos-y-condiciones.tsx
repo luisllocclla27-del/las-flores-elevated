@@ -104,8 +104,8 @@ function TerminosCondicionesPage() {
       </section>
 
       {/* ── CONTENIDO PRINCIPAL EDITORIAL ── */}
-      <main className="py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
-        <div className="bg-white rounded-3xl p-8 md:p-12 border border-black/10 shadow-lg space-y-10 text-xs md:text-sm text-nogal/85 leading-relaxed font-sans">
+      <main className="doc-legible py-16 md:py-24 px-6 md:px-12 lg:px-20 max-w-4xl mx-auto w-full flex-1">
+        <div className="bg-white rounded-3xl p-8 md:p-12 border border-black/10 shadow-lg space-y-10 text-sm md:text-base text-nogal/85 leading-relaxed">
           
           {/* Introducción */}
           <div className="border-b border-black/10 pb-6 space-y-3">
