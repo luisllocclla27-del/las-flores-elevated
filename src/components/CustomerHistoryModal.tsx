@@ -280,19 +280,12 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
   const firstName = fullName.split(" ")[0];
 
   const content = (
-      <div className={`relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal rounded-[24px] sm:rounded-[32px] rounded-b-none sm:rounded-b-[32px] shadow-2xl overflow-hidden border border-black/10 flex flex-col shrink-0 ${inline ? "h-full max-w-full shadow-none border-none rounded-none w-full" : "h-[92dvh] sm:h-[calc(100dvh-80px)] sm:max-h-[950px] animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"}`}>
+      <div className={`doc-legible relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal rounded-[24px] sm:rounded-[32px] rounded-b-none sm:rounded-b-[32px] shadow-2xl overflow-hidden border border-black/10 flex flex-col shrink-0 ${inline ? "h-full max-w-full shadow-none border-none rounded-none w-full" : "h-[92dvh] sm:h-[calc(100dvh-80px)] sm:max-h-[950px] animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200"}`}>
         {/* Header & Navbar Pinned Bar */}
         <div className="bg-white shrink-0 border-b border-black/10 shadow-xs z-20">
           <div className="px-5 py-3.5 flex items-center justify-between border-b border-black/5">
-            <div className="w-8 flex items-center gap-1.5 text-nogal/70">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="2" y1="12" x2="22" y2="12" />
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-              </svg>
-              <span className="text-[11px] font-bold">ES</span>
-            </div>
-            
+            <div className="w-8" />
+
             <img
               src="/images.png"
               alt="Logo Las Flores"
@@ -314,7 +307,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
               <button
                 type="button"
                 onClick={() => { setActiveTab("orders"); setSelectedTrackingOrder(null); }}
-                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-all ${
+                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all ${
                   activeTab === "orders"
                     ? "bg-white text-eucalipto shadow-sm border border-black/5"
                     : "text-black/60 hover:text-black hover:bg-white/50"
@@ -327,7 +320,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
               <button
                 type="button"
                 onClick={() => { setActiveTab("reservations"); setSelectedTrackingOrder(null); }}
-                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-all ${
+                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all ${
                   activeTab === "reservations"
                     ? "bg-white text-eucalipto shadow-sm border border-black/5"
                     : "text-black/60 hover:text-black hover:bg-white/50"
@@ -340,7 +333,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
               <button
                 type="button"
                 onClick={() => { setActiveTab("profile"); setSelectedTrackingOrder(null); }}
-                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-[11px] font-extrabold uppercase tracking-wider rounded-xl transition-all ${
+                className={`flex items-center justify-center gap-1.5 py-2 px-2 text-xs font-extrabold uppercase tracking-wider rounded-xl transition-all ${
                   activeTab === "profile"
                     ? "bg-white text-eucalipto shadow-sm border border-black/5"
                     : "text-black/60 hover:text-black hover:bg-white/50"
@@ -389,7 +382,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                       <span className="font-serif font-bold text-sm text-nogal block">
                         #{order.order_number}
                       </span>
-                      <span className="text-[10px] text-black/45 block">
+                      <span className="text-xs text-black/45 block">
                         {new Date(order.created_at).toLocaleDateString("es-PE", {
                           day: "numeric",
                           month: "short",
@@ -432,7 +425,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                       )}
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-black/45 block uppercase">Total</span>
+                      <span className="text-xs text-black/45 block uppercase">Total</span>
                       <span className="font-serif font-bold text-sm text-eucalipto">
                         S/ {order.total?.toFixed(2)}
                       </span>
@@ -448,7 +441,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                         <button 
                           type="button"
                           onClick={() => setSelectedTrackingOrder(order)}
-                          className="w-full py-2.5 bg-eucalipto hover:bg-eucalipto/90 text-piedra rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                          className="w-full py-2.5 bg-eucalipto hover:bg-eucalipto/90 text-piedra rounded-xl font-bold text-xs uppercase tracking-widest transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                         >
                           <MapPin size={14} />
                           Rastrear Pedido en Vivo
@@ -484,7 +477,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                         <span className="font-serif font-bold text-sm text-nogal block">
                           {res.guest_count} {res.guest_count === 1 ? "Comensal" : "Comensales"}
                         </span>
-                        <span className="text-[10px] text-black/45 capitalize block">
+                        <span className="text-xs text-black/45 capitalize block">
                           {res.service_type}
                         </span>
                       </div>
@@ -521,7 +514,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                     <UserIcon size={18} className="text-eucalipto" />
                     <span>Datos del Cliente</span>
                   </h4>
-                  <span className="text-[10px] text-eucalipto font-bold bg-eucalipto/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  <span className="text-xs text-eucalipto font-bold bg-eucalipto/10 px-2.5 py-1 rounded-full uppercase tracking-wider">
                     Información Oficial
                   </span>
                 </div>
@@ -544,7 +537,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                 )}
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-black/70 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/70 mb-1">
                     Nombre Completo
                   </label>
                   <input
@@ -558,7 +551,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-black/70 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/70 mb-1">
                     Teléfono / WhatsApp de Contacto
                   </label>
                   <input
@@ -571,7 +564,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-black/70 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/70 mb-1">
                     Fecha de Nacimiento
                   </label>
                   <div className="grid grid-cols-3 gap-2">
@@ -617,7 +610,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-black/45 mb-1">
+                  <label className="block text-xs font-bold uppercase tracking-wider text-black/45 mb-1">
                     Correo Electrónico (Asociado a tu cuenta)
                   </label>
                   <input
@@ -771,10 +764,10 @@ function InlineOrderTracker({ order, onBack }: { order: any; onBack: () => void 
 
       <div className="bg-white p-5 rounded-2xl border border-black/5 shadow-xs space-y-6">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] uppercase font-extrabold tracking-widest text-nogal/50">
+          <span className="text-xs uppercase font-extrabold tracking-widest text-nogal/50">
             Seguimiento en Vivo
           </span>
-          <span className="text-[9px] uppercase font-bold px-2.5 py-0.5 bg-eucalipto/10 text-eucalipto rounded-full flex items-center gap-1">
+          <span className="text-xs uppercase font-bold px-2.5 py-0.5 bg-eucalipto/10 text-eucalipto rounded-full flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-eucalipto animate-ping" />
             En Tiempo Real
           </span>
@@ -790,7 +783,7 @@ function InlineOrderTracker({ order, onBack }: { order: any; onBack: () => void 
             return (
               <div key={step.num} className="relative flex items-start gap-3">
                 <div
-                  className={`absolute -left-[29px] top-0 w-6 h-6 rounded-full flex items-center justify-center font-bold text-[10px] transition-all ${
+                  className={`absolute -left-[29px] top-0 w-6 h-6 rounded-full flex items-center justify-center font-bold text-xs transition-all ${
                     isCompleted
                       ? "bg-eucalipto text-white"
                       : isCurrent
@@ -807,12 +800,12 @@ function InlineOrderTracker({ order, onBack }: { order: any; onBack: () => void 
                       {step.title}
                     </h4>
                     {isCurrent && (
-                      <span className="text-[8px] uppercase font-extrabold px-1.5 py-0.2 bg-nogal text-chilca rounded animate-pulse">
+                      <span className="text-xs uppercase font-extrabold px-1.5 py-0.2 bg-nogal text-chilca rounded animate-pulse">
                         En Proceso
                       </span>
                     )}
                   </div>
-                  <p className={`text-[11px] mt-0.5 leading-snug ${isCurrent ? "text-nogal/80 font-medium" : "text-nogal/45"}`}>
+                  <p className={`text-xs mt-0.5 leading-snug ${isCurrent ? "text-nogal/80 font-medium" : "text-nogal/45"}`}>
                     {step.desc}
                   </p>
                 </div>
@@ -823,10 +816,10 @@ function InlineOrderTracker({ order, onBack }: { order: any; onBack: () => void 
 
         <div className="pt-3 border-t border-black/5 flex flex-col gap-3">
           <div>
-            <span className="text-[9px] uppercase font-bold text-nogal/40 block">Destino Registrado:</span>
+            <span className="text-xs uppercase font-bold text-nogal/40 block">Destino Registrado:</span>
             <span className="text-xs font-bold text-nogal">{order.address || "Dirección registrada"}</span>
             {order.reference && (
-              <span className="text-[10px] text-nogal/50 block italic mt-0.5">Ref: {order.reference}</span>
+              <span className="text-xs text-nogal/50 block italic mt-0.5">Ref: {order.reference}</span>
             )}
           </div>
 
@@ -863,7 +856,7 @@ function OrderStatusBadge({ status }: { status: string }) {
   const style = map[norm] || { label: status, bg: "bg-gray-100", text: "text-gray-800" };
 
   return (
-    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${style.bg} ${style.text}`}>
+    <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${style.bg} ${style.text}`}>
       {style.label}
     </span>
   );
@@ -880,7 +873,7 @@ function ReservationStatusBadge({ status }: { status: string }) {
   const style = map[status] || { label: status, bg: "bg-gray-100", text: "text-gray-800" };
 
   return (
-    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${style.bg} ${style.text}`}>
+    <span className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${style.bg} ${style.text}`}>
       {style.label}
     </span>
   );

@@ -72,7 +72,7 @@ const inputCls =
   "w-full border-2 border-transparent border-b-black/15 rounded-t-xl rounded-b-sm px-4 py-3 text-base md:text-sm bg-black/4 focus:border-b-cream/50 focus:bg-white transition-all placeholder:text-black/30 font-medium";
 
 const Label = ({ children }: { children: React.ReactNode }) => (
-  <label className="block text-[10px] uppercase tracking-[0.14em] font-bold text-black/50 mb-2">
+  <label className="block text-xs uppercase tracking-[0.14em] font-bold text-black/50 mb-2">
     {children}
   </label>
 );
@@ -114,6 +114,7 @@ export function CartSidebar() {
   const [isMounted, setIsMounted] = useState(false);
   const [visible, setVisible] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [brokenItemImages, setBrokenItemImages] = useState<Record<string, boolean>>({});
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<string>("");
   const [completedOrderSummary, setCompletedOrderSummary] = useState<{
@@ -738,7 +739,7 @@ export function CartSidebar() {
       {/* Modal: bottom-sheet en móvil, panel pegado a la derecha a pantalla completa en escritorio.
           Empuja desde/hacia un solo eje por breakpoint (Y en móvil, X en escritorio). */}
       <div
-        className={`relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal shadow-2xl overflow-hidden border border-black/10 sm:border-0 flex flex-col h-[100dvh] shrink-0 transition-transform duration-[350ms] ease-out ${
+        className={`doc-legible relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal shadow-2xl overflow-hidden border border-black/10 sm:border-0 flex flex-col h-[100dvh] shrink-0 transition-transform duration-[350ms] ease-out ${
           entered
             ? "translate-y-0 sm:translate-x-0"
             : "translate-y-full sm:translate-y-0 sm:translate-x-full"
@@ -821,13 +822,13 @@ export function CartSidebar() {
               return (
                 <div
                   key={s}
-                  className="flex-1 py-3 flex flex-col items-center gap-1 text-[10px] font-bold tracking-wider uppercase transition-all"
+                  className="flex-1 py-3 flex flex-col items-center gap-1.5 text-xs font-bold tracking-wider uppercase transition-all"
                   style={{
                     borderBottom: isActive ? `3px solid var(--color-eucalipto)` : "3px solid transparent",
                   }}
                 >
                   <div
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all"
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold transition-all"
                     style={{
                       background: isActive ? "rgba(36,63,50,0.1)" : isPast ? "var(--color-eucalipto)" : "rgba(0,0,0,0.05)",
                       color: isActive ? "var(--color-eucalipto)" : isPast ? "white" : "rgba(0,0,0,0.3)",
@@ -892,13 +893,18 @@ export function CartSidebar() {
                         key={item.id}
                         className="flex items-start gap-3.5 bg-white rounded-xl p-3.5 shadow-xs border border-black/5 group hover:shadow-sm transition-all"
                       >
-                        {item.image && (
+                        {item.image && !brokenItemImages[item.id] ? (
                           <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-black/5 shadow-xs bg-white mt-0.5">
                             <img
                               src={item.image}
                               alt={item.name}
+                              onError={() => setBrokenItemImages((prev) => ({ ...prev, [item.id]: true }))}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
+                          </div>
+                        ) : (
+                          <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-black/5 shadow-xs bg-black/5 mt-0.5 flex items-center justify-center">
+                            <ShoppingBag size={22} className="text-black/25" />
                           </div>
                         )}
                         <div className="flex-1 min-w-0 flex flex-col justify-between min-h-16 py-0.5">
@@ -910,22 +916,22 @@ export function CartSidebar() {
                               {item.customizations && (
                                 <div className="mt-1 space-y-0.5">
                                   {item.customizations.bebidaFria && (
-                                    <p className="text-[10px] text-black/60 font-medium">
+                                    <p className="text-xs text-black/60 font-medium">
                                       • <span className="font-bold text-eucalipto">Fría:</span> {item.customizations.bebidaFria}
                                     </p>
                                   )}
                                   {item.customizations.bebidaCaliente && (
-                                    <p className="text-[10px] text-black/60 font-medium">
+                                    <p className="text-xs text-black/60 font-medium">
                                       • <span className="font-bold text-eucalipto">Caliente:</span> {item.customizations.bebidaCaliente}
                                     </p>
                                   )}
                                   {item.customizations.sandwich && (
-                                    <p className="text-[10px] text-black/60 font-medium">
+                                    <p className="text-xs text-black/60 font-medium">
                                       • <span className="font-bold text-eucalipto">Sándwich:</span> {item.customizations.sandwich}
                                     </p>
                                   )}
                                   {item.customizations.acompanamiento && (
-                                    <p className="text-[10px] text-black/60 font-medium">
+                                    <p className="text-xs text-black/60 font-medium">
                                       • <span className="font-bold text-eucalipto">Acompañante:</span> {item.customizations.acompanamiento}
                                     </p>
                                   )}
@@ -971,7 +977,7 @@ export function CartSidebar() {
 
               {items.length > 0 && (
                 <div className="mt-6">
-                  <p className="text-[10px] uppercase tracking-[0.14em] font-bold text-black/40 mb-3">
+                  <p className="text-xs uppercase tracking-[0.14em] font-bold text-black/40 mb-3">
                     Tipo de pedido
                   </p>
 
@@ -1013,7 +1019,7 @@ export function CartSidebar() {
                             <span className="block font-serif font-bold text-xs leading-tight">
                               {label}
                             </span>
-                            <span className="block text-[10.5px] mt-0.5 opacity-70 truncate font-sans">
+                            <span className="block text-xs mt-0.5 opacity-70 truncate font-sans">
                               {sub}
                             </span>
                           </div>
@@ -1024,7 +1030,7 @@ export function CartSidebar() {
 
                   {/* Coupon Input Box */}
                   <div className="bg-amber-50/60 rounded-xl p-3.5 border border-amber-200/60 shadow-xs">
-                    <label className="block text-[11px] font-serif font-bold text-[#14231D] mb-1.5 flex items-center gap-1.5">
+                    <label className="block text-xs font-serif font-bold text-[#14231D] mb-1.5 flex items-center gap-1.5">
                       <Ticket size={14} className="text-[#D4AF37]" /> ¿Tienes un código de descuento?
                     </label>
 
@@ -1069,7 +1075,7 @@ export function CartSidebar() {
                     )}
 
                     {couponError && (
-                      <p className="text-[11px] font-semibold text-red-600 mt-1.5">
+                      <p className="text-xs font-semibold text-red-600 mt-1.5">
                         {couponError}
                       </p>
                     )}
@@ -1159,7 +1165,7 @@ export function CartSidebar() {
                         }
                         setDelivery({ ...delivery, email: "", name: "" });
                       }}
-                      className="text-[10px] uppercase tracking-wider font-bold underline underline-offset-2 opacity-80 hover:opacity-100 flex-shrink-0"
+                      className="text-xs uppercase tracking-wider font-bold underline underline-offset-2 opacity-80 hover:opacity-100 flex-shrink-0"
                     >
                       Cerrar sesión
                     </button>
@@ -1173,7 +1179,7 @@ export function CartSidebar() {
                         <button
                           type="button"
                           onClick={handleUseGPS}
-                          className="text-[11px] font-bold text-eucalipto flex items-center gap-1 hover:underline mb-2"
+                          className="text-xs font-bold text-eucalipto flex items-center gap-1 hover:underline mb-2"
                         >
                           <MapPin size={13} /> usar mi GPS
                         </button>
@@ -1195,7 +1201,7 @@ export function CartSidebar() {
                           <span className="font-bold text-eucalipto">Costo: S/ {DELIVERY_FEE.toFixed(2)}</span>
                         </div>
                       ) : (
-                        <p className="text-[11px] text-black/50 font-medium">
+                        <p className="text-xs text-black/50 font-medium">
                           Mueve el pin rojo o haz clic en el mapa para marcar tu ubicación exacta en Huamanga.
                         </p>
                       )}
@@ -1235,12 +1241,12 @@ export function CartSidebar() {
                         <div className="p-3 bg-white rounded-xl border border-black/10 flex items-center justify-between text-xs">
                           <div className="min-w-0 pr-2">
                             <span className="block font-bold text-nogal truncate"><MapPin size={11} className="inline mr-1 text-eucalipto" />{delivery.address || "Ubicación fijada"}</span>
-                            <span className="block text-[10px] text-black/50">A {distanceKm.toFixed(1)} km del restaurante</span>
+                            <span className="block text-xs text-black/50">A {distanceKm.toFixed(1)} km del restaurante</span>
                           </div>
                           <button
                             type="button"
                             onClick={() => setDeliverySubStep("location")}
-                            className="text-[11px] font-bold text-eucalipto hover:underline flex-shrink-0"
+                            className="text-xs font-bold text-eucalipto hover:underline flex-shrink-0"
                           >
                             Modificar mapa
                           </button>
@@ -1341,7 +1347,7 @@ export function CartSidebar() {
                       A nombre de <strong className="text-[#2D473C] font-bold">{yapeConfig.mode === "personal" ? yapeConfig.personalName : yapeConfig.businessName}</strong>
                     </p>
                     {(yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone) && (
-                      <span className="text-[11px] text-gray-500 font-mono mt-0.5">
+                      <span className="text-xs text-gray-500 font-mono mt-0.5">
                         Número: {yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone}
                       </span>
                     )}
@@ -1368,7 +1374,7 @@ export function CartSidebar() {
                       value={yapeOperacion}
                       onChange={(e) => setYapeOperacion(e.target.value.replace(/\D/g, "").slice(0, 8))}
                     />
-                    <p className="text-[10px] text-black/40 mt-1.5 font-medium">
+                    <p className="text-xs text-black/40 mt-1.5 font-medium">
                       Entre 3 y 8 dígitos de aprobación de tu pantalla de éxito.
                     </p>
                   </div>
@@ -1506,7 +1512,7 @@ export function CartSidebar() {
               )}
 
               <div className="w-full bg-white rounded-xl p-4 border border-black/5 text-left mb-4 shadow-sm">
-                <p className="text-[10px] uppercase tracking-[0.12em] font-bold text-black/40 mb-3">
+                <p className="text-xs uppercase tracking-[0.12em] font-bold text-black/40 mb-3">
                   Resumen
                 </p>
                 {(completedOrderSummary?.items || items).map((item) => (

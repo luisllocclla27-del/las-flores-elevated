@@ -190,15 +190,18 @@
 }
 
 /*
- * Tipografía legible para páginas legales / de trámite (Política de Privacidad,
- * Términos y Condiciones, Libro de Reclamaciones). Sin @layer a propósito: así
- * gana por prioridad de cascada sobre las utilidades font-sans/font-serif de
- * Tailwind y la regla base de encabezados, sin tener que tocar cada elemento.
+ * Tipografía legible para páginas/paneles de trámite (Política de Privacidad,
+ * Términos y Condiciones, Libro de Reclamaciones, modal del carrito). Sin
+ * @layer a propósito: así gana por prioridad de cascada sobre las utilidades
+ * font-sans/font-serif de Tailwind y la regla base de encabezados, sin tener
+ * que tocar cada elemento. Incluye tabular-nums para que precios y cantidades
+ * no salten de ancho al cambiar de dígito.
  */
 .doc-legible,
 .doc-legible * {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   letter-spacing: normal;
+  font-variant-numeric: tabular-nums;
 }
 
 @keyframes reveal-up {
