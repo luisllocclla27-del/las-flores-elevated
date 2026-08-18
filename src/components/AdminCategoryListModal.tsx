@@ -146,7 +146,7 @@ export function AdminCategoryListModal({
                     <tr key={cat.id} className="hover:bg-gray-50/50">
                       <td className="px-6 py-4">
                         <div className="font-bold text-gray-900 text-sm">{cat.name}</div>
-                        <div className="text-gray-400 text-[10px] mt-0.5">/{cat.slug}</div>
+                        <div className="text-gray-400 text-xs mt-0.5">/{cat.slug}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
@@ -163,7 +163,7 @@ export function AdminCategoryListModal({
                               }`}
                             />
                           </button>
-                          <span className={`text-[11px] font-bold ${cat.is_active ? "text-emerald-700" : "text-gray-500"}`}>
+                          <span className={`text-xs font-bold ${cat.is_active ? "text-emerald-700" : "text-gray-500"}`}>
                             {cat.is_active ? "Activa" : "Inactiva"}
                           </span>
                         </div>

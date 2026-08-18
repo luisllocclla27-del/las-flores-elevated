@@ -198,7 +198,7 @@ export function AdminCategoryFormModal({
                 placeholder="menu-infantil"
                 className="w-full text-sm font-mono bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#14231D]"
               />
-              <p className="text-[10px] text-gray-500 mt-1">Debe ser único, sin espacios ni caracteres especiales.</p>
+              <p className="text-xs text-gray-500 mt-1">Debe ser único, sin espacios ni caracteres especiales.</p>
             </div>
 
             <div>
@@ -231,7 +231,7 @@ export function AdminCategoryFormModal({
             <div className="pt-2 flex items-center justify-between p-3.5 bg-gray-50 border border-gray-200 rounded-xl">
               <div>
                 <span className="text-xs font-bold text-gray-900 block">Estado Inicial</span>
-                <span className="text-[11px] text-gray-500">¿Visible en la carta pública?</span>
+                <span className="text-xs text-gray-500">¿Visible en la carta pública?</span>
               </div>
               
               <button

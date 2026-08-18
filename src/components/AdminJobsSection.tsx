@@ -248,7 +248,7 @@ export function AdminJobsSection() {
         <div className="bg-white rounded-3xl border border-[#d4a373]/25 shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-[#3b1f10]">
-              <thead className="bg-[#f7f5ef] border-b border-[#d4a373]/20 text-[11px] font-serif font-bold uppercase tracking-wider text-[#3b1f10]/60">
+              <thead className="bg-[#f7f5ef] border-b border-[#d4a373]/20 text-xs font-serif font-bold uppercase tracking-wider text-[#3b1f10]/60">
                 <tr>
                   <th className="px-6 py-4">Convocatoria</th>
                   <th className="px-6 py-4">Área / Ubicación</th>
@@ -286,7 +286,7 @@ export function AdminJobsSection() {
                       </td>
                       <td className="px-6 py-4 text-xs">
                         <span
-                          className={`px-3 py-1 rounded-full font-bold text-[11px] border ${
+                          className={`px-3 py-1 rounded-full font-bold text-xs border ${
                             offer.status === "published"
                               ? "bg-emerald-50 text-[#2e5339] border-emerald-200"
                               : offer.status === "paused"
@@ -367,7 +367,7 @@ export function AdminJobsSection() {
           <div className="bg-white rounded-2xl border border-black/10 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-sm text-ink">
-                <thead className="bg-[#fcfaf5] border-b border-black/5 text-[11px] font-bold uppercase tracking-wider text-ink/60">
+                <thead className="bg-[#fcfaf5] border-b border-black/5 text-xs font-bold uppercase tracking-wider text-ink/60">
                   <tr>
                     <th className="px-6 py-4">Postulante</th>
                     <th className="px-6 py-4">Puesto</th>

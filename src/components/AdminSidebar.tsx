@@ -55,7 +55,7 @@ export function AdminSidebar({
               Las Flores
               <ShieldCheck size={14} className="text-[#D4AF37]" />
             </h2>
-            <span className="text-[10px] font-sans uppercase font-extrabold text-emerald-200/80 tracking-wider block mt-0.5">
+            <span className="text-xs font-sans uppercase font-extrabold text-emerald-200/80 tracking-wider block mt-0.5">
               Suite de Administración
             </span>
           </div>
@@ -63,7 +63,7 @@ export function AdminSidebar({
 
         {/* Navigation Items */}
         <nav className="p-3 space-y-1.5">
-          <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-emerald-300/70 px-3 block mb-2 mt-1">
+          <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-emerald-300/70 px-3 block mb-2 mt-1">
             Navegación Principal
           </span>
           {menuItems.map((item) => {
@@ -87,7 +87,7 @@ export function AdminSidebar({
 
                 {item.badge !== undefined && item.badge > 0 && (
                   <span
-                    className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                    className={`px-2 py-0.5 rounded-full text-xs font-black ${
                       isActive ? "bg-[#2D473C] text-white" : "bg-emerald-400 text-[#2D473C]"
                     }`}
                   >
@@ -106,7 +106,7 @@ export function AdminSidebar({
       <div className="p-4 border-t border-emerald-900/60 bg-black/25 space-y-3 shrink-0">
         <div className="flex items-center justify-between text-xs">
           <div className="min-w-0 pr-2">
-            <span className="text-[10px] uppercase font-extrabold text-emerald-300/80 block">Sesión Activa</span>
+            <span className="text-xs uppercase font-extrabold text-emerald-300/80 block">Sesión Activa</span>
             <p className="font-bold text-white truncate text-xs">{userEmail || "Administrador"}</p>
           </div>
         </div>

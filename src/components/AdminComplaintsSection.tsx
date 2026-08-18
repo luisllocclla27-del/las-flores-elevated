@@ -203,7 +203,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
       {/* ── HEADER CON MÉTRICAS ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-2xs space-y-1">
-          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider block">
+          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider block">
             Total Reclamaciones
           </span>
           <div className="flex items-center justify-between">
@@ -213,7 +213,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
         </div>
 
         <div className="bg-amber-50/70 p-4 rounded-2xl border border-amber-200/80 shadow-2xs space-y-1">
-          <span className="text-[11px] font-bold text-amber-800 uppercase tracking-wider block">
+          <span className="text-xs font-bold text-amber-800 uppercase tracking-wider block">
             Recibidas (Pendientes)
           </span>
           <div className="flex items-center justify-between">
@@ -223,7 +223,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
         </div>
 
         <div className="bg-blue-50/70 p-4 rounded-2xl border border-blue-200/80 shadow-2xs space-y-1">
-          <span className="text-[11px] font-bold text-blue-800 uppercase tracking-wider block">
+          <span className="text-xs font-bold text-blue-800 uppercase tracking-wider block">
             En Atención / Proceso
           </span>
           <div className="flex items-center justify-between">
@@ -233,7 +233,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
         </div>
 
         <div className="bg-emerald-50/70 p-4 rounded-2xl border border-emerald-200/80 shadow-2xs space-y-1">
-          <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
+          <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider block">
             Resueltas con Respuesta
           </span>
           <div className="flex items-center justify-between">
@@ -297,7 +297,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-500 font-extrabold uppercase tracking-wider text-[10px]">
+              <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-500 font-extrabold uppercase tracking-wider text-xs">
                 <th className="py-3.5 px-4">Código / Fecha</th>
                 <th className="py-3.5 px-4">Consumidor</th>
                 <th className="py-3.5 px-4">Tipo</th>
@@ -319,7 +319,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                   <td colSpan={6} className="text-center py-12 text-gray-400">
                     <BookOpen size={36} className="mx-auto mb-2 text-gray-300" />
                     <p className="font-bold text-gray-700">No se encontraron registros</p>
-                    <p className="text-[11px] text-gray-400">Las incidencias enviadas aparecerán aquí en tiempo real.</p>
+                    <p className="text-xs text-gray-400">Las incidencias enviadas aparecerán aquí en tiempo real.</p>
                   </td>
                 </tr>
               ) : (
@@ -343,17 +343,17 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                     >
                       <td className="py-3.5 px-4">
                         <span className="font-mono font-black text-[#2D473C] block">{item.code}</span>
-                        <span className="text-[10px] text-gray-400 block">{dateStr} • {timeStr}</span>
+                        <span className="text-xs text-gray-400 block">{dateStr} • {timeStr}</span>
                       </td>
 
                       <td className="py-3.5 px-4">
                         <span className="font-bold text-gray-900 block">{item.full_name}</span>
-                        <span className="text-[11px] text-gray-500 block">{item.doc_type}: {item.doc_number}</span>
+                        <span className="text-xs text-gray-500 block">{item.doc_type}: {item.doc_number}</span>
                       </td>
 
                       <td className="py-3.5 px-4">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+                          className={`inline-block px-2.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider ${
                             item.claim_type === "reclamo"
                               ? "bg-red-100 text-red-800 border border-red-200"
                               : "bg-orange-100 text-orange-800 border border-orange-200"
@@ -364,13 +364,13 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                       </td>
 
                       <td className="py-3.5 px-4 max-w-[200px] truncate text-gray-700">
-                        <span className="capitalize font-semibold text-gray-800 block text-[11px]">{item.claimed_type}</span>
-                        <span className="text-gray-500 truncate block text-[11px]">{item.claimed_description}</span>
+                        <span className="capitalize font-semibold text-gray-800 block text-xs">{item.claimed_type}</span>
+                        <span className="text-gray-500 truncate block text-xs">{item.claimed_description}</span>
                       </td>
 
                       <td className="py-3.5 px-4">
                         <span
-                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-black border ${statusConf.bg} ${statusConf.color} ${statusConf.border}`}
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-black border ${statusConf.bg} ${statusConf.color} ${statusConf.border}`}
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-current" />
                           {statusConf.label}
@@ -409,7 +409,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xl font-black text-[#2D473C]">{selectedComplaint.code}</span>
                   <span
-                    className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                    className={`px-2.5 py-0.5 rounded-full text-xs font-black uppercase tracking-wider ${
                       selectedComplaint.claim_type === "reclamo"
                         ? "bg-red-100 text-red-800"
                         : "bg-orange-100 text-orange-800"
@@ -434,7 +434,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
             {/* Datos del Consumidor */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50/70 p-4 rounded-2xl border border-gray-200 text-xs">
               <div>
-                <span className="text-[10px] uppercase font-bold text-gray-400 block">Consumidor Reclamante</span>
+                <span className="text-xs uppercase font-bold text-gray-400 block">Consumidor Reclamante</span>
                 <p className="font-bold text-gray-900 text-sm">{selectedComplaint.full_name}</p>
                 <p className="text-gray-600 mt-1">{selectedComplaint.doc_type}: {selectedComplaint.doc_number}</p>
                 <p className="text-gray-600">{selectedComplaint.address}</p>
@@ -446,7 +446,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
               </div>
 
               <div className="space-y-1.5">
-                <span className="text-[10px] uppercase font-bold text-gray-400 block">Canales de Contacto</span>
+                <span className="text-xs uppercase font-bold text-gray-400 block">Canales de Contacto</span>
                 <p className="flex items-center gap-2 text-gray-700">
                   <Phone size={13} className="text-[#2D473C]" />
                   <a href={`tel:${selectedComplaint.phone}`} className="font-bold hover:underline">
@@ -456,7 +456,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                     href={`https://wa.me/51${selectedComplaint.phone.replace(/\D/g, "")}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold hover:bg-emerald-200"
+                    className="text-xs bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold hover:bg-emerald-200"
                   >
                     WhatsApp
                   </a>
@@ -467,7 +467,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                     {selectedComplaint.email}
                   </a>
                 </p>
-                <p className="text-gray-500 pt-1 text-[11px]">
+                <p className="text-gray-500 pt-1 text-xs">
                   Bien: <strong className="text-gray-800 capitalize">{selectedComplaint.claimed_type}</strong> — {selectedComplaint.claimed_description}
                   {selectedComplaint.claimed_amount && ` (Monto: S/ ${selectedComplaint.claimed_amount})`}
                 </p>
@@ -477,14 +477,14 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
             {/* Hechos y Solicitud */}
             <div className="space-y-3 text-xs">
               <div className="bg-[#fdf8f0] p-4 rounded-2xl border border-[#d4a373]/30 space-y-1">
-                <span className="text-[10px] uppercase font-extrabold text-[#d4a373] block tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-[#d4a373] block tracking-wider">
                   Detalle de los Hechos (Explicación del Cliente)
                 </span>
                 <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">{selectedComplaint.detail}</p>
               </div>
 
               <div className="bg-emerald-50/50 p-4 rounded-2xl border border-emerald-200/60 space-y-1">
-                <span className="text-[10px] uppercase font-extrabold text-emerald-800 block tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-emerald-800 block tracking-wider">
                   Pedido Concreto del Consumidor (Solución solicitada)
                 </span>
                 <p className="text-gray-800 leading-relaxed whitespace-pre-wrap">
@@ -512,7 +512,7 @@ export function AdminComplaintsSection({ onPendingCountChange }: AdminComplaints
                   </select>
                 </div>
 
-                <div className="text-[11px] text-gray-500 bg-gray-50 p-3 rounded-xl border border-gray-200">
+                <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-xl border border-gray-200">
                   ⏳ <strong>Plazo Legal Indecopi:</strong> 15 días hábiles a partir de la fecha de registro para brindar descargo o solución motivada.
                 </div>
               </div>

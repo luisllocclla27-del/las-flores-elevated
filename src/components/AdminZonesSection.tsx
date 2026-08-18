@@ -79,7 +79,7 @@ export function AdminZonesSection() {
     <div className="p-6 lg:p-8 space-y-6">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-white/90 backdrop-blur-md p-6 rounded-3xl border border-[#d4a373]/25 shadow-sm">
         <div>
-          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] text-[#d4a373] block">
+          <span className="text-xs font-sans font-bold uppercase tracking-[0.2em] text-[#d4a373] block">
             Gestión del Establecimiento
           </span>
           <h2 className="font-serif italic text-2xl font-bold text-[#3b1f10]">
@@ -158,7 +158,7 @@ export function AdminZonesSection() {
                       Sin foto asignada
                     </div>
                   )}
-                  <div className="absolute top-3 right-3 bg-[#3b1f10]/80 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-white/20">
+                  <div className="absolute top-3 right-3 bg-[#3b1f10]/80 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-white/20">
                     {zone.max_tables_count} Mesas
                   </div>
                 </div>
@@ -184,7 +184,7 @@ export function AdminZonesSection() {
                     </span>
 
                     <span
-                      className={`px-3 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+                      className={`px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide border ${
                         zone.is_active
                           ? "bg-emerald-50 text-[#2e5339] border-emerald-200"
                           : "bg-red-50 text-[#8C1D40] border-red-200"
@@ -254,7 +254,7 @@ export function AdminZonesSection() {
                             {b.restaurant_zones?.name || b.zone_id}
                           </span>
                         ) : (
-                          <span className="px-2.5 py-1 rounded-lg bg-rose-50 text-[#8C1D40] font-bold uppercase text-[10px] border border-rose-200">
+                          <span className="px-2.5 py-1 rounded-lg bg-rose-50 text-[#8C1D40] font-bold uppercase text-xs border border-rose-200">
                             Todo el Local
                           </span>
                         )}
@@ -268,7 +268,7 @@ export function AdminZonesSection() {
                             : "Indefinido"}
                         </span>
                       </td>
-                      <td className="py-4 px-5 font-mono text-[11px]">
+                      <td className="py-4 px-5 font-mono text-xs">
                         <div className="flex flex-col gap-0.5">
                           <span className="font-bold text-[#3b1f10]">
                             {b.start_date} {b.end_date ? ` al ${b.end_date}` : ""}
@@ -285,7 +285,7 @@ export function AdminZonesSection() {
                       </td>
                       <td className="py-4 px-5">
                         <span
-                          className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${
+                          className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${
                             b.is_active
                               ? "bg-rose-50 text-[#8C1D40] border-rose-200"
                               : "bg-emerald-50 text-[#2e5339] border-emerald-200"

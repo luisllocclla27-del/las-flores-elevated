@@ -171,7 +171,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
             {/* Total Efectivo a Rendir */}
             <div className="bg-white p-5 rounded-2xl border border-black/10 shadow-xs flex flex-col justify-between space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-extrabold text-black/50 tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-black/50 tracking-wider">
                   Efectivo a Rendir
                 </span>
                 <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200/60">
@@ -182,7 +182,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                 <span className="text-2xl font-serif font-extrabold text-emerald-800 block">
                   S/ {totalCash.toFixed(2)}
                 </span>
-                <span className="text-[10px] text-black/50 font-medium">
+                <span className="text-xs text-black/50 font-medium">
                   Cobrado en efectivo por motorizados
                 </span>
               </div>
@@ -191,7 +191,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
             {/* Total Pagado Online */}
             <div className="bg-white p-5 rounded-2xl border border-black/10 shadow-xs flex flex-col justify-between space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-extrabold text-black/50 tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-black/50 tracking-wider">
                   Cobrado Online
                 </span>
                 <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-200/60">
@@ -202,7 +202,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                 <span className="text-2xl font-serif font-extrabold text-purple-800 block">
                   S/ {totalOnline.toFixed(2)}
                 </span>
-                <span className="text-[10px] text-black/50 font-medium">
+                <span className="text-xs text-black/50 font-medium">
                   Yape, Plin y Tarjeta de Crédito
                 </span>
               </div>
@@ -211,7 +211,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
             {/* Total Comisiones Delivery */}
             <div className="bg-white p-5 rounded-2xl border border-black/10 shadow-xs flex flex-col justify-between space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-extrabold text-black/50 tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-black/50 tracking-wider">
                   Fletes Delivery
                 </span>
                 <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200/60">
@@ -222,7 +222,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                 <span className="text-2xl font-serif font-extrabold text-blue-800 block">
                   S/ {totalDeliveryFees.toFixed(2)}
                 </span>
-                <span className="text-[10px] text-black/50 font-medium">
+                <span className="text-xs text-black/50 font-medium">
                   Suma total de costos de envío
                 </span>
               </div>
@@ -231,7 +231,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
             {/* Venta Total Bruta */}
             <div className="bg-[#2c4a3e] text-white p-5 rounded-2xl border border-[#2c4a3e] shadow-md flex flex-col justify-between space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] uppercase font-extrabold text-[#d4af37] tracking-wider">
+                <span className="text-xs uppercase font-extrabold text-[#d4af37] tracking-wider">
                   Venta Total Neto
                 </span>
                 <div className="w-9 h-9 rounded-xl bg-[#d4af37]/20 text-[#d4af37] flex items-center justify-center border border-[#d4af37]/40">
@@ -242,7 +242,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                 <span className="text-2xl font-serif font-extrabold text-[#fbf5e6] block">
                   S/ {totalSales.toFixed(2)}
                 </span>
-                <span className="text-[10px] text-white/70 font-medium">
+                <span className="text-xs text-white/70 font-medium">
                   {filteredOrders.length} comandas ({countDelivery} delivery / {countPickup} recojo)
                 </span>
               </div>
@@ -270,7 +270,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
                   <thead>
-                    <tr className="bg-[#2c4a3e]/5 text-[#2c4a3e] font-extrabold uppercase tracking-wider text-[10px] border-b border-black/10">
+                    <tr className="bg-[#2c4a3e]/5 text-[#2c4a3e] font-extrabold uppercase tracking-wider text-xs border-b border-black/10">
                       <th className="p-3.5 pl-4">Orden</th>
                       <th className="p-3.5">Hora</th>
                       <th className="p-3.5">Cliente</th>
@@ -299,7 +299,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                           <td className="p-3.5 font-bold text-black">{o.client_name || "Cliente"}</td>
                           <td className="p-3.5">
                             <span
-                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[9px] font-extrabold uppercase tracking-wider ${
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wider ${
                                 o.order_type === "delivery"
                                   ? "bg-blue-50 text-blue-700 border border-blue-200/80"
                                   : "bg-amber-50 text-amber-700 border border-amber-200/80"
@@ -318,7 +318,7 @@ export function CashierAuditModal({ isOpen, onClose, orders }: CashierAuditModal
                           </td>
                           <td className="p-3.5">
                             <span
-                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[9px] font-extrabold uppercase tracking-wider ${
+                              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase tracking-wider ${
                                 isCash
                                   ? "bg-emerald-50 text-emerald-800 border border-emerald-200/80"
                                   : "bg-purple-50 text-purple-800 border border-purple-200/80"

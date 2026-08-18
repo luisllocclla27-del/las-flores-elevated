@@ -602,7 +602,7 @@ function CashierDashboardRoute() {
   }).length;
 
   return (
-    <div className="min-h-screen bg-[#F9F8F3] text-[#231A14] pb-20 font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">
+    <div className="doc-legible min-h-screen bg-[#F9F8F3] text-[#231A14] pb-20 font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">
       
       {/* Floating Stacked Toast Notifications */}
       <div className="fixed top-4 right-4 z-50 flex flex-col gap-3 max-w-sm sm:max-w-md w-full pointer-events-none">
@@ -642,7 +642,7 @@ function CashierDashboardRoute() {
             {/* Texto de la comanda/reserva */}
             <div className="flex-1 min-w-0">
               <span
-                className={`text-[10px] font-sans font-black uppercase tracking-wider block ${
+                className={`text-xs font-sans font-black uppercase tracking-wider block ${
                   notif.type === "order" ? "text-orange-400" : "text-emerald-300"
                 }`}
               >
@@ -745,7 +745,7 @@ function CashierDashboardRoute() {
             >
               <QrCode size={16} className={yapeConfig.mode === "personal" ? "text-purple-700" : "text-emerald-700"} />
               <span>QR Yape:</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+              <span className={`px-2 py-0.5 rounded-full text-xs font-black uppercase tracking-wider ${
                 yapeConfig.mode === "personal" ? "bg-purple-700 text-white" : "bg-emerald-700 text-white"
               }`}>
                 {yapeConfig.mode === "personal" ? "Personal" : "Empresa"}
@@ -817,10 +817,10 @@ function CashierDashboardRoute() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500">
+                    <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500">
                       Pendientes
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                       statusFilter === "pendiente" ? "bg-[#D4AF37] text-[#2D473C]" : "bg-amber-100 text-amber-900"
                     }`}>
                       Acción
@@ -829,7 +829,7 @@ function CashierDashboardRoute() {
                   <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-gray-900">
                     {pendingOrders.length}
                   </span>
-                  <p className="text-[10px] mt-0.5 font-medium text-gray-500">Por enviar a cocina</p>
+                  <p className="text-xs mt-0.5 font-medium text-gray-500">Por enviar a cocina</p>
                 </button>
 
                 <button
@@ -841,10 +841,10 @@ function CashierDashboardRoute() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500">
+                    <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500">
                       En Cocina
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                       statusFilter === "en_preparacion" ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-900"
                     }`}>
                       Cocina
@@ -853,7 +853,7 @@ function CashierDashboardRoute() {
                   <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-gray-900">
                     {inKitchenOrders.length}
                   </span>
-                  <p className="text-[10px] mt-0.5 font-medium text-gray-500">En preparación</p>
+                  <p className="text-xs mt-0.5 font-medium text-gray-500">En preparación</p>
                 </button>
 
                 <button
@@ -865,10 +865,10 @@ function CashierDashboardRoute() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500">
+                    <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500">
                       Despacho / Recojo
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                       statusFilter === "en_camino" ? "bg-purple-600 text-white" : "bg-purple-100 text-purple-900"
                     }`}>
                       Despacho
@@ -877,7 +877,7 @@ function CashierDashboardRoute() {
                   <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-gray-900">
                     {onWayOrders.length}
                   </span>
-                  <p className="text-[10px] mt-0.5 font-medium text-gray-500">Delivery / Recojo</p>
+                  <p className="text-xs mt-0.5 font-medium text-gray-500">Delivery / Recojo</p>
                 </button>
 
                 <button
@@ -889,10 +889,10 @@ function CashierDashboardRoute() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500">
+                    <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500">
                       Entregados Hoy
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                       statusFilter === "entregado" ? "bg-emerald-600 text-white" : "bg-emerald-100 text-emerald-900"
                     }`}>
                       Completado
@@ -901,7 +901,7 @@ function CashierDashboardRoute() {
                   <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-gray-900">
                     {orders.filter((o) => getNormalizedStatus(o.status) === "entregado" && (o.created_at ? getLocalYYYYMMDD(new Date(o.created_at)) === todayStr : false)).length}
                   </span>
-                  <p className="text-[10px] mt-0.5 font-medium text-gray-500">Total completados hoy</p>
+                  <p className="text-xs mt-0.5 font-medium text-gray-500">Total completados hoy</p>
                 </button>
 
                 <button
@@ -913,10 +913,10 @@ function CashierDashboardRoute() {
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-[#2D473C]">
+                    <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#2D473C]">
                       Todos los Pedidos
                     </span>
-                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                       statusFilter === "all" ? "bg-[#2D473C] text-white" : "bg-gray-200 text-gray-700"
                     }`}>
                       Total
@@ -925,7 +925,7 @@ function CashierDashboardRoute() {
                   <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-[#2D473C]">
                     {orders.length}
                   </span>
-                  <p className="text-[10px] mt-0.5 font-medium text-[#5F8575]">Total registrado</p>
+                  <p className="text-xs mt-0.5 font-medium text-[#5F8575]">Total registrado</p>
                 </button>
 
               </div>
@@ -949,7 +949,7 @@ function CashierDashboardRoute() {
                   {statusFilter === "all" && layoutMode !== "kanban" && (
                     <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                       <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                        <span className="text-[10px] font-serif font-bold text-gray-500 uppercase">Estado:</span>
+                        <span className="text-xs font-serif font-bold text-gray-500 uppercase">Estado:</span>
                         <select
                           value={historicalStatusFilter}
                           onChange={(e) => setHistoricalStatusFilter(e.target.value)}
@@ -964,7 +964,7 @@ function CashierDashboardRoute() {
                         </select>
                       </div>
                       <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                        <span className="text-[10px] font-serif font-bold text-gray-500 uppercase">Desde:</span>
+                        <span className="text-xs font-serif font-bold text-gray-500 uppercase">Desde:</span>
                         <input
                           type="date"
                           value={orderDateFrom}
@@ -973,7 +973,7 @@ function CashierDashboardRoute() {
                         />
                       </div>
                       <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                        <span className="text-[10px] font-serif font-bold text-gray-500 uppercase">Hasta:</span>
+                        <span className="text-xs font-serif font-bold text-gray-500 uppercase">Hasta:</span>
                         <input
                           type="date"
                           value={orderDateTo}
@@ -1068,10 +1068,10 @@ function CashierDashboardRoute() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-[#2D473C]">
+                  <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-[#2D473C]">
                     Reservas del Día
                   </span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                     reservationStatusFilter === "today" ? "bg-[#2D473C] text-white" : "bg-emerald-100 text-emerald-900"
                   }`}>
                     Hoy
@@ -1080,7 +1080,7 @@ function CashierDashboardRoute() {
                 <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-[#2D473C]">
                   {todayReservationsCount}
                 </span>
-                <p className="text-[10px] mt-0.5 font-medium text-[#5F8575]">Programadas para HOY</p>
+                <p className="text-xs mt-0.5 font-medium text-[#5F8575]">Programadas para HOY</p>
               </button>
 
               <button
@@ -1092,10 +1092,10 @@ function CashierDashboardRoute() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-amber-900">
+                  <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-amber-900">
                     Pendientes
                   </span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                     reservationStatusFilter === "pendiente" ? "bg-[#D4AF37] text-[#2D473C]" : "bg-amber-100 text-amber-900"
                   }`}>
                     Por Confirmar
@@ -1104,7 +1104,7 @@ function CashierDashboardRoute() {
                 <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-amber-950">
                   {pendingReservationsCount}
                 </span>
-                <p className="text-[10px] mt-0.5 font-medium text-amber-800">Por confirmar WhatsApp</p>
+                <p className="text-xs mt-0.5 font-medium text-amber-800">Por confirmar WhatsApp</p>
               </button>
 
               <button
@@ -1119,10 +1119,10 @@ function CashierDashboardRoute() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-blue-900">
+                  <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-blue-900">
                     Confirmadas
                   </span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                     reservationStatusFilter === "confirmada" ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-900"
                   }`}>
                     Confirmado
@@ -1131,7 +1131,7 @@ function CashierDashboardRoute() {
                 <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-blue-950">
                   {confirmedReservationsCount}
                 </span>
-                <p className="text-[10px] mt-0.5 font-medium text-blue-800">Listas para recibir</p>
+                <p className="text-xs mt-0.5 font-medium text-blue-800">Listas para recibir</p>
               </button>
 
               <button
@@ -1146,10 +1146,10 @@ function CashierDashboardRoute() {
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-700">
+                  <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-700">
                     Todas / Historial
                   </span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                     reservationStatusFilter === "all" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-700"
                   }`}>
                     Total
@@ -1158,7 +1158,7 @@ function CashierDashboardRoute() {
                 <span className="font-sans text-3xl font-black tracking-tight tabular-nums block mt-2 text-gray-900">
                   {reservations.length}
                 </span>
-                <p className="text-[10px] mt-0.5 font-medium text-gray-600">Total de reservas</p>
+                <p className="text-xs mt-0.5 font-medium text-gray-600">Total de reservas</p>
               </button>
 
             </div>
@@ -1180,7 +1180,7 @@ function CashierDashboardRoute() {
                 {(reservationStatusFilter === "all" || reservationStatusFilter === "confirmada") && (
                   <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto">
                     <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                      <span className="text-[10px] font-serif font-bold text-gray-500 uppercase">Desde:</span>
+                      <span className="text-xs font-serif font-bold text-gray-500 uppercase">Desde:</span>
                       <input
                         type="date"
                         value={resDateFrom}
@@ -1190,7 +1190,7 @@ function CashierDashboardRoute() {
                     </div>
 
                     <div className="flex items-center gap-1.5 bg-gray-50 border border-gray-200 rounded-xl px-3 py-1.5">
-                      <span className="text-[10px] font-serif font-bold text-gray-500 uppercase">Hasta:</span>
+                      <span className="text-xs font-serif font-bold text-gray-500 uppercase">Hasta:</span>
                       <input
                         type="date"
                         value={resDateTo}
@@ -1340,14 +1340,14 @@ function CashierDashboardRoute() {
                 <div className="flex items-center justify-between">
                   <Building2 className={yapeConfig.mode === "business" ? "text-emerald-700" : "text-gray-400"} size={20} />
                   {yapeConfig.mode === "business" && (
-                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px]">
+                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}
                 </div>
                 <div>
                   <span className="font-bold text-xs uppercase block text-gray-900">Yape Empresa</span>
-                  <span className="text-[11px] text-gray-500 line-clamp-1">{yapeConfig.businessName}</span>
+                  <span className="text-xs text-gray-500 line-clamp-1">{yapeConfig.businessName}</span>
                 </div>
               </button>
 
@@ -1367,21 +1367,21 @@ function CashierDashboardRoute() {
                 <div className="flex items-center justify-between">
                   <UserCheck className={yapeConfig.mode === "personal" ? "text-purple-700" : "text-gray-400"} size={20} />
                   {yapeConfig.mode === "personal" && (
-                    <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[10px]">
+                    <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">
                       <Check size={12} strokeWidth={3} />
                     </span>
                   )}
                 </div>
                 <div>
                   <span className="font-bold text-xs uppercase block text-gray-900">Yape Personal</span>
-                  <span className="text-[11px] text-gray-500 line-clamp-1">{yapeConfig.personalName}</span>
+                  <span className="text-xs text-gray-500 line-clamp-1">{yapeConfig.personalName}</span>
                 </div>
               </button>
             </div>
 
             {/* Datos Editables del Modo Activo */}
             <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-4 text-xs">
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block">
+              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block">
                 Datos del Yape Activo ({yapeConfig.mode === "personal" ? "Personal" : "Empresarial"})
               </span>
 
@@ -1431,7 +1431,7 @@ function CashierDashboardRoute() {
                 </>
               )}
 
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-[11px] leading-relaxed">
+              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs leading-relaxed">
                 ℹ️ Al cambiar de modo, el carrito de compras de todos los clientes mostrará de forma inmediata el nuevo nombre y datos al momento de pagar por Yape.
               </div>
             </div>

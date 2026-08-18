@@ -60,7 +60,7 @@ export function AdminZoneModal({ isOpen, onClose, zone, onSaved }: AdminZoneModa
       <div className="bg-white rounded-3xl max-w-lg w-full shadow-2xl p-6 lg:p-8 space-y-6">
         <div className="flex items-center justify-between border-b border-black/10 pb-4">
           <div>
-            <span className="text-[10px] uppercase font-bold text-eucalipto tracking-wider">
+            <span className="text-xs uppercase font-bold text-eucalipto tracking-wider">
               Configuración de Salón
             </span>
             <h3 className="font-serif font-bold text-2xl text-ink mt-0.5">{zone.name}</h3>

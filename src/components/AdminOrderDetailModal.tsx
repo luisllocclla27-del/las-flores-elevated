@@ -177,7 +177,7 @@ export function AdminOrderDetailModal({
                     href={generateDeliveryGoogleMapsUrl(order.latitude, order.longitude, order.address || order.delivery_address)}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1"
+                    className="text-xs font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 px-2 py-0.5 rounded flex items-center gap-1"
                   >
                     <span>GPS Mapa</span>
                     <ExternalLink size={10} />

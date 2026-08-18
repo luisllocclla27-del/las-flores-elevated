@@ -341,7 +341,7 @@ export function AdminAnalyticsSection({
           <h2 className="font-serif text-lg font-bold text-[#3b1f10] flex items-center gap-2.5">
             <BarChart3 size={20} className="text-[#2e5339]" />
             Inteligencia de Negocios & Analítica Avanzada
-            <span className="font-sans text-[10px] px-2.5 py-0.5 rounded-full bg-[#2e5339]/10 text-[#2e5339] font-bold uppercase tracking-wider border border-[#2e5339]/20">
+            <span className="font-sans text-xs px-2.5 py-0.5 rounded-full bg-[#2e5339]/10 text-[#2e5339] font-bold uppercase tracking-wider border border-[#2e5339]/20">
               Corporativo BI
             </span>
           </h2>
@@ -376,14 +376,14 @@ export function AdminAnalyticsSection({
 
           {/* Custom Date Pickers */}
           <div className="flex items-center gap-2 bg-[#f7f5ef] border border-[#d4a373]/25 p-1.5 rounded-2xl shadow-inner">
-            <span className="text-[11px] font-bold text-[#3b1f10]/60 pl-1 font-serif">Desde:</span>
+            <span className="text-xs font-bold text-[#3b1f10]/60 pl-1 font-serif">Desde:</span>
             <input
               type="date"
               value={customStartDate}
               onChange={(e) => { setCustomStartDate(e.target.value); setTimeframe("custom"); }}
               className="text-xs bg-white border border-[#d4a373]/20 rounded-xl px-2.5 py-1 text-[#3b1f10] font-sans focus:outline-none focus:ring-2 focus:ring-[#2e5339]/30"
             />
-            <span className="text-[11px] font-bold text-[#3b1f10]/60 font-serif">Hasta:</span>
+            <span className="text-xs font-bold text-[#3b1f10]/60 font-serif">Hasta:</span>
             <input
               type="date"
               value={customEndDate}
@@ -421,7 +421,7 @@ export function AdminAnalyticsSection({
         
         {/* Total Revenue Card */}
         <div className="bg-white p-5 rounded-3xl border border-[#d4a373]/25 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#3b1f10]/60 text-[11px] font-sans font-bold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[#3b1f10]/60 text-xs font-sans font-bold uppercase tracking-wider">
             <span>Facturación Total</span>
             <div className="w-10 h-10 rounded-2xl bg-[#d4a373]/15 text-[#8C1D40] flex items-center justify-center border border-[#d4a373]/30">
               <DollarSign size={18} />
@@ -429,7 +429,7 @@ export function AdminAnalyticsSection({
           </div>
           <div className="mt-3">
             <span className="font-sans text-3xl font-black tracking-tight tabular-nums text-[#3b1f10]">S/ {totalRevenue.toFixed(2)}</span>
-            <p className="text-[11px] text-[#2e5339] mt-1 font-semibold flex items-center gap-1">
+            <p className="text-xs text-[#2e5339] mt-1 font-semibold flex items-center gap-1">
               <TrendingUp size={12} /> {validOrders.length} pedidos efectivos
             </p>
           </div>
@@ -437,7 +437,7 @@ export function AdminAnalyticsSection({
 
         {/* Average Ticket Size */}
         <div className="bg-white p-5 rounded-3xl border border-[#d4a373]/25 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#3b1f10]/60 text-[11px] font-sans font-bold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[#3b1f10]/60 text-xs font-sans font-bold uppercase tracking-wider">
             <span>Ticket Promedio (AOV)</span>
             <div className="w-10 h-10 rounded-2xl bg-[#2e5339]/10 text-[#2e5339] flex items-center justify-center border border-[#2e5339]/20">
               <ShoppingBag size={18} />
@@ -445,13 +445,13 @@ export function AdminAnalyticsSection({
           </div>
           <div className="mt-3">
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-[#3b1f10]">S/ {averageTicket.toFixed(2)}</span>
-            <p className="text-[11px] text-[#3b1f10]/50 mt-1 font-medium">Gasto medio por orden</p>
+            <p className="text-xs text-[#3b1f10]/50 mt-1 font-medium">Gasto medio por orden</p>
           </div>
         </div>
 
         {/* Completion Rate */}
         <div className="bg-white p-5 rounded-3xl border border-[#d4a373]/25 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#3b1f10]/60 text-[11px] font-sans font-bold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[#3b1f10]/60 text-xs font-sans font-bold uppercase tracking-wider">
             <span>Efectividad de Venta</span>
             <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-200">
               <Percent size={18} />
@@ -459,7 +459,7 @@ export function AdminAnalyticsSection({
           </div>
           <div className="mt-3">
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-[#3b1f10]">{completionRate.toFixed(1)}%</span>
-            <p className="text-[11px] text-[#2e5339] mt-1 font-semibold flex items-center gap-1">
+            <p className="text-xs text-[#2e5339] mt-1 font-semibold flex items-center gap-1">
               <CheckCircle2 size={12} /> {validOrders.length} de {filteredOrders.length} entregados
             </p>
           </div>
@@ -467,7 +467,7 @@ export function AdminAnalyticsSection({
 
         {/* Top Product Star */}
         <div className="bg-white p-5 rounded-3xl border border-[#d4a373]/25 shadow-sm hover:shadow-md transition-all">
-          <div className="flex items-center justify-between text-[#3b1f10]/60 text-[11px] font-sans font-bold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[#3b1f10]/60 text-xs font-sans font-bold uppercase tracking-wider">
             <span>Plato Estrella</span>
             <div className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-700 flex items-center justify-center border border-amber-200">
               <Award size={18} />
@@ -477,7 +477,7 @@ export function AdminAnalyticsSection({
             <span className="font-serif text-base font-extrabold text-[#3b1f10] line-clamp-1">
               {topProducts[0]?.name || "Sin ventas aún"}
             </span>
-            <p className="text-[11px] text-amber-700 font-semibold mt-1">
+            <p className="text-xs text-amber-700 font-semibold mt-1">
               {topProducts[0] ? `${topProducts[0].quantity} unidades (S/ ${topProducts[0].revenue.toFixed(2)})` : "Esperando pedidos"}
             </p>
           </div>
@@ -485,7 +485,7 @@ export function AdminAnalyticsSection({
 
         {/* Total Discounts Given KPI Card */}
         <div className="bg-white p-5 rounded-3xl border border-[#d4a373]/25 shadow-sm hover:shadow-md transition-all sm:col-span-2 lg:col-span-4">
-          <div className="flex items-center justify-between text-[#3b1f10]/60 text-[11px] font-sans font-bold uppercase tracking-wider">
+          <div className="flex items-center justify-between text-[#3b1f10]/60 text-xs font-sans font-bold uppercase tracking-wider">
             <span className="flex items-center gap-1.5 text-[#3b1f10] font-bold">
               <Percent size={16} className="text-[#2e5339]" />
               Impacto de Promociones & Descuentos Otorgados (BI)
@@ -532,8 +532,8 @@ export function AdminAnalyticsSection({
           ) : (
             <div className="pt-6 pb-2 relative">
               <div className="absolute inset-x-0 top-6 bottom-8 flex flex-col justify-between pointer-events-none opacity-10 z-0">
-                <div className="border-b border-[#14231D] border-dashed w-full flex justify-end pr-2 text-[9px] font-mono">S/ {dailySalesData.maxVal.toFixed(0)}</div>
-                <div className="border-b border-[#14231D] border-dashed w-full flex justify-end pr-2 text-[9px] font-mono">S/ {(dailySalesData.maxVal / 2).toFixed(0)}</div>
+                <div className="border-b border-[#14231D] border-dashed w-full flex justify-end pr-2 text-xs font-mono">S/ {dailySalesData.maxVal.toFixed(0)}</div>
+                <div className="border-b border-[#14231D] border-dashed w-full flex justify-end pr-2 text-xs font-mono">S/ {(dailySalesData.maxVal / 2).toFixed(0)}</div>
                 <div className="border-b border-[#14231D] w-full" />
               </div>
 
@@ -547,7 +547,7 @@ export function AdminAnalyticsSection({
                       onMouseLeave={() => setHoveredBar(null)}
                       className="flex-1 h-full flex flex-col justify-end items-center gap-1 group cursor-pointer"
                     >
-                      <span className="text-[10px] font-mono font-extrabold text-[#14231D] group-hover:scale-110 transition-transform">
+                      <span className="text-xs font-mono font-extrabold text-[#14231D] group-hover:scale-110 transition-transform">
                         S/{dataObj.total.toFixed(0)}
                       </span>
                       <div className="w-full flex-1 max-h-[170px] flex items-end bg-[#14231D]/5 rounded-t-xl p-0.5 border border-[#14231D]/8">
@@ -556,7 +556,7 @@ export function AdminAnalyticsSection({
                           className="w-full bg-gradient-to-t from-[#14231D] via-[#2A4237] to-[#5F8575] hover:from-[#2A4237] hover:to-[#7B9F90] rounded-t-lg transition-all shadow-md group-hover:brightness-110"
                         />
                       </div>
-                      <span className="text-[10px] text-[#14231D]/50 font-bold truncate w-full text-center tracking-tight">
+                      <span className="text-xs text-[#14231D]/50 font-bold truncate w-full text-center tracking-tight">
                         {date}
                       </span>
                     </div>
@@ -670,7 +670,7 @@ export function AdminAnalyticsSection({
               <div key={pm.label} className="p-4 rounded-xl border border-[#14231D]/8 bg-[#F5F3EE]/60 space-y-1">
                 <span className="text-xs font-bold text-[#14231D]/60 block">{pm.label}</span>
                 <span className="font-sans text-lg font-black tracking-tight tabular-nums text-[#14231D] block">S/ {pm.revenue.toFixed(2)}</span>
-                <span className="text-[11px] text-[#14231D]/40 font-semibold block">{pm.count} transacciones</span>
+                <span className="text-xs text-[#14231D]/40 font-semibold block">{pm.count} transacciones</span>
               </div>
             ))}
           </div>
@@ -715,7 +715,7 @@ export function AdminAnalyticsSection({
                   <span className="font-sans text-sm font-black tracking-tight tabular-nums text-[#5F8575] block">
                     S/ {p.revenue.toFixed(2)}
                   </span>
-                  <span className="text-[10px] text-[#14231D]/30 uppercase font-bold tracking-wider">Facturado</span>
+                  <span className="text-xs text-[#14231D]/30 uppercase font-bold tracking-wider">Facturado</span>
                 </div>
               </div>
             ))}

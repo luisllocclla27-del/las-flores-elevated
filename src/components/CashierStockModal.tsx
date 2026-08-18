@@ -236,7 +236,7 @@ export function CashierStockModal({ isOpen, onClose }: CashierStockModalProps) {
                           <span className="text-xs font-serif font-extrabold text-[#2c4a3e]">
                             S/ {Number(p.price || 0).toFixed(2)}
                           </span>
-                          <span className="text-[10px] text-black/40 uppercase font-semibold truncate">
+                          <span className="text-xs text-black/40 uppercase font-semibold truncate">
                             {p.categories?.name || "General"}
                           </span>
                         </div>

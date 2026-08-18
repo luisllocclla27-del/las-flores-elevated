@@ -188,7 +188,7 @@ export function AdminCouponModal({
               placeholder="Ej: FLORES, AYACUCHO10, DELIVERYS"
               className="w-full text-base font-black font-mono tracking-wider uppercase bg-amber-50/50 border border-amber-300 rounded-xl px-4 py-2.5 text-[#14231D] focus:outline-none focus:ring-2 focus:ring-[#14231D]"
             />
-            <p className="text-[11px] text-gray-500 mt-1">El código que escribirán los clientes en el carrito (ej. <strong>FLORES</strong>).</p>
+            <p className="text-xs text-gray-500 mt-1">El código que escribirán los clientes en el carrito (ej. <strong>FLORES</strong>).</p>
           </div>
 
           {/* Discount Type & Value */}
@@ -239,7 +239,7 @@ export function AdminCouponModal({
                 placeholder="100"
                 className="w-full text-sm font-extrabold bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#14231D]"
               />
-              <p className="text-[10px] text-gray-500 mt-1">Ej: Válido solo para los <strong>100 primeros pedidos</strong>.</p>
+              <p className="text-xs text-gray-500 mt-1">Ej: Válido solo para los <strong>100 primeros pedidos</strong>.</p>
             </div>
 
             <div>
@@ -272,14 +272,14 @@ export function AdminCouponModal({
               placeholder="0 (Sin mínimo)"
               className="w-full text-xs bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#14231D]"
             />
-            <p className="text-[10px] text-gray-400 mt-0.5">Ingresa 0 si no requiere un monto mínimo de pedido.</p>
+            <p className="text-xs text-gray-400 mt-0.5">Ingresa 0 si no requiere un monto mínimo de pedido.</p>
           </div>
 
           {/* Active Switch */}
           <div className="pt-2 flex items-center justify-between p-3.5 bg-gray-50 border border-gray-200 rounded-xl">
             <div>
               <span className="text-xs font-bold text-gray-900 block">Estado del Cupón</span>
-              <span className="text-[11px] text-gray-500">¿Permitir usar este cupón activamente?</span>
+              <span className="text-xs text-gray-500">¿Permitir usar este cupón activamente?</span>
             </div>
             
             <button

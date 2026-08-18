@@ -338,7 +338,7 @@ function AdminRoute() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9F8F3] flex font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">
+    <div className="doc-legible min-h-screen bg-[#F9F8F3] flex font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">
       
       {/* Sidebar Navigation */}
       <AdminSidebar
@@ -358,7 +358,7 @@ function AdminRoute() {
           <div>
             <h1 className="font-serif text-xl font-black text-[#2D473C] flex items-center gap-2">
               Panel de Administración
-              <span className="text-[10px] font-sans px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold flex items-center gap-1.5 uppercase tracking-wider">
+              <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold flex items-center gap-1.5 uppercase tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 REALTIME
               </span>
@@ -447,7 +447,7 @@ function AdminRoute() {
               {/* Orders Table */}
               <div className="overflow-x-auto border border-gray-100 rounded-xl">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#2D473C] text-white uppercase text-[10px] font-black tracking-wider">
+                  <thead className="bg-[#2D473C] text-white uppercase text-xs font-black tracking-wider">
                     <tr>
                       <th className="py-3 px-4">N° Orden</th>
                       <th className="py-3 px-4">Cliente</th>
@@ -473,15 +473,15 @@ function AdminRoute() {
                           </td>
                           <td className="py-3 px-4 font-bold text-gray-800">
                             {ord.client_name || "Cliente"}
-                            <span className="block text-[10px] text-gray-400 font-normal">{ord.client_phone}</span>
+                            <span className="block text-xs text-gray-400 font-normal">{ord.client_phone}</span>
                           </td>
-                          <td className="py-3 px-4 font-semibold uppercase text-[10px] text-gray-700">
+                          <td className="py-3 px-4 font-semibold uppercase text-xs text-gray-700">
                             {ord.order_type === "delivery" ? "Delivery" : "Recojo"}
                           </td>
                           <td className="py-3 px-4 text-gray-600 font-medium">
                             {ord.created_at ? new Date(ord.created_at).toLocaleString('es-PE', { dateStyle: 'short', timeStyle: 'short' }) : '-'}
                           </td>
-                          <td className="py-3 px-4 uppercase font-bold text-[10px] text-gray-800">
+                          <td className="py-3 px-4 uppercase font-bold text-xs text-gray-800">
                             <span className="px-2.5 py-0.5 rounded-full bg-gray-100 border border-gray-200 inline-block">
                               {ord.status}
                             </span>
@@ -543,7 +543,7 @@ function AdminRoute() {
               {/* Reservations Table */}
               <div className="overflow-x-auto border border-gray-100 rounded-xl">
                 <table className="w-full text-left text-xs">
-                  <thead className="bg-[#2D473C] text-white uppercase text-[10px] font-black tracking-wider">
+                  <thead className="bg-[#2D473C] text-white uppercase text-xs font-black tracking-wider">
                     <tr>
                       <th className="py-3 px-4">Comensal</th>
                       <th className="py-3 px-4">Fecha & Hora</th>
@@ -565,7 +565,7 @@ function AdminRoute() {
                         <tr key={res.id} className="hover:bg-gray-50/80 transition-colors">
                           <td className="py-3 px-4 font-bold text-gray-900">
                             {res.client_name || "Cliente Reserva"}
-                            <span className="block text-[10px] text-gray-400 font-normal">{res.client_phone}</span>
+                            <span className="block text-xs text-gray-400 font-normal">{res.client_phone}</span>
                           </td>
                           <td className="py-3 px-4 text-gray-700 font-semibold">
                             {res.reservation_date} — {res.reservation_time || "Hora por fijar"}
@@ -576,7 +576,7 @@ function AdminRoute() {
                           <td className="py-3 px-4 text-gray-600 font-medium">
                             {res.table_number || res.zone_id || "Aleatoria"}
                           </td>
-                          <td className="py-3 px-4 uppercase font-bold text-[10px]">
+                          <td className="py-3 px-4 uppercase font-bold text-xs">
                             <span className="px-2.5 py-0.5 rounded-full bg-gray-100 border border-gray-200 inline-block">
                               {res.status || "pending"}
                             </span>
@@ -586,7 +586,7 @@ function AdminRoute() {
                               {res.status !== "confirmed" && res.status !== "completed" && (
                                 <button
                                   onClick={() => handleUpdateReservationStatus(res.id, "confirmed")}
-                                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-[11px]"
+                                  className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold text-xs"
                                 >
                                   Confirmar
                                 </button>
@@ -594,7 +594,7 @@ function AdminRoute() {
                               {res.status !== "cancelled" && (
                                 <button
                                   onClick={() => handleUpdateReservationStatus(res.id, "cancelled")}
-                                  className="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 border border-red-200 rounded-lg font-bold text-[11px]"
+                                  className="px-2.5 py-1 bg-red-100 hover:bg-red-200 text-red-800 border border-red-200 rounded-lg font-bold text-xs"
                                 >
                                   Cancelar
                                 </button>
@@ -682,7 +682,7 @@ function AdminRoute() {
                         </div>
                       )}
 
-                      <span className={`absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase shadow-xs ${
+                      <span className={`absolute top-3 right-3 px-2.5 py-0.5 rounded-full text-xs font-black uppercase shadow-xs ${
                         product.is_available ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
                       }`}>
                         {product.is_available ? "En Stock" : "Agotado"}
@@ -691,7 +691,7 @@ function AdminRoute() {
 
                     {/* Body */}
                     <div className="p-4 space-y-2 flex-1">
-                      <span className="text-[10px] uppercase font-bold text-gray-400 tracking-wider">
+                      <span className="text-xs uppercase font-bold text-gray-400 tracking-wider">
                         {product.categories?.name || "Sin categoría"}
                       </span>
                       <h4 className="font-serif font-bold text-base text-gray-900 leading-tight">
@@ -775,7 +775,7 @@ function AdminRoute() {
                       <span className="font-mono font-black text-base text-[#2D473C] bg-amber-100 px-3 py-1 rounded-xl border border-amber-300">
                         {coupon.code}
                       </span>
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                         coupon.is_active ? "bg-emerald-100 text-emerald-900" : "bg-red-100 text-red-900"
                       }`}>
                         {coupon.is_active ? "Activo" : "Inactivo"}

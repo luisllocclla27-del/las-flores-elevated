@@ -140,7 +140,7 @@ Si deseas realizar alg√∫n ajuste en tu reserva, no dudes en escribirnos por aqu√
             <Calendar size={18} />
           </div>
           <div>
-            <span className={`text-[10px] uppercase font-sans font-extrabold tracking-wider flex items-center gap-1.5 ${theme.typeText}`}>
+            <span className={`text-xs uppercase font-sans font-extrabold tracking-wider flex items-center gap-1.5 ${theme.typeText}`}>
               {isToday ? (
                 <span className="bg-[#D4AF37] text-[#2A4237] px-2 py-0.5 rounded-full font-black animate-pulse shadow-2xs">
                   HOY
@@ -157,7 +157,7 @@ Si deseas realizar alg√∫n ajuste en tu reserva, no dudes en escribirnos por aqu√
         </div>
 
         {/* Status Badge Refinado Sem√°ntico */}
-        <span className={`text-[10px] font-sans font-black px-3 py-1 rounded-full uppercase tracking-wider z-10 ${theme.badge}`}>
+        <span className={`text-xs font-sans font-black px-3 py-1 rounded-full uppercase tracking-wider z-10 ${theme.badge}`}>
           {isConfirmed
             ? "Confirmada"
             : isCompleted
@@ -184,7 +184,7 @@ Si deseas realizar alg√∫n ajuste en tu reserva, no dudes en escribirnos por aqu√
               </p>
             )}
             {reservation.client_email && (
-              <p className="text-[11px] text-gray-500 flex items-center gap-1 mt-0.5 font-medium">
+              <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5 font-medium">
                 <Mail size={12} className="text-gray-400" />
                 {reservation.client_email}
               </p>
@@ -192,7 +192,7 @@ Si deseas realizar alg√∫n ajuste en tu reserva, no dudes en escribirnos por aqu√
           </div>
 
           <div className="bg-[#5F8575]/10 border border-[#5F8575]/20 text-[#2A4237] px-3 py-2 rounded-xl text-center shrink-0">
-            <span className="text-[10px] uppercase font-bold tracking-wider text-[#5F8575] block">
+            <span className="text-xs uppercase font-bold tracking-wider text-[#5F8575] block">
               Personas
             </span>
             <span className="font-sans text-lg font-black tracking-tight tabular-nums text-[#2A4237] flex items-center justify-center gap-1">

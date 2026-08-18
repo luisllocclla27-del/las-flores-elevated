@@ -517,7 +517,7 @@ export function AdminProductModal({
               <span className="flex items-center gap-1">
                 <ImageIcon size={14} className="text-emerald-700" /> Foto del Plato / Promoción
               </span>
-              <span className="text-[10px] text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+              <span className="text-xs text-emerald-800 font-bold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                 Almacenamiento Automático
               </span>
             </label>
@@ -533,7 +533,7 @@ export function AdminProductModal({
                   <span className="text-xs font-bold text-emerald-800 flex items-center gap-1">
                     <CheckCircle2 size={13} /> Imagen Cargar y Lista
                   </span>
-                  <p className="text-[11px] text-gray-500 line-clamp-1 break-all">{imageUrl}</p>
+                  <p className="text-xs text-gray-500 line-clamp-1 break-all">{imageUrl}</p>
                   
                   <button
                     type="button"
@@ -558,7 +558,7 @@ export function AdminProductModal({
                 <span className="text-xs font-bold text-nogal block">
                   {uploading ? "Optimizando y Subiendo Foto..." : "Haga clic aquí para Seleccionar Foto (Celular o PC)"}
                 </span>
-                <span className="text-[11px] text-gray-500 block mt-0.5">
+                <span className="text-xs text-gray-500 block mt-0.5">
                   El sistema comprime la foto automáticamente y genera su enlace permanente.
                 </span>
               </div>
@@ -602,7 +602,7 @@ export function AdminProductModal({
           <div className="pt-2 flex items-center justify-between p-3.5 bg-gray-50 border border-gray-200 rounded-xl">
             <div>
               <span className="text-xs font-bold text-gray-900 block">Disponibilidad en Carta Web</span>
-              <span className="text-[11px] text-gray-500">¿El plato o promoción está activo para clientes?</span>
+              <span className="text-xs text-gray-500">¿El plato o promoción está activo para clientes?</span>
             </div>
             
             <button
@@ -626,7 +626,7 @@ export function AdminProductModal({
               <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
                 <Sparkles size={14} className="text-amber-600" /> ¿Es un plato personalizable? (Arma tu plato / Ronda)
               </span>
-              <span className="text-[11px] text-amber-800/80 block mt-0.5">
+              <span className="text-xs text-amber-800/80 block mt-0.5">
                 Permite al cliente seleccionar opciones (Bebidas, Acompañamientos, etc.) antes de agregar.
               </span>
             </div>
@@ -662,14 +662,14 @@ export function AdminProductModal({
                   <button
                     type="button"
                     onClick={() => setCustomSections(PRESET_DESAYUNO)}
-                    className="px-2.5 py-1 text-[11px] font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg border border-amber-300 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg border border-amber-300 transition-colors flex items-center gap-1"
                   >
                     <Wand2 size={12} /> Cargar Plantilla Desayuno
                   </button>
                   <button
                     type="button"
                     onClick={() => setCustomSections(PRESET_RONDA)}
-                    className="px-2.5 py-1 text-[11px] font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg border border-amber-300 transition-colors flex items-center gap-1"
+                    className="px-2.5 py-1 text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 rounded-lg border border-amber-300 transition-colors flex items-center gap-1"
                   >
                     <Wand2 size={12} /> Cargar Plantilla Ronda
                   </button>
@@ -681,7 +681,7 @@ export function AdminProductModal({
                 {customSections.length === 0 ? (
                   <div className="p-6 text-center bg-white/80 rounded-xl border border-dashed border-amber-300 text-amber-900">
                     <p className="text-xs font-medium mb-2">No has agregado secciones para este plato personalizable.</p>
-                    <p className="text-[11px] text-amber-700 mb-3">Puedes cargar una plantilla rápida arriba o hacer clic abajo para crear tu primera sección.</p>
+                    <p className="text-xs text-amber-700 mb-3">Puedes cargar una plantilla rápida arriba o hacer clic abajo para crear tu primera sección.</p>
                     <button
                       type="button"
                       onClick={handleAddSection}

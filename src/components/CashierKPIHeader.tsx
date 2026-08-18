@@ -29,7 +29,7 @@ export function CashierKPIHeader({
           <div>
             <h1 className="font-serif text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
               Panel de Caja & Recepción
-              <span className="text-[10px] font-sans px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/40 font-extrabold flex items-center gap-1.5 uppercase tracking-wider">
+              <span className="text-xs font-sans px-2.5 py-0.5 rounded-full bg-emerald-400/20 text-emerald-200 border border-emerald-400/40 font-extrabold flex items-center gap-1.5 uppercase tracking-wider">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 TIMBRE EN VIVO
               </span>
@@ -74,7 +74,7 @@ export function CashierKPIHeader({
             <TrendingUp size={22} />
           </div>
           <div className="min-w-0">
-            <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
+            <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
               Ventas Hoy (S/)
             </span>
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-[#2D473C]">
@@ -89,7 +89,7 @@ export function CashierKPIHeader({
             <ShoppingBag size={22} />
           </div>
           <div className="min-w-0">
-            <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
+            <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
               Comandas en Cola
             </span>
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-amber-950">
@@ -104,7 +104,7 @@ export function CashierKPIHeader({
             <Clock size={22} />
           </div>
           <div className="min-w-0">
-            <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
+            <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
               {activeOrdersCount > 0 ? "Espera en Cola" : "Promedio Despacho"}
             </span>
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-blue-950">
@@ -119,7 +119,7 @@ export function CashierKPIHeader({
             <Calendar size={22} />
           </div>
           <div className="min-w-0">
-            <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
+            <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500 block truncate">
               Reservas Hoy
             </span>
             <span className="font-sans text-2xl font-black tracking-tight tabular-nums text-purple-950">

@@ -124,17 +124,17 @@ export function CashierOrderCard({
             <span className="font-sans font-black text-base text-[#2D473C] tracking-tight tabular-nums">
               #{order.order_number || order.id?.slice(0, 8)}
             </span>
-            <span className={`px-2.5 py-0.5 rounded-full text-[10px] uppercase border ${currentStatus.badge}`}>
+            <span className={`px-2.5 py-0.5 rounded-full text-xs uppercase border ${currentStatus.badge}`}>
               {currentStatus.label}
             </span>
             {(order.payment_method || "").toLowerCase() === "culqi" && (
-              <span className="px-2 py-0.5 rounded-md text-[9px] font-black bg-[#00A19B]/15 text-[#00A19B] border border-[#00A19B]/40 flex items-center gap-1">
+              <span className="px-2 py-0.5 rounded-md text-xs font-black bg-[#00A19B]/15 text-[#00A19B] border border-[#00A19B]/40 flex items-center gap-1">
                 ✓ PAGADO
               </span>
             )}
           </div>
 
-          <div className={`flex items-center gap-1 text-[11px] px-2.5 py-1 rounded-lg border ${timerBadgeStyle}`}>
+          <div className={`flex items-center gap-1 text-xs px-2.5 py-1 rounded-lg border ${timerBadgeStyle}`}>
             <Clock size={12} className={(!isCompleted && elapsedMinutes >= 20) ? "text-red-600 animate-bounce" : ""} />
             <span>{timeDisplay}</span>
           </div>
@@ -147,7 +147,7 @@ export function CashierOrderCard({
               {order.client_name || "Cliente General"}
             </span>
 
-            <span className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold flex items-center gap-1 ${
+            <span className={`px-2.5 py-0.5 rounded-md text-xs font-bold flex items-center gap-1 ${
               order.order_type === "delivery"
                 ? "bg-[#5F8575]/10 text-[#2D473C] border border-[#5F8575]/30"
                 : "bg-[#D4AF37]/15 text-[#2D473C] border border-[#D4AF37]/40"
@@ -172,7 +172,7 @@ export function CashierOrderCard({
           )}
 
           {order.order_type === "delivery" && (order.address || order.latitude) && (
-            <div className="flex items-center justify-between gap-1 text-[11px] text-gray-700 bg-gray-50/90 p-2 rounded-xl border border-gray-200 shadow-2xs mt-1">
+            <div className="flex items-center justify-between gap-1 text-xs text-gray-700 bg-gray-50/90 p-2 rounded-xl border border-gray-200 shadow-2xs mt-1">
               <div className="flex items-start gap-1 min-w-0 pr-2">
                 <MapPin size={13} className="shrink-0 mt-0.5 text-[#5F8575]" />
                 <span className="truncate font-semibold">{order.address || "Ubicación Georeferenciada"} {order.reference ? `(${order.reference})` : ""}</span>
@@ -181,7 +181,7 @@ export function CashierOrderCard({
                 href={generateDeliveryGoogleMapsUrl(order.latitude, order.longitude, order.address)}
                 target="_blank"
                 rel="noreferrer"
-                className="shrink-0 px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg font-bold text-[10px] flex items-center gap-1 transition-colors"
+                className="shrink-0 px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 rounded-lg font-bold text-xs flex items-center gap-1 transition-colors"
                 title="Abrir ubicación en Google Maps GPS"
               >
                 <span>GPS</span>
@@ -193,7 +193,7 @@ export function CashierOrderCard({
 
         {/* Items List Summary */}
         <div className="py-3 space-y-2">
-          <span className="text-[10px] font-sans font-extrabold uppercase tracking-wider text-gray-500 block">
+          <span className="text-xs font-sans font-extrabold uppercase tracking-wider text-gray-500 block">
             Comanda ({items.length} ítems):
           </span>
           <div className="space-y-1.5 font-sans">
@@ -221,14 +221,14 @@ export function CashierOrderCard({
         {/* Total & Payment Method */}
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[10px] uppercase font-bold text-gray-400 block">Total a Cobrar</span>
+            <span className="text-xs uppercase font-bold text-gray-400 block">Total a Cobrar</span>
             <span className="font-sans text-xl font-black tracking-tight tabular-nums text-[#2D473C]">
               S/ {Number(order.total || 0).toFixed(2)}
             </span>
           </div>
 
           <div className="text-right">
-            <span className="text-[10px] font-bold text-gray-400 block uppercase">Pago</span>
+            <span className="text-xs font-bold text-gray-400 block uppercase">Pago</span>
             <span className={`text-xs font-black uppercase px-2.5 py-0.5 rounded-md inline-block shadow-2xs ${
               (order.payment_method || "").toLowerCase() === "culqi" 
                 ? "text-[#00A19B] bg-[#00A19B]/10 border border-[#00A19B]/30"
