@@ -240,7 +240,7 @@ function EventosPage() {
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-eucalipto pt-32 pb-24 px-6">
         <img
-          src={heroImg}
+          src="/inicio/eventos.webp"
           alt="Eventos en Restaurante Las Flores Ayacucho"
           loading="eager"
           decoding="async"
