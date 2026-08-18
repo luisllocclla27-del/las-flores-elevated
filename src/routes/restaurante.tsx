@@ -31,13 +31,15 @@ export const Route = createFileRoute("/restaurante")({
       },
       {
         property: "og:image",
-        content: new URL(casaImg, "https://restaurantelasflores.pe").toString(),
+        content: new URL(casaImg, "https://www.restaurantelasflores.com").toString(),
       },
       {
         name: "twitter:image",
-        content: new URL(casaImg, "https://restaurantelasflores.pe").toString(),
+        content: new URL(casaImg, "https://www.restaurantelasflores.com").toString(),
       },
+      { property: "og:url", content: "https://www.restaurantelasflores.com/restaurante" },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/restaurante" }],
   }),
   component: RestaurantePage,
 });
@@ -424,7 +426,7 @@ function RestaurantePage() {
       <ChefAccordionSection />
 
       {/* Tesoros de Ayacucho */}
-      <section id="tesoros" className="bg-eucalipto text-piedra py-24 md:py-32 px-6">
+      <section id="tesoros" className="bg-eucalipto text-piedra py-16 md:py-32 px-6">
         <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12 md:gap-20">
           <div className="flex-1 max-w-[50ch]">
             <span className="text-chilca font-medium uppercase tracking-[0.3em] text-xs mb-6 block">
@@ -463,7 +465,7 @@ function RestaurantePage() {
       </section>
 
       {/* CTA Reservas y Delivery */}
-      <section id="reservas" className="bg-piedra py-24 md:py-32 px-6">
+      <section id="reservas" className="bg-piedra py-16 md:py-32 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-eucalipto font-medium uppercase tracking-[0.3em] text-xs block mb-6">
             Reservas y Delivery

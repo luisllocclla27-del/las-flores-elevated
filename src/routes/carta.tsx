@@ -33,6 +33,7 @@ export const Route = createFileRoute("/carta")({
       { property: "og:url", content: "https://www.restaurantelasflores.com/carta" },
       { property: "og:type", content: "website" },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/carta" }],
     scripts: [
       {
         type: "application/ld+json",

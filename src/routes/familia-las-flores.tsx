@@ -18,6 +18,7 @@ export const Route = createFileRoute("/familia-las-flores")({
           "Conozca al equipo humano de Restaurante Las Flores. Historias de orgullo, pasión y excelencia culinaria de quienes hacen posible la magia ayacuchana.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/familia-las-flores" }],
   }),
   component: FamiliaLasFloresPage,
 });

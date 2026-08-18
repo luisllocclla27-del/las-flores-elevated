@@ -121,7 +121,7 @@ const RetabloWrapper = ({ children }: { children: ReactNode }) => {
        * - Puertas (50% cada una): 22vw (max 450px cada una)
        * - Retablo Abierto: 22vw + 44vw + 22vw = 88vw TOTAL (12vw de margen libre sin scrollbar)
        */
-      className="relative mx-auto mt-8 lg:mt-12 mb-12 w-[90vw] max-w-xl lg:w-[44vw] lg:max-w-[900px] flex flex-col justify-center"
+      className="relative mx-auto mt-0 lg:mt-12 mb-0 lg:mb-12 w-[90vw] max-w-xl lg:w-[44vw] lg:max-w-[900px] flex flex-col justify-center"
       style={{
         perspective: "1400px",
         perspectiveOrigin: "50% 40%",

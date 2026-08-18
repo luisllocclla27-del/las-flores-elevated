@@ -18,6 +18,7 @@ export const Route = createFileRoute("/libro-de-reclamaciones")({
           "Libro de Reclamaciones Virtual de Restaurante Turístico Las Flores en cumplimiento de la Ley N° 29571 del Código de Protección y Defensa del Consumidor del Perú.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/libro-de-reclamaciones" }],
   }),
   component: LibroReclamacionesPage,
 });

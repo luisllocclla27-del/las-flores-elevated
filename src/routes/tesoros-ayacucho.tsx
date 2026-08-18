@@ -21,7 +21,9 @@ export const Route = createFileRoute("/tesoros-ayacucho")({
         property: "og:description",
         content: "Productos ayacuchanos de temporada que dan vida a nuestra cocina tradicional.",
       },
+      { property: "og:url", content: "https://www.restaurantelasflores.com/tesoros-ayacucho" },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/tesoros-ayacucho" }],
   }),
   component: TesorosAyacuchoPage,
 });

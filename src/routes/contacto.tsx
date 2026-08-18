@@ -27,6 +27,7 @@ export const Route = createFileRoute("/contacto")({
       { title: "Contacto | Restaurante Las Flores Ayacucho" },
       { name: "description", content: "Póngase en contacto con Restaurante Las Flores en Ayacucho. Atención al cliente, reservas, pedidos a domicilio y ubicación." },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/contacto" }],
   }),
   component: ContactoPage,
 });
@@ -192,7 +193,7 @@ function ContactoPage() {
       </section>
 
       {/* ── MAIN LAYOUT (DESPLAZAMIENTO NATURAL Y FLUIDO) ── */}
-      <section id="contacto-detalles" className="px-4 md:px-12 lg:px-20 pt-20 pb-20 flex-1 relative z-20">
+      <section id="contacto-detalles" className="px-4 md:px-12 lg:px-20 pt-16 pb-16 flex-1 relative z-20">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* COLUMNA IZQUIERDA: Información Directa (5 cols) */}

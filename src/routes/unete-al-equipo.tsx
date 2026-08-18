@@ -22,6 +22,7 @@ export const Route = createFileRoute("/unete-al-equipo")({
           "Desarróllate profesionalmente en Restaurante Las Flores Ayacucho. Conoce nuestras convocatorias abiertas y forma parte de nuestra familia.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/unete-al-equipo" }],
   }),
   component: UneteAlEquipoPage,
 });
@@ -454,7 +455,7 @@ function UneteAlEquipoPage() {
       </section>
 
       {/* ── CIERRE EDITORIAL CON FOTO DEL EQUIPO ── */}
-      <section className="py-20 px-6 md:px-12 lg:px-20 bg-eucalipto text-cream relative overflow-hidden">
+      <section className="py-16 md:py-20 px-6 md:px-12 lg:px-20 bg-eucalipto text-cream relative overflow-hidden">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 z-10">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-cream/75">

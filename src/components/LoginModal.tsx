@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { User, Loader2, Mail, Lock, KeyRound, ArrowRight } from "lucide-react";
 import { signInWithEmail, signUpWithEmail } from "../lib/supabase";
 
@@ -48,7 +49,7 @@ export function LoginModal({
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center pb-4 sm:pb-0 bg-black/60 backdrop-blur-sm p-4 pointer-events-auto">
       {/* Card del modal */}
       <div className="bg-[#f8f4e6] rounded-3xl w-full max-w-[400px] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 border border-black/8">
@@ -243,6 +244,7 @@ export function LoginModal({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

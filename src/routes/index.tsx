@@ -47,6 +47,7 @@ export const Route = createFileRoute("/")({
         content: "https://www.restaurantelasflores.com/images.png",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -886,7 +887,7 @@ function Index() {
       </header>
 
       {/* CULTURA Y TRADICIÓN */}
-      <section className="flex justify-center items-center w-full min-h-screen overflow-x-hidden relative pt-4 lg:pt-6 pb-12">
+      <section className="flex justify-center items-center w-full lg:min-h-screen overflow-x-hidden relative py-16 lg:pt-6 lg:pb-12">
         <RetabloWrapper>
           {/* Layout Responsivo: Vertical en Móvil (<lg), Side-by-Side en Desktop (lg: >=1024px) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center p-5 lg:p-10 overflow-hidden">
@@ -1010,7 +1011,7 @@ function Index() {
       </section>
 
       {/* LUGARES PARA VISITAR */}
-      <section className="py-20 md:py-32 px-6 bg-piedra">
+      <section className="py-16 md:py-32 px-6 bg-piedra">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
@@ -1032,7 +1033,7 @@ function Index() {
       </section>
 
       {/* FESTIVIDADES DE HUAMANGA */}
-      <section className="py-20 md:py-32 px-6">
+      <section className="py-16 md:py-32 px-6">
         <div className="max-w-7xl mx-auto">
           <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
@@ -1053,9 +1054,9 @@ function Index() {
       </section>
 
       {/* PLATOS TÍPICOS */}
-      <section className="py-12 md:py-16 px-6 bg-cafe text-piedra selection:bg-chilca/30">
+      <section className="py-16 md:py-16 px-6 bg-cafe text-piedra selection:bg-chilca/30">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8 max-w-3xl">
+          <div className="mb-16 md:mb-8 max-w-3xl">
             <span className="text-chilca font-medium uppercase tracking-[0.3em] text-[10px] mb-4 block">
               Platos Típicos
             </span>
@@ -1096,7 +1097,7 @@ function Index() {
       </section>
 
       {/* PREMIOS */}
-      <section className="py-24 md:py-32 px-6">
+      <section className="py-16 md:py-32 px-6">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
           <div className="md:col-span-6">
             <span className="text-eucalipto font-medium uppercase tracking-[0.3em] text-xs mb-6 block">
@@ -1188,7 +1189,7 @@ function Index() {
       </section>
 
       {/* CITA DEL PERSONAL */}
-      <section className="relative bg-eucalipto py-24 md:py-32 px-6">
+      <section className="relative bg-eucalipto py-16 md:py-32 px-6">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-chilca font-medium uppercase tracking-[0.3em] text-xs block mb-8">
             El Orgullo de nuestro Personal

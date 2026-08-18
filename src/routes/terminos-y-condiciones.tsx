@@ -16,6 +16,7 @@ export const Route = createFileRoute("/terminos-y-condiciones")({
           "Términos y Condiciones de contratación de servicios gastronómicos, reservas de mesa y compras delivery en Restaurante Turístico Las Flores de Ayacucho.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/terminos-y-condiciones" }],
   }),
   component: TerminosCondicionesPage,
 });

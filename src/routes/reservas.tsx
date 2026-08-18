@@ -22,6 +22,7 @@ export const Route = createFileRoute("/reservas")({
           "Reserva tu mesa en el Restaurante Las Flores de Ayacucho. Desayunos, almuerzos y cenas con vista al corazón de Huamanga. Atención todos los días.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/reservas" }],
   }),
   validateSearch: (search: Record<string, unknown>): { zona?: string } => {
     return {
@@ -717,7 +718,7 @@ function ReservasPage() {
 
       {/* PHASE 1: GALERÍA DE AMBIENTES (Estilo La Rosa Náutica: Tarjetas limpias, fotos verticales y botones ovalados) */}
       {!selectedZona && (
-        <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-14 pb-24">
+        <main className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-8 py-14">
           {/* Grid de Tarjetas Elegantes (Estilo La Rosa Náutica: Fotos altas y prominentes) */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {ZONAS.map((z) => {

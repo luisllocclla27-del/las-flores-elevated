@@ -16,6 +16,7 @@ export const Route = createFileRoute("/politica-de-privacidad")({
           "Conoce nuestra Política de Privacidad y Tratamiento de Datos Personales en Restaurante Las Flores conforme a la Ley N° 29733 de la República del Perú.",
       },
     ],
+    links: [{ rel: "canonical", href: "https://www.restaurantelasflores.com/politica-de-privacidad" }],
   }),
   component: PoliticaPrivacidadPage,
 });

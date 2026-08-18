@@ -106,7 +106,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "ICBM", content: "-13.1611, -74.2236" },
     ],
     links: [
-      { rel: "canonical", href: "https://www.restaurantelasflores.com/" },
       {
         rel: "stylesheet",
         href: appCss,
