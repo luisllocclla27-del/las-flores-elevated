@@ -123,7 +123,19 @@ export async function signInWithGoogle() {
     return data;
   }
 
-  // En escritorio intentamos popup con fallback a redirección directa
+  // En escritorio intentamos popup con fallback a redirección directa.
+  // La ventana se abre ANTES del await: si se abre después, el navegador ya
+  // no lo reconoce como parte del gesto directo del clic del usuario y
+  // bloquea el popup en silencio (sin error en consola).
+  const width = 500, height = 650;
+  const left = window.screenX + (window.outerWidth - width) / 2;
+  const top = window.screenY + (window.outerHeight - height) / 2;
+  const popup = window.open(
+    "about:blank",
+    "google_auth_popup",
+    `width=${width},height=${height},left=${left},top=${top},status=no,menubar=no,toolbar=no`
+  );
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
@@ -133,20 +145,20 @@ export async function signInWithGoogle() {
     },
   });
 
-  if (error) throw error;
+  if (error) {
+    popup?.close();
+    throw error;
+  }
 
   if (data?.url) {
-    const width = 500, height = 650;
-    const left = window.screenX + (window.outerWidth - width) / 2;
-    const top = window.screenY + (window.outerHeight - height) / 2;
-    const popup = window.open(
-      data.url,
-      "google_auth_popup",
-      `width=${width},height=${height},left=${left},top=${top},status=no,menubar=no,toolbar=no`
-    );
-    if (!popup) {
+    if (popup && !popup.closed) {
+      popup.location.href = data.url;
+    } else {
+      // El popup fue bloqueado o cerrado: recurrimos a redirección directa
       window.location.href = data.url;
     }
+  } else {
+    popup?.close();
   }
   return data;
 }

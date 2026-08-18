@@ -112,6 +112,8 @@ export function CartSidebar() {
   const [culqiToken, setCulqiToken] = useState<CulqiToken | null>(null);
   const [culqiProcessing, setCulqiProcessing] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [entered, setEntered] = useState(false);
   const [activeUser, setActiveUser] = useState<User | null>(null);
   const [createdOrderNumber, setCreatedOrderNumber] = useState<string>("");
   const [completedOrderSummary, setCompletedOrderSummary] = useState<{
@@ -137,6 +139,33 @@ export function CartSidebar() {
       portalRef.current = null;
     };
   }, []);
+
+  // Controla la entrada/salida deslizada del modal (empuja desde la derecha en
+  // escritorio, desde abajo en móvil) usando transform + transition en vez de
+  // animaciones por keyframes, para que el movimiento sea limpio en un solo eje.
+  useEffect(() => {
+    let rafId1: number | undefined;
+    let rafId2: number | undefined;
+    let timer: number | undefined;
+    if (isOpen) {
+      setVisible(true);
+      // Doble rAF: el primero espera a que React pinte el modal en su posición
+      // "cerrada"; recién en el segundo frame activamos la transición, si no
+      // el navegador puede fusionar ambos estados en el mismo pintado y el
+      // modal aparece de golpe sin animar.
+      rafId1 = requestAnimationFrame(() => {
+        rafId2 = requestAnimationFrame(() => setEntered(true));
+      });
+    } else {
+      setEntered(false);
+      timer = window.setTimeout(() => setVisible(false), 350);
+    }
+    return () => {
+      if (rafId1 !== undefined) cancelAnimationFrame(rafId1);
+      if (rafId2 !== undefined) cancelAnimationFrame(rafId2);
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -692,42 +721,35 @@ export function CartSidebar() {
     }
   };
 
-  if (!isMounted || !portalRef.current || !isOpen) return null;
+  if (!isMounted || !portalRef.current || !visible) return null;
 
   return createPortal(
     <>
-      {isOpen && (
-        <div className="fixed inset-0 z-[110] flex flex-col items-center justify-end sm:justify-start sm:pt-2 animate-in fade-in duration-300">
+      {visible && (
+        <div className="fixed inset-0 z-[110] flex flex-col items-center justify-end sm:flex-row sm:items-stretch sm:justify-end">
       {/* Fondo oscuro con blur */}
-      <div className="absolute inset-0 bg-eucalipto/75 backdrop-blur-sm cursor-pointer" onClick={handleClose} />
-
-      {/* Modal flotante central */}
       <div
-        className="relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden border border-black/10 flex flex-col h-[92dvh] sm:h-[calc(100dvh-80px)] sm:max-h-[950px] animate-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 shrink-0"
+        className={`absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer transition-opacity duration-[350ms] ease-out ${
+          entered ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={handleClose}
+      />
+
+      {/* Modal: bottom-sheet en móvil, panel pegado a la derecha a pantalla completa en escritorio.
+          Empuja desde/hacia un solo eje por breakpoint (Y en móvil, X en escritorio). */}
+      <div
+        className={`relative z-10 w-full max-w-[390px] bg-[#f8f4e6] text-nogal shadow-2xl overflow-hidden border border-black/10 sm:border-0 flex flex-col h-[100dvh] shrink-0 transition-transform duration-[350ms] ease-out ${
+          entered
+            ? "translate-y-0 sm:translate-x-0"
+            : "translate-y-full sm:translate-y-0 sm:translate-x-full"
+        }`}
       >
         {/* ── HEADER FIJO (estilo Chicha) ── */}
         {step !== "profile" && (
         <div className="flex items-center justify-between px-5 py-3.5 bg-[#f8f4e6] border-b border-nogal/8 z-10 shrink-0">
 
-          {/* Izquierda: Selector de idioma */}
-          <div className="w-12 flex items-center gap-1 text-nogal/70">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="2" y1="12" x2="22" y2="12" />
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-            </svg>
-            <span className="text-[10px] font-bold">ES</span>
-          </div>
-
-          {/* Centro: Logo */}
-          <img
-            src="/images.png"
-            alt="Logo Las Flores"
-            className="h-9 object-contain drop-shadow-sm scale-[1.25] origin-center"
-          />
-
-          {/* Derecha: Perfil o persona */}
-          <div className="w-12 flex justify-end">
+          {/* Izquierda: Perfil o persona */}
+          <div className="w-12 flex items-center justify-start">
             {activeUser ? (
               <button
                 type="button"
@@ -762,6 +784,27 @@ export function CartSidebar() {
                 </svg>
               </button>
             )}
+          </div>
+
+          {/* Centro: Logo */}
+          <img
+            src="/images.png"
+            alt="Logo Las Flores"
+            className="h-9 object-contain drop-shadow-sm scale-[1.25] origin-center"
+          />
+
+          {/* Derecha: Cerrar */}
+          <div className="w-12 flex justify-end">
+            <button
+              type="button"
+              onClick={handleClose}
+              className="flex items-center justify-center text-nogal/50 hover:text-eucalipto transition-colors"
+              aria-label="Cerrar"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6 6 18M6 6l12 12" />
+              </svg>
+            </button>
           </div>
         </div>
         )}
@@ -847,7 +890,7 @@ export function CartSidebar() {
                     return (
                       <div
                         key={item.id}
-                        className="flex items-start gap-3.5 bg-white rounded-xl p-3 shadow-xs border border-black/5 group hover:shadow-sm transition-all"
+                        className="flex items-start gap-3.5 bg-white rounded-xl p-3.5 shadow-xs border border-black/5 group hover:shadow-sm transition-all"
                       >
                         {item.image && (
                           <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 border border-black/5 shadow-xs bg-white mt-0.5">
@@ -891,7 +934,7 @@ export function CartSidebar() {
                             </div>
                             <button
                               onClick={() => removeItem(item.id)}
-                              className="text-black/30 hover:text-red-600 transition-colors p-1 rounded-lg hover:bg-red-50 -mr-1 -mt-1 flex-shrink-0"
+                              className="text-black/30 hover:text-red-600 transition-colors p-2 -m-1 rounded-lg hover:bg-red-50 flex-shrink-0"
                               title="Eliminar plato"
                             >
                               <Trash2 size={15} />
@@ -901,21 +944,21 @@ export function CartSidebar() {
                             <p className="text-xs font-serif font-bold text-eucalipto">
                               S/ {item.price.toFixed(2)}
                             </p>
-                            <div className="flex items-center gap-1.5 bg-black/4 rounded-lg p-0.5 border border-black/5">
+                            <div className="flex items-center gap-2 bg-black/4 rounded-lg p-1 border border-black/5">
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                className="w-6 h-6 rounded-md flex items-center justify-center font-bold text-nogal/70 hover:text-eucalipto hover:bg-white transition-all"
+                                className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-nogal/70 hover:text-eucalipto hover:bg-white active:scale-95 transition-all"
                               >
-                                <Minus size={11} strokeWidth={2.5} />
+                                <Minus size={13} strokeWidth={2.5} />
                               </button>
-                              <span className="text-xs font-bold w-4 text-center text-nogal">
+                              <span className="text-xs font-bold w-5 text-center text-nogal">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                className="w-6 h-6 rounded-md flex items-center justify-center font-bold text-nogal/70 hover:text-eucalipto hover:bg-white transition-all"
+                                className="w-8 h-8 rounded-md flex items-center justify-center font-bold text-nogal/70 hover:text-eucalipto hover:bg-white active:scale-95 transition-all"
                               >
-                                <Plus size={11} strokeWidth={2.5} />
+                                <Plus size={13} strokeWidth={2.5} />
                               </button>
                             </div>
                           </div>
@@ -970,7 +1013,7 @@ export function CartSidebar() {
                             <span className="block font-serif font-bold text-xs leading-tight">
                               {label}
                             </span>
-                            <span className="block text-[9.5px] mt-0.5 opacity-70 truncate font-sans">
+                            <span className="block text-[10.5px] mt-0.5 opacity-70 truncate font-sans">
                               {sub}
                             </span>
                           </div>
@@ -1093,7 +1136,7 @@ export function CartSidebar() {
                     type="button"
                     onClick={() => setShowLoginModal(true)}
                     className="w-full py-4 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
-                    style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+                    style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
                   >
                     Iniciar sesión para continuar
                   </button>
@@ -1496,7 +1539,7 @@ export function CartSidebar() {
             <button
               onClick={() => setStep("delivery")}
               className="w-full py-4 rounded-xl font-serif font-bold text-lg tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5"
-              style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+              style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
             >
               Continuar — S/ {total.toFixed(2)}
             </button>
@@ -1525,7 +1568,7 @@ export function CartSidebar() {
                   onClick={() => setDeliverySubStep("details")}
                   disabled={!clientLocation || isTooFar || !delivery.address}
                   className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed cursor-pointer"
-                  style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+                  style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
                 >
                   Continuar a datos &rarr;
                 </button>
@@ -1535,7 +1578,7 @@ export function CartSidebar() {
                   form="delivery-form"
                   disabled={!delivery.phone || (orderType === "delivery" && (!clientLocation || isTooFar))}
                   className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed cursor-pointer"
-                  style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+                  style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
                 >
                   Ir al pago
                 </button>
@@ -1562,7 +1605,7 @@ export function CartSidebar() {
                   (paymentMethod === "yape" && (!yapeTitular.trim() || !yapeOperacion.trim()))
                 }
                 className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
-                style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+                style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
               >
                 {culqiProcessing 
                   ? "Procesando Culqi..." 
@@ -1580,7 +1623,7 @@ export function CartSidebar() {
               <button
                 onClick={handleClose}
                 className="w-full py-3.5 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2"
-                style={{ background: "var(--color-eucalipto)", color: "#FBF5E6" }}
+                style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
               >
                 <Plus size={18} />
                 <span>Hacer otro Pedido</span>
@@ -1600,16 +1643,6 @@ export function CartSidebar() {
         )}
       </div>
 
-      {/* ── BOTÓN CERRAR FLOTANTE (fuera del modal, abajo centrado) ── */}
-      <button
-        onClick={handleClose}
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 w-14 h-14 sm:w-[50px] sm:h-[50px] rounded-full bg-eucalipto text-piedra flex items-center justify-center shadow-xl hover:bg-[#1e3329] hover:scale-105 active:scale-95 transition-all z-[112]"
-        aria-label="Cerrar"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
       </div>
       )}
 

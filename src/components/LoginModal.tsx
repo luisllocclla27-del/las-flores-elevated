@@ -49,21 +49,31 @@ export function LoginModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center pb-4 sm:pb-0 bg-ink/75 backdrop-blur-sm p-4 pointer-events-auto">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center pb-4 sm:pb-0 bg-black/60 backdrop-blur-sm p-4 pointer-events-auto">
       {/* Card del modal */}
       <div className="bg-[#f8f4e6] rounded-3xl w-full max-w-[400px] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 border border-black/8">
-        {/* Header — logo centrado */}
-        <div className="flex items-center justify-center px-5 py-3.5 border-b border-ink/8">
+        {/* Header — logo centrado + cerrar */}
+        <div className="relative flex items-center justify-center px-5 py-3.5 border-b border-ink/8">
           <img
             src="/images.png"
             alt="Logo Las Flores"
             className="h-9 object-contain drop-shadow-sm scale-[1.25] origin-center"
           />
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-5 top-1/2 -translate-y-1/2 flex items-center justify-center text-nogal/50 hover:text-eucalipto transition-colors"
+            aria-label="Cerrar"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         {/* Cuerpo */}
         <div className="py-8 px-7 flex flex-col items-center">
-          <div className="w-14 h-14 rounded-full bg-eucalipto/10 text-eucalipto flex items-center justify-center mb-3">
+          <div className="w-14 h-14 rounded-full bg-cochinilla/10 text-cochinilla flex items-center justify-center mb-3">
             <User size={26} strokeWidth={1.8} />
           </div>
 
@@ -125,7 +135,7 @@ export function LoginModal({
               <button
                 type="button"
                 onClick={() => setAuthMode("email_login")}
-                className="w-full flex items-center justify-center gap-2 bg-eucalipto/10 hover:bg-eucalipto/20 text-eucalipto rounded-xl px-4 py-3 text-xs font-bold transition-all border border-eucalipto/20 cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 bg-cochinilla/10 hover:bg-cochinilla/20 text-cochinilla rounded-xl px-4 py-3 text-xs font-bold transition-all border border-cochinilla/20 cursor-pointer"
               >
                 <Mail size={16} /> Usar Correo y Contraseña
               </button>
@@ -143,7 +153,7 @@ export function LoginModal({
                     placeholder="Ej: Juan Pérez"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-eucalipto"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-cochinilla"
                   />
                 </div>
               )}
@@ -158,7 +168,7 @@ export function LoginModal({
                   placeholder="tu@correo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-eucalipto"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-cochinilla"
                 />
               </div>
 
@@ -173,7 +183,7 @@ export function LoginModal({
                   placeholder="******"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-eucalipto"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-black/15 bg-white text-xs font-medium text-ink focus:outline-none focus:ring-2 focus:ring-cochinilla"
                 />
               </div>
 
@@ -192,7 +202,7 @@ export function LoginModal({
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3.5 rounded-xl font-serif font-bold text-sm bg-eucalipto text-piedra hover:bg-eucalipto/90 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
+                className="w-full py-3.5 rounded-xl font-serif font-bold text-sm bg-cochinilla text-piedra hover:bg-cochinilla/90 transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60"
               >
                 {isSubmitting ? (
                   <Loader2 size={16} className="animate-spin" />
@@ -214,7 +224,7 @@ export function LoginModal({
                       authMode === "email_login" ? "email_register" : "email_login"
                     )
                   }
-                  className="text-[11px] font-bold text-eucalipto hover:underline cursor-pointer"
+                  className="text-[11px] font-bold text-cochinilla hover:underline cursor-pointer"
                 >
                   {authMode === "email_login"
                     ? "¿No tienes cuenta? Regístrate"
@@ -233,27 +243,6 @@ export function LoginModal({
           )}
         </div>
       </div>
-
-      {/* Botón cerrar — FUERA del card */}
-      <button
-        type="button"
-        onClick={onClose}
-        className="mt-4 w-14 h-14 rounded-full bg-eucalipto text-cream flex items-center justify-center shadow-xl hover:bg-eucalipto/90 active:scale-95 transition-all cursor-pointer"
-        aria-label="Cerrar"
-      >
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M18 6 6 18M6 6l12 12" />
-        </svg>
-      </button>
     </div>
   );
 }
