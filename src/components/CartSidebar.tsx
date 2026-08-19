@@ -173,6 +173,10 @@ export function CartSidebar() {
       if (!isHistoryTrigger.current) {
         if (step === "profile" || step === "success") {
           setStep("cart");
+          if (step === "success") {
+            setDeliverySubStep("location");
+            setClientLocation(null);
+          }
         }
       }
       isHistoryTrigger.current = false;
@@ -716,6 +720,8 @@ export function CartSidebar() {
     if (step === "success") {
       clearCart();
       setStep("cart");
+      setDeliverySubStep("location");
+      setClientLocation(null);
       setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
       setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
       setCulqiToken(null);
