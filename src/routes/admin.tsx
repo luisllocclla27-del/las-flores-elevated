@@ -159,17 +159,31 @@ function AdminRoute() {
       const { data: ordData } = await supabase
         .from("orders")
         .select("*")
-        .gte("created_at", dateFilter)
+        .gte("created_at", dateFilter);
+
       if (ordData) {
-        setOrders(ordData);
         if (ordData.length > 0) {
           const orderIds = ordData.map((o: any) => o.id);
-          const { data: itemsData } = await supabase
-            .from("order_items")
-            .select("*, products(name, image_url)")
-            .in("order_id", orderIds);
+          const [{ data: itemsData }, { data: pinsData }] = await Promise.all([
+            supabase
+              .from("order_items")
+              .select("*, products(name, image_url)")
+              .in("order_id", orderIds),
+            supabase
+              .from("driver_pins")
+              .select("order_id, pin_code")
+              .in("order_id", orderIds),
+          ]);
           if (itemsData) setOrderItems(itemsData);
+
+          const pinMap = new Map((pinsData || []).map((p: any) => [p.order_id, p.pin_code]));
+          const enrichedOrders = ordData.map((o: any) => ({
+            ...o,
+            driver_pin: pinMap.get(o.id) || (o as any).driver_pin || "",
+          }));
+          setOrders(enrichedOrders);
         } else {
+          setOrders(ordData);
           setOrderItems([]);
         }
       }

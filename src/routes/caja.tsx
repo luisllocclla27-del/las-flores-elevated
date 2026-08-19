@@ -239,34 +239,48 @@ function CashierDashboardRoute() {
         .limit(200);
 
       if (!ordErr && ordData) {
-        setOrders((prev) => {
-          if (prev.length > 0 && ordData.length > prev.length) {
-            const prevIds = new Set(prev.map((o: any) => o.id));
-            const newOrders = ordData.filter((o: any) => !prevIds.has(o.id));
-            newOrders.forEach((newest: any) => {
-              addNotification({
-                entityId: newest.id || newest.order_number,
-                type: "order",
-                title: "¡NUEVO PEDIDO RECIBIDO!",
-                subtitle: `#${newest.order_number || "LF-NUEVO"}`,
-                detail: `${newest.client_name || "Cliente"} — S/ ${Number(newest.total || 0).toFixed(2)}`,
-                data: newest,
-              });
-            });
-          }
-          return ordData;
-        });
-      }
+        if (ordData.length > 0) {
+          const orderIds = ordData.map((o: any) => o.id);
+          const [{ data: itemsData }, { data: pinsData }] = await Promise.all([
+            supabase
+              .from("order_items")
+              .select("*, products(name, image_url)")
+              .in("order_id", orderIds),
+            supabase
+              .from("driver_pins")
+              .select("order_id, pin_code")
+              .in("order_id", orderIds),
+          ]);
 
-      if (ordData && ordData.length > 0) {
-        const orderIds = ordData.map((o: any) => o.id);
-        const { data: itemsData } = await supabase
-          .from("order_items")
-          .select("*, products(name, image_url)")
-          .in("order_id", orderIds);
-        if (itemsData) setOrderItems(itemsData);
-      } else {
-        setOrderItems([]);
+          if (itemsData) setOrderItems(itemsData);
+
+          const pinMap = new Map((pinsData || []).map((p: any) => [p.order_id, p.pin_code]));
+          const enrichedOrders = ordData.map((o: any) => ({
+            ...o,
+            driver_pin: pinMap.get(o.id) || (o as any).driver_pin || "",
+          }));
+
+          setOrders((prev) => {
+            if (prev.length > 0 && enrichedOrders.length > prev.length) {
+              const prevIds = new Set(prev.map((o: any) => o.id));
+              const newOrders = enrichedOrders.filter((o: any) => !prevIds.has(o.id));
+              newOrders.forEach((newest: any) => {
+                addNotification({
+                  entityId: newest.id || newest.order_number,
+                  type: "order",
+                  title: "¡NUEVO PEDIDO RECIBIDO!",
+                  subtitle: `#${newest.order_number || "LF-NUEVO"}`,
+                  detail: `${newest.client_name || "Cliente"} — S/ ${Number(newest.total || 0).toFixed(2)}`,
+                  data: newest,
+                });
+              });
+            }
+            return enrichedOrders;
+          });
+        } else {
+          setOrders(ordData);
+          setOrderItems([]);
+        }
       }
 
       // 3. Fetch Reservations
