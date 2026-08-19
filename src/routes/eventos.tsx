@@ -7,7 +7,29 @@ const equipoImg = "/imagenes-reales/EQUIPO/02042026-DSC05038.webp";
 const retabloImg =
   "/imagenes-reales/ARTE Y CULTURA LISTO/RETABLO AYACUCHANO/Retablo-Ayacuchano.webp";
 import { SiteFooter } from "@/components/site-footer";
-import { ArrowRight, CalendarHeart, GlassWater, Users, CheckCircle2, Sparkles, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  CalendarHeart,
+  GlassWater,
+  Users,
+  CheckCircle2,
+  Sparkles,
+  ChevronUp,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  User,
+  Mail,
+  Phone,
+  Clock,
+  MessageSquare,
+  Send,
+  Loader2,
+  X,
+  MapPin,
+  ShieldCheck,
+  PhoneCall,
+} from "lucide-react";
 import { SiteNavigationMenu } from '../components/SiteNavigationMenu';
 import { useState, useTransition, useEffect } from 'react';
 import { useCart } from "@/context/CartContext";
@@ -157,6 +179,17 @@ function EventosPage() {
     });
   };
 
+  // Cerrar Drawer al presionar Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isContactOpen) {
+        setIsContactOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isContactOpen]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormStatus("submitting");
@@ -169,7 +202,9 @@ function EventosPage() {
     const guests = guestsInput ? Number(guestsInput) : null;
     const event_type = (form.querySelector("#tipo") as HTMLSelectElement)?.value || "";
     const event_date = (form.querySelector("#fecha") as HTMLInputElement)?.value || null;
-    const message = (form.querySelector("#mensaje") as HTMLTextAreaElement)?.value || "";
+    const turno = (form.querySelector("#turno") as HTMLSelectElement)?.value || "";
+    const rawMessage = (form.querySelector("#mensaje") as HTMLTextAreaElement)?.value || "";
+    const message = turno ? `[Turno: ${turno}] ${rawMessage}` : rawMessage;
 
     try {
       const { error } = await supabase.from("event_quotes").insert([
@@ -434,194 +469,310 @@ function EventosPage() {
       <SiteFooter />
       {isMenuOpen && <MenuModal open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />}
 
-      {/* Drawer Formulario Lateral */}
+      {/* Drawer Formulario Lateral de Cotización */}
       {isContactOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end">
-          {/* Overlay oscuro con blur */}
+        <div className="fixed inset-0 z-[100] flex justify-end animate-in fade-in duration-200">
+          {/* Overlay oscuro con blur que cierra al hacer clic fuera */}
           <div
-            className="absolute inset-0 bg-eucalipto/70 backdrop-blur-sm animate-in fade-in duration-300"
+            className="fixed inset-0 bg-[#14231D]/80 backdrop-blur-md cursor-pointer transition-opacity"
             onClick={() => setIsContactOpen(false)}
+            aria-hidden="true"
           />
 
-          {/* Panel Lateral */}
-          <div className="relative w-full max-w-md bg-piedra text-nogal h-full shadow-2xl flex flex-col overflow-y-auto animate-in slide-in-from-right duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]">
-            <div className="p-8 border-b border-nogal/10 flex justify-between items-center bg-piedra sticky top-0 z-10">
-              <h3 className="font-serif text-2xl">Cotizar Evento</h3>
+          {/* Panel Lateral Drawer */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 w-full max-w-lg bg-[#FAF6EE] text-nogal h-full shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-400 ease-out border-l border-[#D4AF37]/30"
+          >
+            {/* Header de Lujo con Sello Las Flores */}
+            <div className="bg-[#2D473C] text-[#FBF5E6] p-6 pb-5 flex items-center justify-between border-b border-[#D4AF37]/30 shrink-0 shadow-md">
+              <div className="flex items-center gap-3.5">
+                <div className="w-12 h-12 rounded-2xl bg-white p-1.5 flex items-center justify-center border-2 border-[#D4AF37] shadow-sm shrink-0">
+                  <img src="/images.png" alt="Las Flores" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <span className="text-[10px] font-sans uppercase font-extrabold text-[#D4AF37] tracking-widest flex items-center gap-1.5">
+                    <Sparkles size={12} />
+                    Cotizaciones & Eventos
+                  </span>
+                  <h3 className="font-serif text-xl font-bold text-white tracking-tight">
+                    Planifica tu Evento
+                  </h3>
+                  <p className="text-xs text-emerald-200/80 font-medium">
+                    Salones privados y jardines coloniales en Ayacucho
+                  </p>
+                </div>
+              </div>
+
               <button
+                type="button"
                 onClick={() => setIsContactOpen(false)}
-                className="text-nogal/60 hover:text-nogal transition-colors text-3xl font-light leading-none pb-1"
-                aria-label="Cerrar"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer active:scale-95"
+                aria-label="Cerrar modal"
               >
-                ×
+                <X size={20} />
               </button>
             </div>
 
-            <div className="p-8 flex-1">
+            {/* Cuerpo del Drawer (Scrollable) */}
+            <div className="p-5 sm:p-7 flex-1 overflow-y-auto space-y-6">
               {formStatus === "success" ? (
-                <div className="h-full flex flex-col items-center justify-center text-center space-y-6">
-                  <div className="w-16 h-16 bg-eucalipto/20 text-eucalipto rounded-full flex items-center justify-center text-3xl mb-4">
-                    ✓
+                <div className="h-full py-12 flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in-95 duration-300">
+                  <div className="w-20 h-20 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-3xl shadow-sm border-2 border-emerald-300">
+                    <CheckCircle2 size={42} strokeWidth={2.2} />
                   </div>
-                  <h3 className="font-serif text-3xl">¡Solicitud Enviada!</h3>
-                  <p className="text-nogal/70 leading-[1.7]">
-                    Hemos recibido su información. Nuestro equipo se pondrá en contacto pronto para
-                    afinar los detalles de su evento.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setIsContactOpen(false);
-                      setTimeout(() => setFormStatus("idle"), 500);
-                    }}
-                    className="mt-8 px-8 py-4 bg-eucalipto text-piedra text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-eucalipto/80 transition-colors w-full rounded-sm"
-                  >
-                    CERRAR
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-8">
-                  <p className="text-nogal/60 text-sm mb-8 leading-relaxed font-light">
-                    Complete los datos a continuación y nuestro coordinador se comunicará con usted
-                    a la brevedad.
-                  </p>
+                  <div className="space-y-2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-[#D4AF37] block">
+                      Solicitud Recibida
+                    </span>
+                    <h3 className="font-serif text-3xl font-bold text-[#2D473C]">
+                      ¡Gracias por Elegirnos!
+                    </h3>
+                    <p className="text-sm text-gray-700 max-w-sm mx-auto leading-relaxed">
+                      Hemos recibido los detalles de tu evento. Nuestro coordinador de eventos se comunicará contigo vía WhatsApp / Teléfono en breve para presentarte la propuesta a medida.
+                    </p>
+                  </div>
 
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="nombre"
-                      className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
+                  <div className="w-full pt-4 space-y-3">
+                    <a
+                      href="https://wa.me/51980723422?text=Hola%20Las%20Flores,%20acabo%20de%20enviar%20mi%20solicitud%20de%20cotizaci%C3%B3n%20para%20un%20evento.%20%C2%BFMe%20podr%C3%ADan%20brindar%20m%C3%A1s%20detalles?"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
                     >
-                      Nombre Completo
-                    </label>
-                    <input
-                      type="text"
-                      id="nombre"
-                      required
-                      className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors"
-                      placeholder="Ej. Juan Pérez"
-                    />
-                  </div>
+                      <PhoneCall size={16} />
+                      <span>Conversar por WhatsApp Ahora</span>
+                    </a>
 
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="email"
-                      className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                    >
-                      Correo Electrónico
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      required
-                      className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors"
-                      placeholder="juan@correo.com"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label
-                        htmlFor="telefono"
-                        className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                      >
-                        Teléfono
-                      </label>
-                      <input
-                        type="tel"
-                        id="telefono"
-                        required
-                        className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors"
-                        placeholder="+51 987 654 321"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label
-                        htmlFor="invitados"
-                        className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                      >
-                        Invitados
-                      </label>
-                      <input
-                        type="number"
-                        id="invitados"
-                        min="1"
-                        className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors"
-                        placeholder="50"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="tipo"
-                      className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                    >
-                      Tipo de Evento
-                    </label>
-                    <div className="relative">
-                      <select
-                        id="tipo"
-                        required
-                        defaultValue=""
-                        className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors appearance-none cursor-pointer"
-                      >
-                        <option value="" disabled>
-                          Seleccione...
-                        </option>
-                        <option value="boda">Boda / Recepción</option>
-                        <option value="corporativo">Corporativo</option>
-                        <option value="familiar">Familiar</option>
-                        <option value="otro">Otro</option>
-                      </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-nogal/40">
-                        <svg
-                          className="fill-current h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="fecha"
-                      className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                    >
-                      Fecha Deseada
-                    </label>
-                    <input
-                      type="date"
-                      id="fecha"
-                      className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors min-h-[44px]"
-                    />
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label
-                      htmlFor="mensaje"
-                      className="text-[10px] uppercase tracking-[0.2em] text-nogal/50 font-semibold block px-1"
-                    >
-                      Detalles Adicionales
-                    </label>
-                    <textarea
-                      id="mensaje"
-                      rows={2}
-                      className="w-full bg-eucalipto/[0.03] border border-nogal/10 rounded-sm px-4 py-3 text-nogal text-sm focus:outline-none focus:border-chilca focus:bg-eucalipto/[0.02] transition-colors resize-none"
-                      placeholder="Cuéntenos más sobre su evento..."
-                    ></textarea>
-                  </div>
-
-                  <div className="pt-4">
                     <button
-                      type="submit"
-                      disabled={formStatus === "submitting"}
-                      className="w-full py-4 bg-eucalipto text-piedra text-[11px] uppercase tracking-[0.25em] font-bold hover:bg-chilca hover:text-nogal transition-colors disabled:opacity-50 rounded-sm shadow-md hover:shadow-lg"
+                      type="button"
+                      onClick={() => {
+                        setIsContactOpen(false);
+                        setTimeout(() => setFormStatus("idle"), 400);
+                      }}
+                      className="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs uppercase tracking-wider font-bold rounded-xl transition-all"
                     >
-                      {formStatus === "submitting" ? "ENVIANDO..." : "SOLICITAR COTIZACIÓN"}
+                      Cerrar Ventana
                     </button>
                   </div>
-                </form>
+                </div>
+              ) : (
+                <>
+                  {/* Banner de Contacto Inmediato por WhatsApp */}
+                  <div className="bg-gradient-to-r from-emerald-900 to-[#2D473C] rounded-2xl p-4 text-white shadow-md border border-[#D4AF37]/40 flex flex-col sm:flex-row items-center justify-between gap-3.5">
+                    <div className="space-y-0.5 text-center sm:text-left">
+                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] block">
+                        ⚡ Atención Inmediata
+                      </span>
+                      <p className="text-xs font-bold text-white leading-tight">
+                        ¿Deseas una cotización exprés por WhatsApp?
+                      </p>
+                      <p className="text-[11px] text-emerald-200/80">
+                        Disponibilidad en tiempo real y catálogo en PDF
+                      </p>
+                    </div>
+                    <a
+                      href="https://wa.me/51980723422?text=Hola%20Las%20Flores,%20deseo%20cotizar%20un%20evento%20especial%20en%20sus%20salones.%20%C2%BFMe%20podr%C3%ADan%20compartir%20informaci%C3%B3n%20y%20men%C3%BAs?"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-2 shrink-0 cursor-pointer active:scale-95"
+                    >
+                      <PhoneCall size={14} />
+                      <span>Chatear (+51 980 723 422)</span>
+                    </a>
+                  </div>
+
+                  {/* Separador elegante */}
+                  <div className="relative flex items-center justify-center my-2">
+                    <div className="border-t border-black/10 w-full" />
+                    <span className="bg-[#FAF6EE] px-3 text-[10px] font-extrabold uppercase tracking-wider text-gray-500 shrink-0">
+                      O completa el formulario formal
+                    </span>
+                    <div className="border-t border-black/10 w-full" />
+                  </div>
+
+                  {/* Formulario Formal */}
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    {/* Tarjeta de Datos de Contacto */}
+                    <div className="bg-white rounded-2xl p-4 sm:p-5 border border-black/10 shadow-xs space-y-3.5">
+                      <h4 className="font-serif text-sm font-bold text-[#2D473C] flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <User size={16} className="text-[#D4AF37]" />
+                        1. Tus Datos de Contacto
+                      </h4>
+
+                      <div className="space-y-1">
+                        <label htmlFor="nombre" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                          Nombre y Apellidos *
+                        </label>
+                        <div className="relative">
+                          <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="text"
+                            id="nombre"
+                            required
+                            className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
+                            placeholder="Ej. Carmen Navarro"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label htmlFor="telefono" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Teléfono / WhatsApp *
+                          </label>
+                          <div className="relative">
+                            <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <input
+                              type="tel"
+                              id="telefono"
+                              required
+                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
+                              placeholder="Ej. 987 654 321"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label htmlFor="email" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Correo Electrónico *
+                          </label>
+                          <div className="relative">
+                            <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <input
+                              type="email"
+                              id="email"
+                              required
+                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
+                              placeholder="carmen@ejemplo.com"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tarjeta de Detalles del Evento */}
+                    <div className="bg-white rounded-2xl p-4 sm:p-5 border border-black/10 shadow-xs space-y-3.5">
+                      <h4 className="font-serif text-sm font-bold text-[#2D473C] flex items-center gap-2 border-b border-gray-100 pb-2">
+                        <Sparkles size={16} className="text-[#D4AF37]" />
+                        2. Detalles de la Celebración
+                      </h4>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label htmlFor="tipo" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Tipo de Evento *
+                          </label>
+                          <select
+                            id="tipo"
+                            required
+                            defaultValue=""
+                            className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all cursor-pointer"
+                          >
+                            <option value="" disabled>Selecciona el tipo...</option>
+                            <option value="bodas">Bodas y Recepciones de Gala</option>
+                            <option value="corporativo">Reuniones Corporativas & Conferencias</option>
+                            <option value="familiar">Celebración Familiar / Cumpleaños</option>
+                            <option value="aniversario">Aniversario / Bodas de Oro/Plata</option>
+                            <option value="graduacion">Graduación / Fiesta de Promoción</option>
+                            <option value="bautizo">Bautizo / Primera Comunión</option>
+                            <option value="cena_privada">Cena Privada de Alta Cocina</option>
+                            <option value="otro">Otro Evento Especial</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label htmlFor="invitados" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Nº de Invitados Estimado *
+                          </label>
+                          <div className="relative">
+                            <Users size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                            <input
+                              type="number"
+                              id="invitados"
+                              min="5"
+                              max="500"
+                              required
+                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
+                              placeholder="Ej. 50 personas"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="space-y-1">
+                          <label htmlFor="fecha" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Fecha Deseada *
+                          </label>
+                          <div className="relative">
+                            <input
+                              type="date"
+                              id="fecha"
+                              required
+                              className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          <label htmlFor="turno" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                            Turno / Horario Preferido
+                          </label>
+                          <select
+                            id="turno"
+                            defaultValue="almuerzo"
+                            className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all cursor-pointer"
+                          >
+                            <option value="almuerzo">Almuerzo (12:30 pm – 04:30 pm)</option>
+                            <option value="cena">Tarde / Cena (06:30 pm – 11:30 pm)</option>
+                            <option value="completo">Jornada Completa</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div className="space-y-1">
+                        <label htmlFor="mensaje" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
+                          Requerimientos Especiales & Detalles
+                        </label>
+                        <div className="relative">
+                          <textarea
+                            id="mensaje"
+                            rows={3}
+                            className="w-full p-3 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all resize-none"
+                            placeholder="Cuéntanos si requieres menú especial, equipos audiovisuales, decoración floral, música o requerimientos particulares..."
+                          ></textarea>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Botón de Envío y Garantía */}
+                    <div className="pt-2 space-y-2.5">
+                      <button
+                        type="submit"
+                        disabled={formStatus === "submitting"}
+                        className="w-full py-4 bg-[#2D473C] hover:bg-[#1E352B] text-[#FBF5E6] text-xs uppercase tracking-[0.2em] font-extrabold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98"
+                      >
+                        {formStatus === "submitting" ? (
+                          <>
+                            <Loader2 size={18} className="animate-spin text-[#D4AF37]" />
+                            <span>Procesando Cotización...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Send size={16} className="text-[#D4AF37]" />
+                            <span>Solicitar Cotización de Evento</span>
+                          </>
+                        )}
+                      </button>
+
+                      <div className="flex items-center justify-center gap-1.5 text-center text-[10px] text-gray-500 font-medium">
+                        <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
+                        <span>Sin compromiso · Te enviaremos propuesta y presupuesto en PDF / WhatsApp.</span>
+                      </div>
+                    </div>
+                  </form>
+                </>
               )}
             </div>
           </div>
