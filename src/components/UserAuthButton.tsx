@@ -3,8 +3,8 @@ import {
   Loader2,
   BarChart3,
   UtensilsCrossed,
+  User,
 } from "lucide-react";
-import { UserIcon } from "@animateicons/react/lucide";
 import { supabase, signInWithGoogle, signInWithFacebook } from "../lib/supabase";
 import { LoginModal } from "./LoginModal";
 
@@ -162,7 +162,7 @@ export function UserAuthButton({ textColorClass }: UserAuthButtonProps) {
           {signingIn ? (
             <Loader2 size={24} className="animate-spin" />
           ) : (
-            <UserIcon size={26} />
+            <User size={26} className="transition-transform active:scale-95" />
           )}
         </button>
 

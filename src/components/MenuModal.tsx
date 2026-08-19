@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Plus, X } from "lucide-react";
-import { ShoppingCartIcon } from "@animateicons/react/lucide";
+import { Plus, X, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { BreakfastCustomizationModal } from "./BreakfastCustomizationModal";
 import { useLiveMenuCategories } from "../lib/liveProducts";
@@ -221,7 +220,7 @@ export function MenuModal({ open, onClose }: MenuModalProps) {
               isBouncing ? "scale-[1.03] ring-4 ring-cafe/30 shadow-lg bg-eucalipto" : ""
             }`}
           >
-            <ShoppingCartIcon size={18} className={`transition-transform duration-300 ${isBouncing ? "-rotate-12 scale-110" : ""}`} />
+            <ShoppingCart size={18} className={`transition-transform duration-300 ${isBouncing ? "-rotate-12 scale-110" : ""}`} />
             <span className="hidden md:inline">Ver Pedido</span>
             {totalItems > 0 && (
               <span

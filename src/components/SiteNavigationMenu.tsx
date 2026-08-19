@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Facebook, Instagram, Phone, Mail, MessageCircle } from 'lucide-react';
-import { MenuIcon } from '@animateicons/react/lucide';
+import { X, Facebook, Instagram, Phone, Mail, MessageCircle, Menu } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 import { UserAuthButton } from './UserAuthButton';
 
@@ -48,10 +47,10 @@ export function SiteNavigationMenu({
       <div className="flex items-center gap-1">
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center justify-center p-0.5 pointer-events-auto"
+          className="flex items-center justify-center p-0.5 pointer-events-auto transition-transform active:scale-95"
           aria-label="Menú principal"
         >
-          <MenuIcon 
+          <Menu 
             size={26} 
             color={iconColor}
             style={{ transform: 'scaleX(-1)' }}
