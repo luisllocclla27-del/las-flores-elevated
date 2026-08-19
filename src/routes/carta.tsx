@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
 import { categories as staticCategories } from "@/components/MenuModal";
 import { MenuModal } from "@/components/MenuModal";
@@ -82,6 +82,12 @@ function CartaPage() {
   const [activeId, setActiveId] = useState("desayuno");
   const { totalItems, setIsOpen: setIsCartOpen } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpenMenu = () => setIsMenuOpen(true);
+    window.addEventListener("open_menu_modal", handleOpenMenu);
+    return () => window.removeEventListener("open_menu_modal", handleOpenMenu);
+  }, []);
 
   const currentCategories = liveCategories.length > 0 ? liveCategories : staticCategories;
 

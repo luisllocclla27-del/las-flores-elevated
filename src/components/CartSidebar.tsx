@@ -173,6 +173,10 @@ export function CartSidebar() {
       if (!isHistoryTrigger.current) {
         if (step === "profile" || step === "success") {
           setStep("cart");
+          if (step === "success") {
+            setDeliverySubStep("location");
+            setClientLocation(null);
+          }
         }
       }
       isHistoryTrigger.current = false;
@@ -711,16 +715,35 @@ export function CartSidebar() {
     };
   }, [isOpen, setIsOpen]);
 
+  const resetOrderState = () => {
+    clearCart();
+    setStep("cart");
+    setDeliverySubStep("location");
+    setClientLocation(null);
+    setDelivery({
+      name: activeUser?.user_metadata?.full_name || activeUser?.email || "",
+      phone: activeUser?.user_metadata?.phone || activeUser?.phone || "",
+      address: "",
+      reference: "",
+      email: activeUser?.email || "",
+      notes: "",
+    });
+    setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
+    setCulqiToken(null);
+    setCulqiProcessing(false);
+  };
+
   const handleClose = () => {
     setIsOpen(false);
     if (step === "success") {
-      clearCart();
-      setStep("cart");
-      setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
-      setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
-      setCulqiToken(null);
-      setCulqiProcessing(false);
+      resetOrderState();
     }
+  };
+
+  const handleOrderAgain = () => {
+    setIsOpen(false);
+    resetOrderState();
+    window.dispatchEvent(new Event("open_menu_modal"));
   };
 
   if (!isMounted || !portalRef.current || !visible) return null;
@@ -1572,12 +1595,18 @@ export function CartSidebar() {
               {orderType === "delivery" && deliverySubStep === "location" ? (
                 <button
                   type="button"
-                  onClick={() => setDeliverySubStep("details")}
+                  onClick={() => {
+                    if (delivery.phone) {
+                      setStep("payment");
+                    } else {
+                      setDeliverySubStep("details");
+                    }
+                  }}
                   disabled={!clientLocation || isTooFar || !delivery.address}
                   className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed cursor-pointer"
                   style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
                 >
-                  Continuar a datos &rarr;
+                  {delivery.phone ? <>Ir al pago &rarr;</> : <>Continuar a datos &rarr;</>}
                 </button>
               ) : (
                 <button
@@ -1628,7 +1657,7 @@ export function CartSidebar() {
           {step === "success" && (
             <div className="flex flex-col gap-2.5 w-full">
               <button
-                onClick={handleClose}
+                onClick={handleOrderAgain}
                 className="w-full py-3.5 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2"
                 style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
               >
