@@ -469,37 +469,33 @@ function EventosPage() {
       <SiteFooter />
       {isMenuOpen && <MenuModal open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />}
 
-      {/* Drawer Formulario Lateral de Cotización */}
+      {/* Modal Centrado Emergente de Cotización */}
       {isContactOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end animate-in fade-in duration-200">
-          {/* Overlay oscuro con blur que cierra al hacer clic fuera */}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+          {/* Backdrop con blur que cierra al hacer clic fuera */}
           <div
-            className="fixed inset-0 bg-[#14231D]/80 backdrop-blur-md cursor-pointer transition-opacity"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer transition-opacity"
             onClick={() => setIsContactOpen(false)}
             aria-hidden="true"
           />
 
-          {/* Panel Lateral Drawer */}
+          {/* Tarjeta Modal Centrada */}
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative z-10 w-full max-w-lg bg-[#FAF6EE] text-nogal h-full shadow-2xl flex flex-col overflow-hidden animate-in slide-in-from-right duration-400 ease-out border-l border-[#D4AF37]/30"
+            className="relative z-10 w-full max-w-2xl bg-white text-gray-800 rounded-3xl shadow-2xl border border-gray-100 flex flex-col overflow-hidden max-h-[92vh] my-auto animate-in zoom-in-95 duration-200"
           >
-            {/* Header de Lujo con Sello Las Flores */}
-            <div className="bg-[#2D473C] text-[#FBF5E6] p-6 pb-5 flex items-center justify-between border-b border-[#D4AF37]/30 shrink-0 shadow-md">
+            {/* Header del Modal */}
+            <div className="bg-[#2D473C] text-[#FBF5E6] px-6 py-5 flex items-center justify-between border-b border-[#2D473C] shrink-0">
               <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-white p-1.5 flex items-center justify-center border-2 border-[#D4AF37] shadow-sm shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-white p-1 flex items-center justify-center shrink-0 shadow-xs">
                   <img src="/images.png" alt="Las Flores" className="w-full h-full object-contain" />
                 </div>
                 <div>
-                  <span className="text-[10px] font-sans uppercase font-extrabold text-[#D4AF37] tracking-widest flex items-center gap-1.5">
-                    <Sparkles size={12} />
-                    Cotizaciones & Eventos
-                  </span>
-                  <h3 className="font-serif text-xl font-bold text-white tracking-tight">
-                    Planifica tu Evento
+                  <h3 className="font-serif text-xl font-bold text-white leading-tight">
+                    Cotizar Evento o Celebración
                   </h3>
-                  <p className="text-xs text-emerald-200/80 font-medium">
-                    Salones privados y jardines coloniales en Ayacucho
+                  <p className="text-xs text-white/80">
+                    Restaurante Las Flores · Ayacucho
                   </p>
                 </div>
               </div>
@@ -507,41 +503,38 @@ function EventosPage() {
               <button
                 type="button"
                 onClick={() => setIsContactOpen(false)}
-                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all cursor-pointer active:scale-95"
-                aria-label="Cerrar modal"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Cerrar ventana"
               >
-                <X size={20} />
+                <X size={18} />
               </button>
             </div>
 
-            {/* Cuerpo del Drawer (Scrollable) */}
-            <div className="p-5 sm:p-7 flex-1 overflow-y-auto space-y-6">
+            {/* Contenido con Scroll */}
+            <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
               {formStatus === "success" ? (
-                <div className="h-full py-12 flex flex-col items-center justify-center text-center space-y-6 animate-in zoom-in-95 duration-300">
-                  <div className="w-20 h-20 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-3xl shadow-sm border-2 border-emerald-300">
-                    <CheckCircle2 size={42} strokeWidth={2.2} />
+                <div className="py-8 flex flex-col items-center justify-center text-center space-y-4">
+                  <div className="w-16 h-16 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center text-2xl">
+                    <CheckCircle2 size={36} />
                   </div>
-                  <div className="space-y-2">
-                    <span className="text-xs font-extrabold uppercase tracking-widest text-[#D4AF37] block">
-                      Solicitud Recibida
-                    </span>
-                    <h3 className="font-serif text-3xl font-bold text-[#2D473C]">
-                      ¡Gracias por Elegirnos!
+                  <div className="space-y-1">
+                    <h3 className="font-serif text-2xl font-bold text-[#2D473C]">
+                      Solicitud Enviada con Éxito
                     </h3>
-                    <p className="text-sm text-gray-700 max-w-sm mx-auto leading-relaxed">
-                      Hemos recibido los detalles de tu evento. Nuestro coordinador de eventos se comunicará contigo vía WhatsApp / Teléfono en breve para presentarte la propuesta a medida.
+                    <p className="text-sm text-gray-600 max-w-md mx-auto">
+                      Hemos recibido los detalles de su evento. Nuestro equipo se comunicará con usted a la brevedad para coordinar la propuesta.
                     </p>
                   </div>
 
-                  <div className="w-full pt-4 space-y-3">
+                  <div className="w-full max-w-sm pt-4 space-y-2.5">
                     <a
                       href="https://wa.me/51980723422?text=Hola%20Las%20Flores,%20acabo%20de%20enviar%20mi%20solicitud%20de%20cotizaci%C3%B3n%20para%20un%20evento.%20%C2%BFMe%20podr%C3%ADan%20brindar%20m%C3%A1s%20detalles?"
                       target="_blank"
                       rel="noreferrer"
-                      className="w-full py-3.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-95"
+                      className="w-full py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl font-semibold text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs"
                     >
                       <PhoneCall size={16} />
-                      <span>Conversar por WhatsApp Ahora</span>
+                      <span>Contactar por WhatsApp</span>
                     </a>
 
                     <button
@@ -550,226 +543,175 @@ function EventosPage() {
                         setIsContactOpen(false);
                         setTimeout(() => setFormStatus("idle"), 400);
                       }}
-                      className="w-full py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 text-xs uppercase tracking-wider font-bold rounded-xl transition-all"
+                      className="w-full py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition-colors"
                     >
-                      Cerrar Ventana
+                      Cerrar
                     </button>
                   </div>
                 </div>
               ) : (
                 <>
-                  {/* Banner de Contacto Inmediato por WhatsApp */}
-                  <div className="bg-gradient-to-r from-emerald-900 to-[#2D473C] rounded-2xl p-4 text-white shadow-md border border-[#D4AF37]/40 flex flex-col sm:flex-row items-center justify-between gap-3.5">
-                    <div className="space-y-0.5 text-center sm:text-left">
-                      <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#D4AF37] block">
-                        ⚡ Atención Inmediata
-                      </span>
-                      <p className="text-xs font-bold text-white leading-tight">
-                        ¿Deseas una cotización exprés por WhatsApp?
+                  {/* Opción rápida WhatsApp */}
+                  <div className="bg-gray-50 border border-gray-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div>
+                      <p className="text-xs font-bold text-gray-800">
+                        ¿Prefieres atención inmediata?
                       </p>
-                      <p className="text-[11px] text-emerald-200/80">
-                        Disponibilidad en tiempo real y catálogo en PDF
+                      <p className="text-xs text-gray-500">
+                        Escríbenos directamente por WhatsApp para coordinar tu fecha y menú.
                       </p>
                     </div>
                     <a
                       href="https://wa.me/51980723422?text=Hola%20Las%20Flores,%20deseo%20cotizar%20un%20evento%20especial%20en%20sus%20salones.%20%C2%BFMe%20podr%C3%ADan%20compartir%20informaci%C3%B3n%20y%20men%C3%BAs?"
                       target="_blank"
                       rel="noreferrer"
-                      className="px-4 py-2.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-2 shrink-0 cursor-pointer active:scale-95"
+                      className="px-4 py-2.5 bg-[#2D473C] hover:bg-[#233a30] text-white rounded-xl text-xs font-semibold uppercase tracking-wider transition-colors flex items-center gap-2 shrink-0 cursor-pointer shadow-xs"
                     >
                       <PhoneCall size={14} />
-                      <span>Chatear (+51 980 723 422)</span>
+                      <span>WhatsApp (+51 980 723 422)</span>
                     </a>
                   </div>
 
-                  {/* Separador elegante */}
-                  <div className="relative flex items-center justify-center my-2">
-                    <div className="border-t border-black/10 w-full" />
-                    <span className="bg-[#FAF6EE] px-3 text-[10px] font-extrabold uppercase tracking-wider text-gray-500 shrink-0">
-                      O completa el formulario formal
-                    </span>
-                    <div className="border-t border-black/10 w-full" />
-                  </div>
-
-                  {/* Formulario Formal */}
+                  {/* Formulario */}
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Tarjeta de Datos de Contacto */}
-                    <div className="bg-white rounded-2xl p-4 sm:p-5 border border-black/10 shadow-xs space-y-3.5">
-                      <h4 className="font-serif text-sm font-bold text-[#2D473C] flex items-center gap-2 border-b border-gray-100 pb-2">
-                        <User size={16} className="text-[#D4AF37]" />
-                        1. Tus Datos de Contacto
-                      </h4>
-
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-1">
-                        <label htmlFor="nombre" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                          Nombre y Apellidos *
+                        <label htmlFor="nombre" className="text-xs font-bold text-gray-700 block">
+                          Nombre Completo *
                         </label>
-                        <div className="relative">
-                          <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            id="nombre"
-                            required
-                            className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
-                            placeholder="Ej. Carmen Navarro"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                          <label htmlFor="telefono" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Teléfono / WhatsApp *
-                          </label>
-                          <div className="relative">
-                            <Phone size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="tel"
-                              id="telefono"
-                              required
-                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
-                              placeholder="Ej. 987 654 321"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label htmlFor="email" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Correo Electrónico *
-                          </label>
-                          <div className="relative">
-                            <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="email"
-                              id="email"
-                              required
-                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
-                              placeholder="carmen@ejemplo.com"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Tarjeta de Detalles del Evento */}
-                    <div className="bg-white rounded-2xl p-4 sm:p-5 border border-black/10 shadow-xs space-y-3.5">
-                      <h4 className="font-serif text-sm font-bold text-[#2D473C] flex items-center gap-2 border-b border-gray-100 pb-2">
-                        <Sparkles size={16} className="text-[#D4AF37]" />
-                        2. Detalles de la Celebración
-                      </h4>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                          <label htmlFor="tipo" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Tipo de Evento *
-                          </label>
-                          <select
-                            id="tipo"
-                            required
-                            defaultValue=""
-                            className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all cursor-pointer"
-                          >
-                            <option value="" disabled>Selecciona el tipo...</option>
-                            <option value="bodas">Bodas y Recepciones de Gala</option>
-                            <option value="corporativo">Reuniones Corporativas & Conferencias</option>
-                            <option value="familiar">Celebración Familiar / Cumpleaños</option>
-                            <option value="aniversario">Aniversario / Bodas de Oro/Plata</option>
-                            <option value="graduacion">Graduación / Fiesta de Promoción</option>
-                            <option value="bautizo">Bautizo / Primera Comunión</option>
-                            <option value="cena_privada">Cena Privada de Alta Cocina</option>
-                            <option value="otro">Otro Evento Especial</option>
-                          </select>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label htmlFor="invitados" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Nº de Invitados Estimado *
-                          </label>
-                          <div className="relative">
-                            <Users size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                              type="number"
-                              id="invitados"
-                              min="5"
-                              max="500"
-                              required
-                              className="w-full pl-10 pr-4 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
-                              placeholder="Ej. 50 personas"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <div className="space-y-1">
-                          <label htmlFor="fecha" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Fecha Deseada *
-                          </label>
-                          <div className="relative">
-                            <input
-                              type="date"
-                              id="fecha"
-                              required
-                              className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1">
-                          <label htmlFor="turno" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                            Turno / Horario Preferido
-                          </label>
-                          <select
-                            id="turno"
-                            defaultValue="almuerzo"
-                            className="w-full px-3.5 py-2.5 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-semibold text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all cursor-pointer"
-                          >
-                            <option value="almuerzo">Almuerzo (12:30 pm – 04:30 pm)</option>
-                            <option value="cena">Tarde / Cena (06:30 pm – 11:30 pm)</option>
-                            <option value="completo">Jornada Completa</option>
-                          </select>
-                        </div>
+                        <input
+                          type="text"
+                          id="nombre"
+                          required
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all"
+                          placeholder="Ej. Juan Pérez"
+                        />
                       </div>
 
                       <div className="space-y-1">
-                        <label htmlFor="mensaje" className="text-[11px] uppercase tracking-wider text-gray-700 font-bold block">
-                          Requerimientos Especiales & Detalles
+                        <label htmlFor="telefono" className="text-xs font-bold text-gray-700 block">
+                          Teléfono / WhatsApp *
                         </label>
-                        <div className="relative">
-                          <textarea
-                            id="mensaje"
-                            rows={3}
-                            className="w-full p-3 bg-gray-50/80 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[#2D473C] focus:bg-white transition-all resize-none"
-                            placeholder="Cuéntanos si requieres menú especial, equipos audiovisuales, decoración floral, música o requerimientos particulares..."
-                          ></textarea>
-                        </div>
+                        <input
+                          type="tel"
+                          id="telefono"
+                          required
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all"
+                          placeholder="Ej. 987 654 321"
+                        />
                       </div>
                     </div>
 
-                    {/* Botón de Envío y Garantía */}
-                    <div className="pt-2 space-y-2.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <label htmlFor="email" className="text-xs font-bold text-gray-700 block">
+                          Correo Electrónico *
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          required
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all"
+                          placeholder="juan@correo.com"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label htmlFor="tipo" className="text-xs font-bold text-gray-700 block">
+                          Tipo de Evento *
+                        </label>
+                        <select
+                          id="tipo"
+                          required
+                          defaultValue=""
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all cursor-pointer"
+                        >
+                          <option value="" disabled>Seleccione el tipo...</option>
+                          <option value="bodas">Boda o Recepción</option>
+                          <option value="corporativo">Reunión Corporativa o Empresa</option>
+                          <option value="familiar">Celebración Familiar o Cumpleaños</option>
+                          <option value="aniversario">Aniversario</option>
+                          <option value="graduacion">Graduación o Fiesta de Promoción</option>
+                          <option value="bautizo">Bautizo o Primera Comunión</option>
+                          <option value="cena_privada">Cena Privada</option>
+                          <option value="otro">Otro</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div className="space-y-1">
+                        <label htmlFor="invitados" className="text-xs font-bold text-gray-700 block">
+                          Nº de Invitados *
+                        </label>
+                        <input
+                          type="number"
+                          id="invitados"
+                          min="1"
+                          required
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all"
+                          placeholder="Ej. 50"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label htmlFor="fecha" className="text-xs font-bold text-gray-700 block">
+                          Fecha Deseada *
+                        </label>
+                        <input
+                          type="date"
+                          id="fecha"
+                          required
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <label htmlFor="turno" className="text-xs font-bold text-gray-700 block">
+                          Horario
+                        </label>
+                        <select
+                          id="turno"
+                          defaultValue="almuerzo"
+                          className="w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all cursor-pointer"
+                        >
+                          <option value="almuerzo">Almuerzo</option>
+                          <option value="cena">Tarde / Noche</option>
+                          <option value="completo">Día Completo</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <label htmlFor="mensaje" className="text-xs font-bold text-gray-700 block">
+                        Detalles o Requerimientos Adicionales
+                      </label>
+                      <textarea
+                        id="mensaje"
+                        rows={3}
+                        className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl text-xs font-medium text-gray-800 placeholder:text-gray-400 focus:outline-none focus:border-[#2D473C] focus:bg-white transition-all resize-none"
+                        placeholder="Indícanos si requieres equipo audiovisual, menú especial, decoración u otros detalles..."
+                      ></textarea>
+                    </div>
+
+                    <div className="pt-2">
                       <button
                         type="submit"
                         disabled={formStatus === "submitting"}
-                        className="w-full py-4 bg-[#2D473C] hover:bg-[#1E352B] text-[#FBF5E6] text-xs uppercase tracking-[0.2em] font-extrabold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center justify-center gap-2.5 disabled:opacity-60 cursor-pointer active:scale-98"
+                        className="w-full py-3.5 bg-[#2D473C] hover:bg-[#233a30] text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs disabled:opacity-60"
                       >
                         {formStatus === "submitting" ? (
                           <>
-                            <Loader2 size={18} className="animate-spin text-[#D4AF37]" />
-                            <span>Procesando Cotización...</span>
+                            <Loader2 size={16} className="animate-spin" />
+                            <span>Enviando Solicitud...</span>
                           </>
                         ) : (
                           <>
-                            <Send size={16} className="text-[#D4AF37]" />
-                            <span>Solicitar Cotización de Evento</span>
+                            <Send size={15} />
+                            <span>Solicitar Cotización</span>
                           </>
                         )}
                       </button>
-
-                      <div className="flex items-center justify-center gap-1.5 text-center text-[10px] text-gray-500 font-medium">
-                        <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
-                        <span>Sin compromiso · Te enviaremos propuesta y presupuesto en PDF / WhatsApp.</span>
-                      </div>
                     </div>
                   </form>
                 </>
