@@ -141,7 +141,7 @@ export async function signInWithGoogle() {
     provider: "google",
     options: {
       skipBrowserRedirect: true,
-      redirectTo: `${currentOrigin}/`,
+      redirectTo: `${currentOrigin}/?auth_popup=1`,
       queryParams: { prompt: "select_account" },
     },
   });
@@ -176,7 +176,7 @@ export async function signInWithFacebook() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "facebook",
     options: {
-      redirectTo: `${currentOrigin}/`,
+      redirectTo: `${currentOrigin}/?auth_popup=1`,
     },
   });
   if (error) throw error;

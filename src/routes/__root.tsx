@@ -192,8 +192,13 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
-  // ── Detectar si estamos dentro de la ventana popup de Google ───────
-  const isPopup = typeof window !== "undefined" && window.name === "google_auth_popup";
+  // ── Detectar si estamos dentro de la ventana popup de OAuth ───────
+  const isPopup = typeof window !== "undefined" && (
+    window.name === "google_auth_popup" ||
+    (window.opener !== null && window.opener !== window) ||
+    window.location.search.includes("auth_popup=1") ||
+    window.location.search.includes("is_popup=true")
+  );
 
   // ── Mostrar spinner mientras Supabase procesa el callback OAuth ─────
   // Solo aplica a la ventana PRINCIPAL (no al popup) con ?code= o #access_token=
@@ -204,55 +209,74 @@ function RootComponent() {
            window.location.hash.includes("access_token");
   });
 
-  // ── Lógica para el POPUP: detectar sesión y cerrar automáticamente ──
+  // ── Lógica para el POPUP: detectar sesión, notificar y cerrar automáticamente ──
   useEffect(() => {
     if (!isPopup) return;
 
-    const close = () => {
+    const closeWindow = () => {
       try { window.close(); } catch {}
-      // Fallback si el navegador bloquea window.close()
       setTimeout(() => { try { window.close(); } catch {} }, 300);
     };
 
     // Notificar al opener y cerrar
-    const notify = () => {
+    const notifyAndClose = () => {
       if (window.opener) {
         try {
           window.opener.postMessage({ type: "SUPABASE_AUTH_SUCCESS" }, "*");
         } catch {}
       }
-      close();
+      try {
+        localStorage.setItem("supabase_auth_broadcast", Date.now().toString());
+      } catch {}
+
+      closeWindow();
     };
 
     // Si la sesión ya existe (popup regresa con token), cerrar de inmediato
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) { notify(); return; }
+      if (session) {
+        notifyAndClose();
+        return;
+      }
 
       // Si no hay sesión aún, esperar el evento SIGNED_IN
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-        if (event === "SIGNED_IN") {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, currentSession) => {
+        if (event === "SIGNED_IN" || event === "TOKEN_REFRESHED" || currentSession) {
           subscription.unsubscribe();
-          notify();
+          notifyAndClose();
         }
       });
 
-      // Timeout: si en 10s no cierra, mostrar botón manual
-      setTimeout(() => { subscription.unsubscribe(); }, 10000);
+      // Timeout: si en 4s no cierra, forzar cierre
+      setTimeout(() => {
+        subscription.unsubscribe();
+        notifyAndClose();
+      }, 4000);
     });
   }, [isPopup]);
 
-  // ── Lógica para la ventana PRINCIPAL: escuchar mensaje del popup ────
+  // ── Lógica para la ventana PRINCIPAL: escuchar mensaje y storage broadcast ────
   useEffect(() => {
     if (isPopup) return;
 
     const handleMessage = async (e: MessageEvent) => {
       if (e.data?.type === "SUPABASE_AUTH_SUCCESS") {
-        // Forzar refresco de sesión en la ventana principal
         await supabase.auth.getSession();
       }
     };
+
+    const handleStorage = async (e: StorageEvent) => {
+      if (e.key === "supabase_auth_broadcast") {
+        await supabase.auth.getSession();
+      }
+    };
+
     window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
+    window.addEventListener("storage", handleStorage);
+    return () => {
+      window.removeEventListener("message", handleMessage);
+      window.removeEventListener("storage", handleStorage);
+    };
   }, [isPopup]);
 
   // ── Limpiar errores OAuth de la URL ────────────────────────────────
