@@ -720,7 +720,14 @@ export function CartSidebar() {
     setStep("cart");
     setDeliverySubStep("location");
     setClientLocation(null);
-    setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
+    setDelivery({
+      name: activeUser?.user_metadata?.full_name || activeUser?.email || "",
+      phone: activeUser?.user_metadata?.phone || activeUser?.phone || "",
+      address: "",
+      reference: "",
+      email: activeUser?.email || "",
+      notes: "",
+    });
     setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
     setCulqiToken(null);
     setCulqiProcessing(false);
@@ -1588,12 +1595,18 @@ export function CartSidebar() {
               {orderType === "delivery" && deliverySubStep === "location" ? (
                 <button
                   type="button"
-                  onClick={() => setDeliverySubStep("details")}
+                  onClick={() => {
+                    if (delivery.phone) {
+                      setStep("payment");
+                    } else {
+                      setDeliverySubStep("details");
+                    }
+                  }}
                   disabled={!clientLocation || isTooFar || !delivery.address}
                   className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed cursor-pointer"
                   style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
                 >
-                  Continuar a datos &rarr;
+                  {delivery.phone ? <>Ir al pago &rarr;</> : <>Continuar a datos &rarr;</>}
                 </button>
               ) : (
                 <button
