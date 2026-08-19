@@ -715,18 +715,28 @@ export function CartSidebar() {
     };
   }, [isOpen, setIsOpen]);
 
+  const resetOrderState = () => {
+    clearCart();
+    setStep("cart");
+    setDeliverySubStep("location");
+    setClientLocation(null);
+    setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
+    setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
+    setCulqiToken(null);
+    setCulqiProcessing(false);
+  };
+
   const handleClose = () => {
     setIsOpen(false);
     if (step === "success") {
-      clearCart();
-      setStep("cart");
-      setDeliverySubStep("location");
-      setClientLocation(null);
-      setDelivery({ name: "", phone: "", address: "", reference: "", email: "", notes: "" });
-      setPayment({ cardNumber: "", cardName: "", expiry: "", cvv: "" });
-      setCulqiToken(null);
-      setCulqiProcessing(false);
+      resetOrderState();
     }
+  };
+
+  const handleOrderAgain = () => {
+    setIsOpen(false);
+    resetOrderState();
+    window.dispatchEvent(new Event("open_menu_modal"));
   };
 
   if (!isMounted || !portalRef.current || !visible) return null;
@@ -1634,7 +1644,7 @@ export function CartSidebar() {
           {step === "success" && (
             <div className="flex flex-col gap-2.5 w-full">
               <button
-                onClick={handleClose}
+                onClick={handleOrderAgain}
                 className="w-full py-3.5 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.99] flex items-center justify-center gap-2"
                 style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
               >

@@ -266,6 +266,12 @@ function FamiliaLasFloresPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    const handleOpenMenu = () => setIsMenuOpen(true);
+    window.addEventListener("open_menu_modal", handleOpenMenu);
+    return () => window.removeEventListener("open_menu_modal", handleOpenMenu);
+  }, []);
+
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
