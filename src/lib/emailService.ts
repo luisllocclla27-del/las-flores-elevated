@@ -27,18 +27,41 @@ interface EmailPayload {
 }
 
 /**
- * Función genérica para enviar correos electrónicos usando la Edge Function de Supabase (send-email).
+ * Función genérica para enviar correos electrónicos usando el endpoint serverless (/api/send-email) o Supabase Edge Functions.
  */
 export async function sendEmail(payload: EmailPayload): Promise<boolean> {
+  const emailBody = {
+    from: payload.from || SENDERS.GENERAL,
+    to: Array.isArray(payload.to) ? payload.to : [payload.to],
+    reply_to: payload.replyTo || OFFICIAL_EMAIL,
+    subject: payload.subject,
+    html: payload.html,
+  };
+
+  // 1. Intentar primero con el endpoint serverless directo de Vercel (mismo origen, 0 errores CORS)
+  try {
+    const res = await fetch("/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(emailBody),
+    });
+
+    if (res.ok) {
+      console.info(
+        `[Email Service]: Correo enviado con éxito a ${
+          Array.isArray(payload.to) ? payload.to.join(", ") : payload.to
+        }`
+      );
+      return true;
+    }
+  } catch (apiErr) {
+    // Si estamos en un entorno sin /api/send-email (por ejemplo dev local puro sin serverless), continuar con Supabase
+  }
+
+  // 2. Fallback a Supabase Functions
   try {
     const { data, error } = await supabase.functions.invoke("send-email", {
-      body: {
-        from: payload.from || SENDERS.GENERAL,
-        to: Array.isArray(payload.to) ? payload.to : [payload.to],
-        reply_to: payload.replyTo || OFFICIAL_EMAIL,
-        subject: payload.subject,
-        html: payload.html,
-      },
+      body: emailBody,
     });
 
     if (!error && data) {
@@ -51,7 +74,6 @@ export async function sendEmail(payload: EmailPayload): Promise<boolean> {
     }
   } catch (err) {
     console.warn(`[Email Service]: Error al enviar correo a ${Array.isArray(payload.to) ? payload.to.join(", ") : payload.to}:`, err);
-    return false;
   }
 
   console.info(
