@@ -604,8 +604,9 @@ export function CartSidebar() {
                 .filter(Boolean)
                 .join(", ")
             : "";
+          const rawProductId = i.productId || i.id;
           return {
-            product_id: i.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(i.id) ? i.id : undefined,
+            product_id: rawProductId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawProductId) ? rawProductId : undefined,
             product_name: opts ? `${i.name} (${opts})` : i.name,
             unit_price: i.price,
             quantity: i.quantity,

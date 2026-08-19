@@ -31,6 +31,8 @@ export interface DishCustomizationSection {
 }
 
 export interface Dish {
+  /** UUID real del producto en Supabase. Ausente para platos del fallback estático (sin datos en BD). */
+  id?: string;
   name: string;
   description: string;
   price: string;
@@ -79,6 +81,7 @@ function DishCard({ dish, categoryId, onSelectBreakfast }: DishCardProps) {
     } else {
       addItem({
         id: `${categoryId}-${dish.name}`,
+        productId: dish.id,
         name: dish.name,
         price: priceNum,
         image: dish.image,

@@ -156,7 +156,7 @@ function CartaPage() {
       </div>
 
       {/* Filtros móvil: carrusel + botón "..." con hoja de todas las categorías */}
-      <div className="md:hidden sticky top-[56px] z-20 w-full bg-piedra border-b border-nogal/10">
+      <div className="md:hidden sticky top-[56px] z-20 w-full bg-piedra border-b border-nogal/10 shadow-[0_6px_16px_-8px_rgba(0,0,0,0.15)]">
         <div className="pl-6">
           <MobileCategoryFilter
             categories={currentCategories.map((c) => ({ key: c.id, label: c.label }))}
@@ -174,7 +174,7 @@ function CartaPage() {
       {/* Main Content with Sidebar */}
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto w-full flex-1">
         {/* Vertical Category Sidebar (solo escritorio) */}
-        <aside className="hidden md:block w-72 bg-piedra border-r border-nogal/10 flex-shrink-0 sticky top-24 h-[calc(100vh-100px)] overflow-y-auto z-20 scrollbar-none">
+        <aside className="hidden md:block w-72 bg-piedra border-r border-nogal/10 flex-shrink-0 sticky top-24 h-[calc(100vh-100px)] overflow-y-auto z-20 scrollbar-none shadow-[6px_0_16px_-10px_rgba(0,0,0,0.15)]">
           <div className="flex flex-col py-8 pr-8">
             {currentCategories.map((cat) => (
               <button
