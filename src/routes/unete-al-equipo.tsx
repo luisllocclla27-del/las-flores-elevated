@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
 import { SiteFooter } from "../components/site-footer";
@@ -7,7 +7,7 @@ import { JobApplicationForm } from "../features/jobs/components/JobApplicationFo
 import { listPublicJobOffers } from "../features/jobs/api";
 import { sortPublicOffers } from "../features/jobs/rules";
 import type { PublicJobOffer } from "../features/jobs/types";
-import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift } from "lucide-react";
+import { Heart, Users, Award, Loader2, AlertCircle, Briefcase, FileText, Send, CheckCircle2, ListChecks, Gift, Sparkles } from "lucide-react";
 import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { FamiliaLasFloresSection } from "../components/FamiliaLasFloresSection";
 import { useCart } from "@/context/CartContext";
@@ -84,89 +84,72 @@ function UneteAlEquipoPage() {
 
   return (
     <div className="min-h-screen bg-piedra flex flex-col font-sans text-nogal selection:bg-chilca/20">
-      {/* ── HEADER FIJO ── */}
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${
-          isScrolled
-            ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3"
-            : "bg-transparent border-transparent py-5"
-        }`}
+      {/* ── HEADER / NAV FIJO (IGUAL A EVENTOS) ── */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
       >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center gap-3">
-          <div className="flex items-center">
-            <SiteNavigationMenu isScrolled={isScrolled} />
-          </div>
-
-          <a href="/" className="flex-1 flex justify-center items-center group">
-            <img
-              src="/images.png"
-              alt="Las Flores"
-              className={`transition-all duration-300 origin-center ${
-                isScrolled ? "h-8 opacity-100" : "h-10 md:h-12 opacity-100 invert brightness-0"
-              }`}
-              style={
-                isScrolled
-                  ? {
-                      filter:
-                        "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)",
-                    }
-                  : {}
-              }
-            />
-          </a>
-
-          <div className="flex items-center gap-3">
-            <a
-              href="/reservas"
-              className={`px-4 py-2 rounded-full font-semibold text-xs transition-all ${
-                isScrolled
-                  ? "bg-eucalipto text-cream hover:bg-eucalipto/90"
-                  : "bg-cream text-ink hover:bg-cream/90"
-              }`}
-            >
-              Reservar
-            </a>
-
-            {totalItems > 0 && (
-              <AnimatedCartButton
-                onClick={() => setCartOpen(true)}
-                className="p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
-                size={20}
-                color="#8B7355"
-              />
-            )}
-          </div>
+        <div className="flex items-center">
+          <SiteNavigationMenu isScrolled={isScrolled} />
         </div>
-      </header>
-
-      {/* ── HERO PORTADA COMPLETA (FULLSCREEN 100VH) ── */}
-      <section className="relative min-h-screen w-full overflow-hidden flex flex-col justify-center items-center px-6 md:px-12 lg:px-20">
-        <div className="absolute inset-0 z-0">
+        <Link
+          to="/"
+          className="flex-1 flex justify-center pointer-events-auto"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        >
           <img
-            src={heroImg}
-            alt="Equipo de Restaurante Las Flores"
-            className="w-full h-full object-cover object-center"
+            src="/images.png"
+            alt="Las Flores Logo"
+            className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
           />
-          <div className="absolute inset-0 bg-black/45" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/70" />
+        </Link>
+        <div className="flex items-center gap-4 md:gap-8 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
+          <Link
+            to="/reservas"
+            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
+                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
+                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
+              }`}
+          >
+            Reservar
+          </Link>
+          {totalItems > 0 && (
+            <AnimatedCartButton
+              onClick={() => setCartOpen(true)}
+              className="hover:text-chilca transition-colors"
+              size={20}
+              color={isScrolled ? "#8B7355" : "#F5F5DC"}
+            />
+          )}
         </div>
+      </nav>
 
-        <div className="max-w-4xl mx-auto text-center relative z-10 pt-16">
-          <span className="inline-block text-xs uppercase tracking-[0.3em] font-bold text-cream/90 bg-eucalipto/80 backdrop-blur-md px-4 py-1.5 rounded-full mb-6 border border-white/20 shadow-md">
+      {/* ── HERO SECTION (FORMATO EXACTO A EVENTOS) ── */}
+      <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-eucalipto pt-32 pb-24 px-6">
+        <img
+          src={heroImg}
+          alt="Equipo de Restaurante Las Flores Ayacucho"
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover opacity-65 filter brightness-105 saturate-[1.1]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/90 via-ink/45 to-black/30" />
+
+        <div className="max-w-4xl mx-auto text-center relative z-10 space-y-6 -mt-12">
+          <span className="text-chilca font-medium uppercase tracking-[0.3em] text-xs flex items-center justify-center gap-2">
+            <Sparkles size={14} />
             Trabaja con nosotros
+            <Sparkles size={14} />
           </span>
-          <h1 className="font-serif text-4xl md:text-6xl text-piedra font-normal leading-tight mb-6">
-            Crece con nosotros
+
+          <h1 className="font-serif text-4xl md:text-6xl text-piedra font-normal leading-tight">
+            Crece con nosotros <br />
+            <span className="font-normal">en Ayacucho</span>
           </h1>
+
           <p className="text-base md:text-lg text-piedra/90 max-w-3xl mx-auto leading-relaxed">
             Forma parte de la tradición gastronómica y cultural de Ayacucho. Construye tu futuro laboral en la familia de Restaurante Las Flores.
           </p>
-        </div>
-
-        {/* Indicador de scroll "Desliza" */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 text-piedra/70 text-[10px] uppercase tracking-[0.4em] font-bold animate-bounce">
-          <span>Desliza</span>
-          <div className="w-1 h-3 rounded-full border border-piedra/50" />
         </div>
       </section>
 
