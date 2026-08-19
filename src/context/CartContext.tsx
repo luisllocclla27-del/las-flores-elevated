@@ -10,6 +10,8 @@ export interface CartCustomizations {
 
 export interface CartItem {
   id: string;
+  /** UUID real del producto en Supabase (distinto del id local del carrito, que puede llevar sufijos de personalización). Necesario para poder crear el pedido. */
+  productId?: string;
   name: string;
   price: number;
   quantity: number;

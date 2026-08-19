@@ -227,6 +227,7 @@ export async function getLiveCategories(): Promise<Category[]> {
       const customOptions = resolveProductCustomOptions(prod.name, basePrice) || prod.custom_options || undefined;
 
       const dish: Dish = {
+        id: prod.id,
         name: prod.name,
         description: prod.description || "",
         price: `S/ ${Number(prod.price || 0).toFixed(2)}`,

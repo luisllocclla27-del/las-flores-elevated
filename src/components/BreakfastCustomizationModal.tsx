@@ -124,6 +124,7 @@ export function BreakfastCustomizationModal({ dish, open, onClose }: BreakfastCu
 
     addItem({
       id: itemUniqueId,
+      productId: dish.id,
       name: dish.name,
       price: resolveSelectedPrice(),
       image: dish.image,
