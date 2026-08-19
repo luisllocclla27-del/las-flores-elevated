@@ -467,11 +467,11 @@ export function CartSidebar() {
 
     // Validar datos de Yape/Plin (de 3 a 8 dígitos numéricos: Yape directo 3+, Plin 6-8)
     if (paymentMethod === "yape") {
-      const cleanTitular = yapeTitular.trim();
+      const effectiveTitular = (yapeTitular || delivery.name || "").trim();
       const cleanOp = yapeOperacion.trim();
 
-      if (cleanTitular.length < 3) {
-        alert("Por favor, ingresa el nombre completo del titular de la cuenta de origen.");
+      if (effectiveTitular.length < 2) {
+        alert("Por favor, ingresa el nombre del titular de la cuenta de origen de Yape/Plin.");
         return;
       }
 
@@ -1147,6 +1147,9 @@ export function CartSidebar() {
               className="p-5 space-y-4 min-h-full"
               onSubmit={(e) => {
                 e.preventDefault();
+                if (!yapeTitular.trim() && delivery.name.trim()) {
+                  setYapeTitular(delivery.name.trim());
+                }
                 setStep("payment");
               }}
             >
@@ -1381,14 +1384,17 @@ export function CartSidebar() {
                     )}
                   </div>
                   <div>
-                    <Label>Titular de la cuenta origen *</Label>
+                    <Label>Titular de la cuenta origen (Yape / Plin) *</Label>
                     <input
                       required
                       placeholder="Ej: Juan Pérez"
                       className={inputCls}
-                      value={yapeTitular}
+                      value={yapeTitular || delivery.name || ""}
                       onChange={(e) => setYapeTitular(e.target.value)}
                     />
+                    <p className="text-xs text-black/40 mt-1 font-medium">
+                      Nombre de la cuenta o persona que realizó el Yape.
+                    </p>
                   </div>
                   <div>
                     <Label>N° Operación (Yape/Plin) *</Label>
@@ -1642,7 +1648,7 @@ export function CartSidebar() {
                 disabled={
                   processing || 
                   culqiProcessing ||
-                  (paymentMethod === "yape" && (!yapeTitular.trim() || !yapeOperacion.trim()))
+                  (paymentMethod === "yape" && (!((yapeTitular || delivery.name).trim()) || !yapeOperacion.trim()))
                 }
                 className="flex-1 py-3 rounded-xl font-serif font-bold text-base tracking-wide transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:cursor-not-allowed"
                 style={{ background: "var(--color-cochinilla)", color: "#FBF5E6" }}
