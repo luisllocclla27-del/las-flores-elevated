@@ -1,9 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createScriptClient } from "./_supabaseClient.js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://twbhugvklizzpjbpdosj.supabase.co";
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_ma96bleVnsLnK1KHW5uz1Q_rSizdLsP";
+// Se conserva solo para construir las URLs públicas de Storage más abajo.
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createScriptClient();
 
 async function cleanUnsplashUrls() {
   console.log("🔍 Buscando y reemplazando todos los enlaces de Unsplash en Supabase BD...\n");
@@ -18,15 +18,16 @@ async function cleanUnsplashUrls() {
   for (const p of products || []) {
     if (p.image_url && p.image_url.includes("unsplash.com")) {
       // Reemplazar por la imagen pública oficial de Supabase Storage o WebP local
-      let newUrl = "https://twbhugvklizzpjbpdosj.supabase.co/storage/v1/object/public/products/platos/qapchi.webp";
+      const storageBase = `${SUPABASE_URL}/storage/v1/object/public/products`;
+      let newUrl = `${storageBase}/platos/qapchi.webp`;
 
       const nameLower = p.name.toLowerCase();
       if (nameLower.includes("chicharron") || nameLower.includes("chancho")) {
-        newUrl = "https://twbhugvklizzpjbpdosj.supabase.co/storage/v1/object/public/products/platos/chicharron.webp";
+        newUrl = `${storageBase}/platos/chicharron.webp`;
       } else if (nameLower.includes("cuy") || nameLower.includes("caldo")) {
-        newUrl = "https://twbhugvklizzpjbpdosj.supabase.co/storage/v1/object/public/products/platos/cuy-chactado.webp";
+        newUrl = `${storageBase}/platos/cuy-chactado.webp`;
       } else if (nameLower.includes("puca")) {
-        newUrl = "https://twbhugvklizzpjbpdosj.supabase.co/storage/v1/object/public/products/platos/puca-picante.webp";
+        newUrl = `${storageBase}/platos/puca-picante.webp`;
       }
 
       const { error: updateErr } = await supabase

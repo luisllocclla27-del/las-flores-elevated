@@ -1,6 +1,10 @@
 /**
  * Culqi API Server Functions
- * Endpoints seguros para procesar pagos con Culqi desde el backend
+ *
+ * Ruta de respaldo del cobro con tarjeta. La ruta principal es el endpoint
+ * serverless `/api/culqi-charge`, que recalcula el importe contra los precios
+ * de Supabase. Esta función NO puede verificar el importe por sí sola, así que
+ * exige que el llamante ya haya pasado por esa verificación.
  */
 
 import { createServerFn } from "@tanstack/react-start";
@@ -12,118 +16,118 @@ import type { CreateChargePayload } from "./culqiServer";
  */
 export const processCulqiCharge = createServerFn()
   .validator((data: unknown) => {
-    // Pasamos los datos sin validación por ahora
-    return data as {
-      tokenId: string;
-      amount: number;
-      email: string;
-      description: string;
-      orderNumber: string;
-      customerName: string;
-      customerPhone?: string;
-      address?: string;
+    const raw = (data ?? {}) as Record<string, unknown>;
+
+    const tokenId = typeof raw.tokenId === "string" ? raw.tokenId.trim() : "";
+    const email = typeof raw.email === "string" ? raw.email.trim() : "";
+    const amount = Number(raw.amount);
+
+    if (!tokenId) {
+      throw new Error("Falta el token de la tarjeta.");
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      throw new Error("El correo electrónico no es válido.");
+    }
+    if (!Number.isInteger(amount) || amount < 100) {
+      throw new Error("Importe inválido.");
+    }
+
+    return {
+      tokenId,
+      amount,
+      email,
+      description:
+        typeof raw.description === "string"
+          ? raw.description.slice(0, 80)
+          : "Pedido en Restaurante Las Flores",
+      orderNumber: typeof raw.orderNumber === "string" ? raw.orderNumber.slice(0, 50) : "LF-ORDEN",
+      customerName:
+        typeof raw.customerName === "string" && raw.customerName.trim()
+          ? raw.customerName.trim().slice(0, 100)
+          : "Cliente",
+      customerPhone: typeof raw.customerPhone === "string" ? raw.customerPhone : undefined,
+      address: typeof raw.address === "string" ? raw.address.slice(0, 200) : undefined,
     };
   })
   .handler(async ({ data: payload }) => {
-  try {
-    if (typeof window !== "undefined") {
-      throw new Error("Esta función solo puede ejecutarse en el servidor");
-    }
+    try {
+      if (typeof window !== "undefined") {
+        throw new Error("Esta función solo puede ejecutarse en el servidor");
+      }
 
-    const secretKey = process.env.CULQI_SECRET_KEY;
-    if (!secretKey) {
-      throw new Error("CULQI_SECRET_KEY no está definida en el servidor");
-    }
+      const secretKey = process.env.CULQI_SECRET_KEY;
+      if (!secretKey) {
+        throw new Error("La pasarela de pagos no está configurada.");
+      }
 
-    const { createCharge } = await import("./culqiServer");
-    
-    // Validar datos de entrada
-    if (!payload.tokenId || !payload.amount || !payload.email) {
-      throw new Error("Datos de pago incompletos");
-    }
+      const { createCharge } = await import("./culqiServer");
 
-    if (payload.amount <= 0) {
-      throw new Error("El monto debe ser mayor a cero");
-    }
+      const metadata: Record<string, string> = {
+        order_number: payload.orderNumber,
+        customer_name: payload.customerName,
+      };
 
-    // Preparar metadata para Culqi
-    const metadata: Record<string, any> = {
-      order_number: payload.orderNumber,
-      customer_name: payload.customerName,
-    };
+      // Culqi exige menos de 15 caracteres y solo dígitos.
+      const cleanPhone = payload.customerPhone
+        ? payload.customerPhone.replace(/\D/g, "").slice(-9)
+        : "000000000";
 
-    if (payload.customerPhone) {
-      metadata.customer_phone = payload.customerPhone;
-    }
+      if (cleanPhone !== "000000000") {
+        metadata.customer_phone = cleanPhone;
+      }
+      if (payload.address) {
+        metadata.delivery_address = payload.address;
+      }
 
-    if (payload.address) {
-      metadata.delivery_address = payload.address;
-    }
-
-    // Limpiar número de teléfono (Culqi requiere < 15 caracteres, solo dígitos)
-    const cleanPhone = payload.customerPhone 
-      ? payload.customerPhone.replace(/\D/g, "").slice(-9) // Solo dígitos, últimos 9
-      : "000000000";
-
-    // Preparar datos antifraud (opcional pero recomendado)
-    const antifraudDetails = payload.customerName
-      ? {
-          first_name: payload.customerName.split(" ")[0] || payload.customerName,
-          last_name: payload.customerName.split(" ").slice(1).join(" ") || payload.customerName,
-          address: payload.address || "N/A",
+      const chargePayload: CreateChargePayload = {
+        amount: payload.amount,
+        currency_code: "PEN",
+        email: payload.email,
+        source_id: payload.tokenId,
+        description: payload.description,
+        metadata,
+        antifraud_details: {
+          first_name: payload.customerName.split(" ")[0] || "Cliente",
+          last_name: payload.customerName.split(" ").slice(1).join(" ") || "Las Flores",
+          address: payload.address || "Ayacucho",
           address_city: "Ayacucho",
           phone_number: cleanPhone,
           country_code: "PE",
-        }
-      : undefined;
+        },
+      };
 
-    // Crear cargo en Culqi
-    const chargePayload: CreateChargePayload = {
-      amount: payload.amount,
-      currency_code: "PEN",
-      email: payload.email,
-      source_id: payload.tokenId,
-      description: payload.description,
-      metadata,
-      antifraud_details: antifraudDetails,
-    };
+      const charge = await createCharge(chargePayload);
 
-    const charge = await createCharge(chargePayload);
+      if (!charge || !charge.id) {
+        throw new Error("No se pudo procesar el cargo");
+      }
 
-    // Verificar que el cargo fue exitoso
-    if (!charge || !charge.id) {
-      throw new Error("No se pudo procesar el cargo");
+      return {
+        success: true,
+        chargeId: charge.id,
+        amount: charge.amount,
+        currency: charge.currency_code,
+        referenceCode: charge.reference_code,
+        authorizationCode: charge.authorization_code,
+        cardBrand: charge.source?.iin?.card_brand,
+        lastFour: charge.source?.last_four,
+        outcome: {
+          type: charge.outcome.type,
+          code: charge.outcome.code,
+          userMessage: charge.outcome.user_message,
+        },
+      };
+    } catch (error: any) {
+      // El detalle queda en los logs del servidor; al cliente solo va el mensaje.
+      console.error("Error procesando cargo Culqi:", error?.message, error);
+
+      return {
+        success: false,
+        error: error?.message || "Error al procesar el pago",
+        code: error?.code || "UNKNOWN_ERROR",
+      };
     }
-
-    // Retornar solo los datos necesarios al cliente
-    return {
-      success: true,
-      chargeId: charge.id,
-      amount: charge.amount,
-      currency: charge.currency_code,
-      referenceCode: charge.reference_code,
-      authorizationCode: charge.authorization_code,
-      cardBrand: charge.source?.iin?.card_brand,
-      lastFour: charge.source?.last_four,
-      outcome: {
-        type: charge.outcome.type,
-        code: charge.outcome.code,
-        merchantMessage: charge.outcome.merchant_message,
-        userMessage: charge.outcome.user_message,
-      },
-    };
-  } catch (error: any) {
-    console.error("Error procesando cargo Culqi:", error.message);
-    
-    // Retornar error estructurado
-    return {
-      success: false,
-      error: error.message || "Error al procesar el pago",
-      code: error.code || "UNKNOWN_ERROR",
-      details: error.toString(),
-    };
-  }
-});
+  });
 
 /**
  * Server Function para verificar el estado de un cargo

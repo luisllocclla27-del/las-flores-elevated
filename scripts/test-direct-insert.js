@@ -1,9 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { createScriptClient } from "./_supabaseClient.js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://twbhugvklizzpjbpdosj.supabase.co";
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_ma96bleVnsLnK1KHW5uz1Q_rSizdLsP";
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createScriptClient();
 
 async function testInsertions() {
   console.log("🧪 PRUEBA 1: Inserción SIN especificar la propiedad status...");

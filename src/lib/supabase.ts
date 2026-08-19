@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { isValidUuid } from "./pricing";
 
 // Obtención de variables de entorno de Supabase (nunca hardcodear claves)
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -183,39 +184,12 @@ export async function signInWithFacebook() {
 }
 
 /**
- * Iniciar sesión con Correo y Contraseña
+ * Nota: el inicio de sesión con correo y contraseña se retiró a propósito.
+ * Solo se admite autenticación federada con Google o Facebook, de modo que el
+ * correo del cliente llega siempre verificado por el proveedor y no gestionamos
+ * contraseñas. Conviene también desactivar el proveedor "Email" en el panel de
+ * Supabase (Authentication → Providers) para cerrar la vía por API.
  */
-export async function signInWithEmail(email: string, pass: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email,
-    password: pass,
-  });
-  if (error) throw error;
-  return data;
-}
-
-/**
- * Registrarse con Correo y Contraseña
- */
-export async function signUpWithEmail(email: string, pass: string, fullName?: string) {
-  const currentOrigin =
-    typeof window !== "undefined" && window.location.origin
-      ? window.location.origin
-      : "https://www.restaurantelasflores.com";
-
-  const { data, error } = await supabase.auth.signUp({
-    email,
-    password: pass,
-    options: {
-      emailRedirectTo: `${currentOrigin}/`,
-      data: {
-        full_name: fullName || "",
-      },
-    },
-  });
-  if (error) throw error;
-  return data;
-}
 
 export interface ProfileUpdatePayload {
   full_name?: string;
@@ -400,9 +374,8 @@ export async function createReservation(payload: any) {
 export async function createOrder(payload: OrderPayload & { discount_amount?: number; coupon_code?: string }) {
   const { items, ...orderData } = payload;
 
-  const hasValidUuids = items.length > 0 && items.every(
-    item => item.product_id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(item.product_id)
-  );
+  const hasValidUuids =
+    items.length > 0 && items.every((item) => isValidUuid(item.product_id));
 
   if (hasValidUuids) {
     try {
@@ -436,35 +409,22 @@ export async function createOrder(payload: OrderPayload & { discount_amount?: nu
 }
 
 /**
- * Obtener el historial de pedidos del usuario autenticado (O pedidos recientes locales)
+ * Obtener el historial de pedidos del usuario autenticado.
+ *
+ * Los pedidos se crean siempre con sesión iniciada (`create_order_secure` los
+ * asocia a `auth.uid()`), y las políticas RLS solo permiten leer los propios o,
+ * al personal, todos. No existe vía de invitado.
  */
-export async function getUserOrders(userId?: string, email?: string, localOrderIds: string[] = []) {
+export async function getUserOrders(userId?: string) {
+  if (!isValidUuid(userId)) return [];
+
   try {
-    let query = supabase
+    const { data, error } = await supabase
       .from("orders")
       .select("*, order_items(*)")
+      .eq("user_id", userId)
       .order("created_at", { ascending: false });
 
-    const conditions: string[] = [];
-
-    if (userId) {
-      conditions.push(`user_id.eq.${userId}`);
-    }
-    if (email && email.trim()) {
-      conditions.push(`client_email.ilike.${email.trim()}`);
-    }
-    if (localOrderIds && localOrderIds.length > 0) {
-      const validIds = localOrderIds.filter(Boolean).map((id) => `"${id}"`).join(",");
-      if (validIds) {
-        conditions.push(`id.in.(${validIds})`);
-      }
-    }
-
-    if (conditions.length === 0) return [];
-
-    query = query.or(conditions.join(","));
-
-    const { data, error } = await query;
     if (error) {
       console.error("Error al obtener pedidos del usuario:", error);
       return [];

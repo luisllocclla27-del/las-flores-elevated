@@ -39,6 +39,9 @@ dist-ssr
 scratch_scrape/
 supabase/*.txt
 
+# Supabase CLI (estado local, no versionar)
+supabase/.temp/
+
 # Local isolated worktrees
 .worktrees/
 *.mov

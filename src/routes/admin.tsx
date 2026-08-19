@@ -783,8 +783,8 @@ function AdminRoute() {
                     </div>
 
                     <div className="text-xs text-gray-600 space-y-1">
-                      <p>Descuento: <strong className="text-gray-900 font-bold">{coupon.discount_percentage}%</strong></p>
-                      <p>Usos acumulados: <strong className="text-gray-900 font-bold">{coupon.used_count || 0}</strong></p>
+                      <p>Descuento: <strong className="text-gray-900 font-bold">{String(coupon.discount_type).startsWith("percent") ? `${coupon.discount_value}%` : `S/ ${Number(coupon.discount_value || 0).toFixed(2)}`}</strong></p>
+                      <p>Usos acumulados: <strong className="text-gray-900 font-bold">{coupon.current_uses ?? coupon.used_count ?? 0}</strong></p>
                     </div>
 
                     <div className="pt-2 border-t border-gray-200 flex justify-end">

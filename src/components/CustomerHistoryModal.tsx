@@ -166,13 +166,6 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
     }
 
     if (open) {
-      let localOrderIds: string[] = [];
-      try {
-        localOrderIds = JSON.parse(localStorage.getItem("las_flores_recent_orders") || "[]");
-      } catch (e) {
-        console.warn("Could not read local recent orders:", e);
-      }
-
       const userId = user?.id;
       const userEmail = user?.email;
 
@@ -186,7 +179,7 @@ export function CustomerHistoryModal({ open, onClose, user, inline }: CustomerHi
         setLoading(true);
         try {
           const [userOrders, userRes] = await Promise.all([
-            getUserOrders(userId, userEmail, localOrderIds),
+            getUserOrders(userId),
             getUserReservations(userId, userEmail),
           ]);
           if (!cancelled) {

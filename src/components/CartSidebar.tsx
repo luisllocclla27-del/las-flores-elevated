@@ -29,6 +29,7 @@ import {
   DELIVERY_CONFIG,
 } from "../utils/deliveryUtils";
 import { signInWithGoogle, signInWithFacebook, createOrder, signOut, supabase } from "../lib/supabase";
+import { isValidUuid, calculateCouponDiscount } from "../lib/pricing";
 import { playSuccessChime } from "@/lib/soundUtils";
 import { sendOrderEmails } from "../lib/emailService";
 import { LocationSelector } from "./LocationSelector";
@@ -404,7 +405,7 @@ export function CartSidebar() {
         return;
       }
 
-      if ((coupon.used_count || 0) >= (coupon.max_uses || 100)) {
+      if ((coupon.current_uses ?? coupon.used_count ?? 0) >= (coupon.max_uses || 100)) {
         setCouponError(`¡El cupón "${code}" ya alcanzó su límite máximo de ${coupon.max_uses} usos!`);
         setAppliedCoupon(null);
         return;
@@ -432,11 +433,7 @@ export function CartSidebar() {
     }
   };
 
-  const discountAmount = appliedCoupon
-    ? appliedCoupon.discount_type === "percent"
-      ? Math.round((totalPrice * (appliedCoupon.discount_value / 100)) * 100) / 100
-      : Math.min(appliedCoupon.discount_value, totalPrice)
-    : 0;
+  const discountAmount = calculateCouponDiscount(appliedCoupon, totalPrice);
 
   const isTooFar = distanceKm > DELIVERY_CONFIG.maxRadiusKm;
   const total = Math.max(0, totalPrice - discountAmount + DELIVERY_FEE);
@@ -454,6 +451,13 @@ export function CartSidebar() {
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // El pedido requiere sesión: `create_order_secure` asocia el pedido a
+    // `auth.uid()` y las políticas de acceso al historial dependen de ello.
+    if (!activeUser) {
+      setShowLoginModal(true);
+      return;
+    }
 
     // Validar ubicación exacta para delivery
     if (orderType === "delivery" && !clientLocation) {
@@ -524,36 +528,53 @@ export function CartSidebar() {
     }
 
     // Procesar cargo con Culqi si el método de pago es Culqi
+    const orderNum = `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     let culqiChargeId: string | null = null;
     let culqiReferenceCode: string | null = null;
     
     if (paymentMethod === "culqi" && culqiToken) {
       try {
-        
         const payload = {
           tokenId: culqiToken.id,
           amount: formatAmountToCents(total),
-          email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
+          email: activeUser.email || delivery.email,
           description: `Pedido delivery - Restaurante Las Flores`,
-          orderNumber: `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`,
+          orderNumber: orderNum,
           customerName: delivery.name || "Cliente",
           customerPhone: delivery.phone,
           address: delivery.address,
+          // El servidor recalcula el importe con estos datos y rechaza el cobro
+          // si no coincide con `amount`.
+          orderType,
+          latitude: clientLocation?.lat,
+          longitude: clientLocation?.lng,
+          couponCode: appliedCoupon?.code,
+          items: items.map((i) => ({
+            productId: i.productId || i.id,
+            quantity: i.quantity,
+          })),
         };
-        
-        
+
         let chargeResult: any = null;
 
-        try {
-          const apiRes = await fetch("/api/culqi-charge", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          chargeResult = await apiRes.json();
-        } catch (fetchErr) {
-          // Fallback a createServerFn
+        const apiRes = await fetch("/api/culqi-charge", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (apiRes.status === 404 || apiRes.status === 405) {
+          // El endpoint serverless no existe en este entorno (p. ej. `vite dev`).
+          // Se recurre a la server function, que no puede verificar el importe,
+          // así que solo se permite fuera de producción.
+          if (import.meta.env.PROD) {
+            throw new Error(
+              "El servicio de pagos no está disponible en este momento. Intenta con Yape o efectivo.",
+            );
+          }
           chargeResult = await processCulqiCharge({ data: payload });
+        } else {
+          chargeResult = await apiRes.json();
         }
 
         if (!chargeResult || !chargeResult.success) {
@@ -562,7 +583,7 @@ export function CartSidebar() {
 
         culqiChargeId = chargeResult.chargeId || null;
         culqiReferenceCode = chargeResult.referenceCode || null;
-        
+
       } catch (culqiError: any) {
         console.error("Error procesando cargo Culqi:", culqiError);
         alert(`Error al procesar el pago: ${culqiError.message || "Por favor, intenta nuevamente."}`);
@@ -571,14 +592,13 @@ export function CartSidebar() {
       }
     }
 
-    const orderNum = `LF-${Date.now().toString(36).toUpperCase().slice(-6)}`;
     try {
       const orderData = {
         order_number: orderNum,
         order_type: orderType,
         status: "received",
         client_name: delivery.name || "Cliente",
-        client_email: delivery.email || activeUser?.email || "cliente@ejemplo.com",
+        client_email: activeUser.email || delivery.email,
         client_phone: delivery.phone || "",
         address: delivery.address,
         reference: delivery.reference,
@@ -610,7 +630,7 @@ export function CartSidebar() {
             : "";
           const rawProductId = i.productId || i.id;
           return {
-            product_id: rawProductId && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(rawProductId) ? rawProductId : undefined,
+            product_id: isValidUuid(rawProductId) ? rawProductId : undefined,
             product_name: opts ? `${i.name} (${opts})` : i.name,
             unit_price: i.price,
             quantity: i.quantity,
@@ -639,30 +659,11 @@ export function CartSidebar() {
         items
       ).catch((e) => console.warn("Background email notification error:", e));
 
-      // Guardar el ID de la orden en localStorage para garantizar el acceso al historial inmediato
-      try {
-        if (createdOrd?.id) {
-          const savedIds: string[] = JSON.parse(localStorage.getItem("las_flores_recent_orders") || "[]");
-          if (!savedIds.includes(createdOrd.id)) {
-            savedIds.push(createdOrd.id);
-            localStorage.setItem("las_flores_recent_orders", JSON.stringify(savedIds.slice(-20)));
-          }
-        }
-      } catch (lsErr) {
-        console.warn("Error guardando orden local:", lsErr);
-      }
-
       // Increment coupon used_count in Supabase & Log redemption record for BI Analytics
+      // `create_order_secure` ya incrementa `current_uses` al validar el cupón,
+      // así que aquí solo se registra la redención para analítica.
       if (appliedCoupon) {
         try {
-          await (supabase.rpc("increment_coupon_used_count", { coupon_id: appliedCoupon.id }) as any).catch(() => {
-            // Fallback si la función RPC no existe: incremento directo
-            return supabase
-              .from("coupons")
-              .update({ used_count: (appliedCoupon.used_count || 0) + 1 })
-              .eq("id", appliedCoupon.id);
-          });
-
           await supabase.from("coupon_redemptions").insert([
             {
               coupon_id: appliedCoupon.id,
@@ -1065,7 +1066,7 @@ export function CartSidebar() {
                             {appliedCoupon.code}
                           </span>
                           <span className="text-xs font-bold text-emerald-700">
-                            ({appliedCoupon.discount_type === "percent" ? `-${appliedCoupon.discount_value}%` : `-S/ ${appliedCoupon.discount_value}`})
+                            ({String(appliedCoupon.discount_type).startsWith("percent") ? `-${appliedCoupon.discount_value}%` : `-S/ ${appliedCoupon.discount_value}`})
                           </span>
                         </div>
                         <button
@@ -1160,8 +1161,11 @@ export function CartSidebar() {
                 </div>
               )}
 
-              {!activeUser && !delivery.email ? (
+              {!activeUser ? (
                 <div className="py-6 text-center px-6">
+                  <p className="text-xs text-nogal/60 mb-3 leading-relaxed">
+                    Necesitas una cuenta para hacer tu pedido y poder seguirlo.
+                  </p>
                   <button
                     type="button"
                     onClick={() => setShowLoginModal(true)}

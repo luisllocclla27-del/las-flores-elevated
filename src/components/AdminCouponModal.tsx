@@ -18,7 +18,10 @@ export function AdminCouponModal({
   onDelete,
 }: AdminCouponModalProps) {
   const [code, setCode] = useState("");
-  const [discountType, setDiscountType] = useState<"percent" | "fixed">("percent");
+  // El esquema SQL admite 'percentage' | 'fixed'. Históricamente este panel
+  // guardaba 'percent', que viola el CHECK de la tabla, así que se normaliza al
+  // leer y se persiste siempre con el nombre del esquema.
+  const [discountType, setDiscountType] = useState<"percentage" | "fixed">("percentage");
   const [discountValue, setDiscountValue] = useState("");
   const [maxUses, setMaxUses] = useState("100");
   const [orderTypeRestriction, setOrderTypeRestriction] = useState<"all" | "delivery" | "pickup">("delivery");
@@ -33,7 +36,9 @@ export function AdminCouponModal({
     if (isOpen) {
       if (coupon) {
         setCode(coupon.code || "");
-        setDiscountType(coupon.discount_type || "percent");
+        setDiscountType(
+          String(coupon.discount_type || "").startsWith("percent") ? "percentage" : "fixed",
+        );
         setDiscountValue(coupon.discount_value ? coupon.discount_value.toString() : "");
         setMaxUses(coupon.max_uses ? coupon.max_uses.toString() : "100");
         setOrderTypeRestriction(coupon.order_type_restriction || "delivery");
@@ -41,7 +46,7 @@ export function AdminCouponModal({
         setIsActive(coupon.is_active ?? true);
       } else {
         setCode("");
-        setDiscountType("percent");
+        setDiscountType("percentage");
         setDiscountValue("");
         setMaxUses("100");
         setOrderTypeRestriction("delivery");
@@ -101,7 +106,7 @@ export function AdminCouponModal({
 
         const { error } = await supabase
           .from("coupons")
-          .insert([{ ...payload, used_count: 0 }]);
+          .insert([{ ...payload, current_uses: 0 }]);
 
         if (error) throw error;
       }
@@ -202,7 +207,7 @@ export function AdminCouponModal({
                 onChange={(e) => setDiscountType(e.target.value as any)}
                 className="w-full text-xs font-bold bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#14231D]"
               >
-                <option value="percent">Porcentaje (%)</option>
+                <option value="percentage">Porcentaje (%)</option>
                 <option value="fixed">Monto Fijo (S/)</option>
               </select>
             </div>
@@ -218,7 +223,7 @@ export function AdminCouponModal({
                 required
                 value={discountValue}
                 onChange={(e) => setDiscountValue(e.target.value)}
-                placeholder={discountType === "percent" ? "15 (para 15%)" : "10 (para S/ 10)"}
+                placeholder={discountType === "percentage" ? "15 (para 15%)" : "10 (para S/ 10)"}
                 className="w-full text-sm font-bold bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-emerald-800 focus:outline-none focus:ring-2 focus:ring-[#14231D]"
               />
             </div>

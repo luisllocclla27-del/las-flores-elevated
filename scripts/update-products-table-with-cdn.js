@@ -1,9 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createScriptClient } from "./_supabaseClient.js";
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL || "https://twbhugvklizzpjbpdosj.supabase.co";
-const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_ma96bleVnsLnK1KHW5uz1Q_rSizdLsP";
+// Se conserva solo para construir la URL pública de Storage más abajo.
+const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 
-const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createScriptClient();
 
 const IMAGE_MAPPINGS = [
   { namePattern: "chicharron", cdnPath: "platos/chicharron.webp" },
@@ -33,7 +33,7 @@ async function linkProductsToStorageCDN() {
     );
 
     if (match) {
-      const publicUrl = `https://twbhugvklizzpjbpdosj.supabase.co/storage/v1/object/public/products/${match.cdnPath}`;
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/products/${match.cdnPath}`;
       const { error: updateError } = await supabase
         .from("products")
         .update({ image_url: publicUrl })

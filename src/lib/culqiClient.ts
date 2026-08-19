@@ -159,12 +159,11 @@ export function openCulqiCheckout(config: CulqiSettings): Promise<CulqiToken> {
 
 /**
  * Formatea un monto a centavos para Culqi
- * @param amount Monto en soles (ejemplo: 50.00)
- * @returns Monto en centavos (ejemplo: 5000)
+ *
+ * Reexportado desde `pricing.ts`, que es la fuente única compartida con el
+ * servidor para que cliente y backend calculen el mismo importe.
  */
-export function formatAmountToCents(amount: number): number {
-  return Math.round(amount * 100);
-}
+export { formatAmountToCents } from "./pricing";
 
 /**
  * Formatea centavos a soles

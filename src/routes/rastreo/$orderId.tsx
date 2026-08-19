@@ -31,19 +31,19 @@ function ClientTrackingLink() {
     const fetchOrderDetails = async () => {
       setLoading(true);
       try {
+        // Se usa el RPC de rastreo porque las políticas RLS ya no permiten leer
+        // `orders` directamente a un visitante anónimo.
         const { data, error: err } = await supabase
-          .from("orders")
-          .select("id, order_number, address, reference, status, total")
-          .eq("id", orderId)
-          .single();
+          .rpc("get_order_tracking", { p_order_id: orderId })
+          .maybeSingle();
 
         if (err || !data) {
           setError("No pudimos encontrar la orden de compra especificada.");
           return;
         }
 
-        setOrder(data);
-        setCurrentStatus(data.status || "pendiente");
+        setOrder(data as OrderDetails);
+        setCurrentStatus((data as OrderDetails).status || "pendiente");
       } catch (e) {
         console.error("Error al cargar orden de rastreo:", e);
         setError("Ocurrió un error al cargar la información del pedido.");
