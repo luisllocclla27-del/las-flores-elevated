@@ -6,26 +6,159 @@
  * El cliente envía la composición del pedido (ítems, tipo, ubicación, cupón)
  * y el `amount` que cree que debe pagar; si no coincide con el cálculo del
  * servidor, la petición se rechaza.
+ *
+ * IMPORTANTE — por qué este archivo se repite a sí mismo:
+ * Este módulo debe ser AUTOCONTENIDO, sin imports relativos a `src/`. El
+ * proyecto declara `"type": "module"`, de modo que en tiempo de ejecución Node
+ * exige extensión en los imports relativos y la función falla al cargarse
+ * (FUNCTION_INVOCATION_FAILED en toda petición, incluido OPTIONS). Solo se
+ * admiten especificadores de paquete como `@supabase/supabase-js`, que se
+ * resuelven desde node_modules.
+ *
+ * La contrapartida es que la lógica de precios está duplicada respecto a
+ * `src/lib/pricing.ts` y `src/utils/deliveryUtils.ts`. Para que no se
+ * desincronicen, las funciones puras se exportan y `src/tests/pricing.test.ts`
+ * comprueba que ambas implementaciones dan el mismo resultado. Si cambias una
+ * fórmula aquí, cámbiala allí también: el test fallará si no lo haces.
  */
 
 import { createClient } from "@supabase/supabase-js";
-import {
-  AMOUNT_TOLERANCE_CENTS,
-  computeOrderTotal,
-  formatAmountToCents,
-  parseIncomingItems,
-  type CouponRule,
-} from "../src/lib/pricing";
-import {
-  DELIVERY_CONFIG,
-  RESTAURANT_LOCATION,
-  calculateDeliveryCost,
-  calculateDistanceKm,
-} from "../src/utils/deliveryUtils";
 
 export const config = {
   runtime: "nodejs",
 };
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Lógica de precios (duplicada de src/lib/pricing.ts — ver nota de cabecera)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Tolerancia al comparar importes, para absorber redondeos de punto flotante. */
+const AMOUNT_TOLERANCE_CENTS = 1;
+
+/** Coordenadas del restaurante: Jr. José Olaya 106, Conchopata, Ayacucho. */
+const RESTAURANT_LOCATION = { lat: -13.1628496, lng: -74.2178801 };
+
+const DELIVERY_CONFIG = {
+  baseCost: 5,
+  costPerKm: 1.5,
+  maxRadiusKm: 8,
+};
+
+interface PricedItem {
+  productId: string;
+  quantity: number;
+}
+
+interface CouponRule {
+  discount_type: string;
+  discount_value: number;
+  min_order_total?: number | null;
+}
+
+export function isValidUuid(value: unknown): value is string {
+  return typeof value === "string" && UUID_REGEX.test(value);
+}
+
+export function formatAmountToCents(amount: number): number {
+  return Math.round(amount * 100);
+}
+
+/** Distancia en kilómetros entre dos puntos (fórmula de Haversine). */
+export function calculateDistanceKm(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number,
+): number {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLon = (lon2 - lon1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+export function calculateDeliveryCost(distanceKm: number): number {
+  if (distanceKm === 0) return 0;
+  const total = DELIVERY_CONFIG.baseCost + distanceKm * DELIVERY_CONFIG.costPerKm;
+  return Math.round(total * 10) / 10;
+}
+
+export function calculateCouponDiscount(
+  coupon: CouponRule | null | undefined,
+  subtotal: number,
+): number {
+  if (!coupon) return 0;
+  if (subtotal < Number(coupon.min_order_total || 0)) return 0;
+
+  const type = String(coupon.discount_type || "").toLowerCase();
+  const value = Number(coupon.discount_value || 0);
+  if (!Number.isFinite(value) || value <= 0) return 0;
+
+  if (type === "percentage" || type === "percent") {
+    return Math.round(subtotal * (value / 100) * 100) / 100;
+  }
+  return Math.min(value, subtotal);
+}
+
+export function computeOrderTotal(params: {
+  items: PricedItem[];
+  unitPrices: Map<string, number>;
+  deliveryFee: number;
+  coupon?: CouponRule | null;
+}): { subtotal: number; discount: number; deliveryFee: number; total: number } {
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+
+  let subtotal = 0;
+  for (const item of params.items) {
+    const price = params.unitPrices.get(item.productId);
+    if (price === undefined) {
+      throw new Error(`Precio no encontrado para el producto ${item.productId}`);
+    }
+    subtotal += price * item.quantity;
+  }
+  subtotal = round2(subtotal);
+
+  const discount = round2(calculateCouponDiscount(params.coupon, subtotal));
+  const deliveryFee = round2(Math.max(0, params.deliveryFee));
+  const total = round2(Math.max(0, subtotal - discount + deliveryFee));
+
+  return { subtotal, discount, deliveryFee, total };
+}
+
+export function parseIncomingItems(raw: unknown): PricedItem[] {
+  if (!Array.isArray(raw) || raw.length === 0) {
+    throw new Error("El pedido no contiene ítems.");
+  }
+  if (raw.length > 100) {
+    throw new Error("El pedido contiene demasiados ítems.");
+  }
+
+  return raw.map((entry) => {
+    const item = entry as Record<string, unknown>;
+    const productId = item.productId ?? item.product_id ?? item.id;
+    const quantity = Number(item.quantity);
+
+    if (!isValidUuid(productId)) {
+      throw new Error("Los productos del pedido no tienen identificadores válidos.");
+    }
+    if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 99) {
+      throw new Error("Cantidad de producto inválida.");
+    }
+
+    return { productId, quantity };
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Control de acceso
+// ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Orígenes autorizados a invocar el cobro. Se evita `*` porque la respuesta
@@ -59,6 +192,10 @@ function applyCors(req: any, res: any): void {
   res.setHeader("Access-Control-Allow-Methods", "POST,OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Handler
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default async function handler(req: any, res: any) {
   applyCors(req, res);
@@ -119,7 +256,7 @@ export default async function handler(req: any, res: any) {
       return res.status(400).json({ success: false, error: "Importe inválido." });
     }
 
-    let items;
+    let items: PricedItem[];
     try {
       items = parseIncomingItems(payload.items);
     } catch (validationErr: any) {
@@ -198,7 +335,9 @@ export default async function handler(req: any, res: any) {
     if (couponCode) {
       const { data: couponRow } = await supabase
         .from("coupons")
-        .select("code, discount_type, discount_value, min_order_total, is_active, valid_from, valid_until, max_uses, current_uses, used_count")
+        .select(
+          "code, discount_type, discount_value, min_order_total, is_active, valid_from, valid_until, max_uses, current_uses, used_count",
+        )
         .ilike("code", couponCode)
         .maybeSingle();
 
@@ -238,8 +377,7 @@ export default async function handler(req: any, res: any) {
       );
       return res.status(409).json({
         success: false,
-        error:
-          "El total del pedido cambió. Vuelve a revisar tu carrito antes de pagar.",
+        error: "El total del pedido cambió. Vuelve a revisar tu carrito antes de pagar.",
         expectedAmount: expectedCents,
       });
     }

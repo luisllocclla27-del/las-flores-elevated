@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:functions": "node scripts/check-api-functions.mjs",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
