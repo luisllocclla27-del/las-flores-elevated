@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { User, Loader2, Mail, Lock, KeyRound, ArrowRight } from "lucide-react";
 import { signInWithEmail, signUpWithEmail } from "../lib/supabase";
@@ -26,6 +26,17 @@ export function LoginModal({
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
+  // Cerrar al presionar Escape
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
@@ -50,9 +61,19 @@ export function LoginModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center pb-4 sm:pb-0 bg-black/60 backdrop-blur-sm p-4 pointer-events-auto">
+    <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-end sm:justify-center pb-4 sm:pb-0 p-4 pointer-events-auto animate-in fade-in duration-200">
+      {/* Backdrop oscuro con blur que cierra al hacer clic fuera */}
+      <div
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer transition-opacity"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
       {/* Card del modal */}
-      <div className="bg-[#f8f4e6] rounded-3xl w-full max-w-[400px] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 border border-black/8">
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative z-10 bg-[#f8f4e6] rounded-3xl w-full max-w-[400px] overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-6 sm:zoom-in-95 duration-200 border border-black/8"
+      >
         {/* Header — logo centrado + cerrar */}
         <div className="relative flex items-center justify-center px-5 py-3.5 border-b border-ink/8">
           <img

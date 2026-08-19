@@ -98,9 +98,18 @@ export function AdminOrderDetailModal({
   const whatsappUrl = `https://wa.me/${fullPhone}?text=Hola%20${encodeURIComponent(order.client_name)},%20te%20saludamos%20de%20Restaurante%20Las%20Flores.%20Tu%20pedido%20%23${order.order_number}%20est%C3%A1%20en%20estado:%20${encodeURIComponent(order.status)}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto animate-in fade-in duration-200">
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative z-10 bg-white w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+      >
         {/* Header */}
         <div className="bg-[#14231D] text-piedra px-6 py-5 flex items-center justify-between">
           <div className="flex items-center gap-3">

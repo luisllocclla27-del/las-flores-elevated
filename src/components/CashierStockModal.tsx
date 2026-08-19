@@ -101,8 +101,18 @@ export function CashierStockModal({ isOpen, onClose }: CashierStockModalProps) {
   const soldOutCount = products.length - activeCount;
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 bg-[#2c4a3e]/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="bg-[#fbf5e6] w-full max-w-4xl max-h-[92vh] rounded-3xl shadow-2xl border border-[#2c4a3e]/20 flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 animate-in fade-in duration-200">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-[#2c4a3e]/80 backdrop-blur-md cursor-pointer"
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative z-10 bg-[#fbf5e6] w-full max-w-4xl max-h-[92vh] rounded-3xl shadow-2xl border border-[#2c4a3e]/20 flex flex-col overflow-hidden"
+      >
         {/* Encabezado del Modal */}
         <div className="bg-[#2c4a3e] text-white p-5 px-6 flex items-center justify-between shadow-md">
           <div className="flex items-center gap-3">
