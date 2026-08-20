@@ -2,11 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
-import { MenuModal } from "@/components/MenuModal";
-import { Heart, Award, Utensils, Sparkles, ArrowRight, Star } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { AnimatedCartButton } from "@/components/AnimatedCartButton";
-import { MobileCategoryFilter } from "@/components/MobileCategoryFilter";
 
 export const Route = createFileRoute("/familia-las-flores")({
   head: () => ({
@@ -26,250 +24,41 @@ export const Route = createFileRoute("/familia-las-flores")({
 interface Collaborator {
   id: string;
   name: string;
-  role: string;
-  category: "cocina" | "salon" | "reposteria" | "administracion";
-  years: string;
   photo: string;
   quote: string;
-  recommendedDish: string;
-  dishPrice: string;
-  badge: string;
 }
 
 const COLLABORATORS: Collaborator[] = [
   // ── Cocina ──
   {
-    id: "4",
-    name: "Edgar Luis",
-    role: "Chef",
-    category: "cocina",
-    years: "1 año en Las Flores",
-    photo: "/familia/chef.webp",
-    quote: "Mi secreto es el respeto por los insumos locales, el liderazgo y el control estricto de calidad.",
-    recommendedDish: "Puca Picante con Chicharrón",
-    dishPrice: "S/ 38.00",
-    badge: "Líder de Cocina",
-  },
-  {
-    id: "5",
-    name: "Yadira Paris",
-    role: "Cocina",
-    category: "cocina",
-    years: "1 años en Las Flores",
-    photo: "/familia/Cocina.webp",
-    quote: "Desarrollé habilidades de organización y trabajo en equipo, fundamentales para nuestro servicio.",
-    recommendedDish: "Ceviche de Trucha",
-    dishPrice: "S/ 28.00",
-    badge: "Mixólogo Andino",
-  },
-  {
-    id: "cocina-1",
-    name: "Ronaldiño",
-    role: "Cocinero",
-    category: "cocina",
-    years: "3 años en Las Flores",
-    photo: "/familia/Ronaldinho.webp",
-    quote: "El secreto está en el respeto a los ingredientes y el amor profundo por cada preparación.",
-    recommendedDish: "Mondongo Ayacuchano",
-    dishPrice: "S/ 25.00",
-    badge: "Sazón Tradicional",
-  },
-  {
-    id: "cocina-2",
-    name: "Marina",
-    role: "Maestra Cocinera",
-    category: "cocina",
-    years: "5 años en Las Flores",
-    photo: "/familia/Marina.webp",
-    quote: "Cuido las recetas de la casa. Mi alegría es que cada bocado sea un pedacito de nuestra tradición.",
-    recommendedDish: "Puca Picante con Chicharrón",
-    dishPrice: "S/ 38.00",
-    badge: "Manos de Oro",
-  },
-  // ── Salón ──
-  {
-    id: "0",
-    name: "Mayte Jarumy",
-    role: "Jefa de Azafatas",
-    category: "salon",
-    years: "3 años en Las Flores",
-    photo: "/familia/Mayte.webp",
-    quote: "Mi misión es la perfección en el salón. Ver a los clientes regresar felices es mi mayor recompensa.",
-    recommendedDish: "Puca Picante Especial",
-    dishPrice: "S/ 42.00",
-    badge: "Líder de Servicio",
-  },
-  {
-    id: "7",
-    name: "Jhon Aldahir",
-    role: "Mozo",
-    category: "salon",
-    years: "1 año en Las Flores",
-    photo: "/familia/Jhon.webp",
-    quote: "Me enorgullece recibir a cada familia. El ambiente cálido de Las Flores es contagioso.",
-    recommendedDish: "Puca Picante con Chicharrón",
-    dishPrice: "S/ 38.00",
-    badge: "Atención Especial",
-  },
-  {
-    id: "8",
-    name: "Heidi Jeraldine",
-    role: "Anfitriona",
-    category: "salon",
-    years: "8 meses en Las Flores",
-    photo: "/familia/Heidi.webp",
-    quote: "Recibirlos con una sonrisa y guiarlos a su mesa es el primer paso de una gran experiencia.",
-    recommendedDish: "Chicharrón de Cerdo",
-    dishPrice: "S/ 42.00",
-    badge: "Sonrisa Acogedora",
-  },
-  {
-    id: "9",
-    name: "Dina Luz",
-    role: "Moza",
-    category: "salon",
-    years: "2 años en Las Flores",
-    photo: "/familia/Dina.webp",
-    quote: "Atender es un arte. Conozco nuestra carta a la perfección para recomendar lo mejor.",
-    recommendedDish: "Cuy Chactado",
-    dishPrice: "S/ 68.00",
-    badge: "Servicio Impecable",
-  },
-  {
-    id: "10",
-    name: "Aurelio",
-    role: "Capitán de Mozos",
-    category: "salon",
-    years: "3 años en Las Flores",
-    photo: "/familia/Aurelio.webp",
-    quote: "Garantizar un trato excepcional es mi pasión y el verdadero significado de la hospitalidad andina.",
-    recommendedDish: "Trucha Frita",
-    dishPrice: "S/ 35.00",
-    badge: "Líder de Salón",
-  },
-  {
-    id: "11",
-    name: "Percy Yoni",
-    role: "Azafata",
-    category: "salon",
-    years: "2 años en Las Flores",
-    photo: "/familia/Percy.webp",
-    quote: "Me dedico a que cada comensal tenga todo lo que necesita. Han sido dos años de hermosas experiencias.",
-    recommendedDish: "Mondongo Ayacuchano",
-    dishPrice: "S/ 25.00",
-    badge: "Atención Dedicada",
-  },
-  // ── Repostería ──
-  {
     id: "1",
-    name: "Paola Zinthia",
-    role: "Maestra Repostera",
-    category: "reposteria",
-    years: "1 año en Las Flores",
-    photo: "/familia/Paola.webp",
-    quote: "Este año me permitió perfeccionar mi técnica en panes de masa madre y postres tradicionales de la casa.",
-    recommendedDish: "Mazamorra de Calabaza y Chapla Tradicional",
-    dishPrice: "S/ 18.00",
-    badge: "Maestra Dulcera",
-  },
-  {
-    id: "reposteria-1",
-    name: "Nancy Marleny",
-    role: "Asistente de Repostería",
-    category: "reposteria",
-    years: "2 años en Las Flores",
-    photo: "/familia/Nancy.webp",
-    quote: "Acompañar nuestras comidas con el dulce perfecto combinando técnica y cariño es mi especialidad.",
-    recommendedDish: "Helado de Lúcuma",
-    dishPrice: "S/ 12.00",
-    badge: "Toque Dulce",
-  },
-  // ── Administración ──
-  {
-    id: "admin-1",
-    name: "Ritney Betsy",
-    role: "Jefa Administrativa",
-    category: "administracion",
-    years: "5 años en Las Flores",
-    photo: "/familia/Ritney.webp",
-    quote: "Liderar la administración ha sido un honor. Mi enfoque es optimizar procesos para seguir creciendo juntos.",
-    recommendedDish: "Pachamanca",
-    dishPrice: "S/ 55.00",
-    badge: "Líder Estratégico",
+    name: "Betsy",
+    photo: "/familia/Cena.webp",
+    quote: "Trabajar en el Restaurante Las Flores es una experiencia que me permite crecer tanto profesional como personalmente. Como administradora, me siento comprometida con mis responsabilidades y con el buen funcionamiento del restaurante, pero también valoro mucho los momentos que compartimos como equipo.",
   },
   {
     id: "2",
-    name: "Marilu Fernanda",
-    role: "Logistica",
-    category: "administracion",
-    years: "3 años en Las Flores",
-    photo: "/familia/Fernanda.webp",
-    quote: "Estos tres años me enseñaron la verdadera organización detrás del éxito gastronómico.",
-    recommendedDish: "Chancho Azado",
-    dishPrice: "S/ 16.00",
-    badge: "Anfitrión Estrella",
+    name: "Ronaldiño",
+    photo: "/familia/Cocina.webp",
+    quote: "Trabajar como cocinero en el Restaurante Las Flores me hace sentir orgulloso de aportar con mi trabajo y pasión por la gastronomía. Cada día es una oportunidad para aprender, mejorar y dar lo mejor de mí junto a mis compañeros. Las cenas, paseos y reuniones nos permiten compartir, fortalecer la unión y disfrutar como equipo fuera del trabajo. Estos momentos nos motivan a seguir creciendo, sin olvidar siempre la responsabilidad, el compromiso y la calidad que nuestro trabajo requiere.",
   },
   {
     id: "3",
-    name: "Juan Carlos ",
-    role: "Inocuidad",
-    category: "administracion",
-    years: "1 años en Las Flores",
-    photo: "/familia/Carlos.webp",
-    quote: "Velar por la higiene y la inocuidad garantiza que cada plato llegue seguro a nuestra mesa.",
-    recommendedDish: "Cuy Chactado Crujiente Tradicional",
-    dishPrice: "S/ 68.00",
-    badge: "Maestro Parrillero",
+    name: "Paola",
+    photo: "/familia/Danza.webp",
+    quote: "Ser parte del equipo del Restaurante Las Flores ha sido una experiencia muy bonita y significativa para mí, especialmente por todo lo que he aprendido en mi labor como cajera. Cada día me esfuerzo por atender con amabilidad, responsabilidad y compromiso, aportando al buen funcionamiento del restaurante. Valoro mucho los momentos de integración y convivencia que compartimos como equipo, porque fortalecen nuestros lazos y nos permiten disfrutar juntos.",
   },
   {
-    id: "6",
-    name: "Kelly Melisa",
-    role: "Ventas",
-    category: "administracion",
-    years: "1 año en Las Flores",
-    photo: "/familia/Melisa.webp",
-    quote: "Aprender a escuchar a nuestros clientes me enseñó que la clave es una atención amable y eficiente.",
-    recommendedDish: "Chorizo Ayacuchano",
-    dishPrice: "S/ 34.00",
-    badge: "Garantía de Servicio",
-  },
-  {
-    id: "admin-2",
-    name: "Paola Sofia",
-    role: "Caja",
-    category: "administracion",
-    years: "2 años en Las Flores",
-    photo: "/familia/Sofia.webp",
-    quote: "Atiendo con rapidez y amabilidad para que su experiencia termine tan bien como empezó.",
-    recommendedDish: "Choclo con Queso",
-    dishPrice: "S/ 15.00",
-    badge: "Atención Eficiente",
-  },
-  {
-    id: "admin-3",
-    name: "Jose",
-    role: "Marketing",
-    category: "administracion",
-    years: "1 año en Las Flores",
-    photo: "/familia/Jose.webp",
-    quote: "Muestro al mundo nuestra belleza y sabor, transmitiendo el cariño de nuestros platos.",
-    recommendedDish: "Helado de Lúcuma",
-    dishPrice: "S/ 12.00",
-    badge: "Creatividad Visual",
+    id: "4",
+    name: "Rosmery",
+    photo: "/familia/Paseo.webp",
+    quote: "Trabajar como maître en el Restaurante Las Flores me hace sentir orgulloso de brindar una atención cercana y de calidad a cada cliente. Cada día es una oportunidad para aprender, liderar y fortalecer el trabajo en equipo.Las actividades realizadas nos permiten compartir, conocernos mejor y crear un ambiente de compañerismo.  ",
   },
 ];
 
 function FamiliaLasFloresPage() {
   const { totalItems, setIsOpen: setCartOpen } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<"all" | "administracion" | "cocina" | "salon" | "barra" | "reposteria">("all");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleOpenMenu = () => setIsMenuOpen(true);
-    window.addEventListener("open_menu_modal", handleOpenMenu);
-    return () => window.removeEventListener("open_menu_modal", handleOpenMenu);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -278,17 +67,6 @@ function FamiliaLasFloresPage() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const filteredCollaborators = COLLABORATORS.filter(
-    (c) => activeCategory === "all" || c.category === activeCategory
-  );
-
-  const CATEGORY_ACCENT: Record<Collaborator["category"], string> = {
-    cocina: "#A32638",
-    salon: "#3E5C4E",
-    reposteria: "#D9A441",
-    administracion: "#5A3D2B",
-  };
 
   return (
     <div className="min-h-screen bg-piedra flex flex-col font-sans text-nogal selection:bg-chilca/20">
@@ -367,60 +145,16 @@ function FamiliaLasFloresPage() {
         </div>
       </section>
 
-      {/* ── FILTROS MÓVIL: sticky pegado al header (solo < lg) ── */}
-      <div className="block lg:hidden sticky top-[56px] z-30 w-full bg-[#F9F8F3] border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto pl-6">
-          <MobileCategoryFilter
-            categories={[
-              { key: "all", label: `Todos (${COLLABORATORS.length})` },
-              { key: "cocina", label: "Cocina" },
-              { key: "salon", label: "Salón" },
-              { key: "barra", label: "Barra" },
-              { key: "reposteria", label: "Repostería" },
-              { key: "administracion", label: "Administración" },
-            ]}
-            activeKey={activeCategory}
-            onSelect={(key) => setActiveCategory(key as typeof activeCategory)}
-          />
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <main className="max-w-7xl mx-auto px-6 py-12">
 
-        {/* ── FILTROS DESKTOP: centrados dentro del contenido (solo lg+) ── */}
-        <div className="hidden lg:flex justify-center gap-3 mb-12">
-          {([
-            { key: "all", label: `Todos (${COLLABORATORS.length})` },
-            { key: "cocina", label: "Cocina" },
-            { key: "salon", label: "Salón" },
-            { key: "barra", label: "Barra" },
-            { key: "reposteria", label: "Repostería" },
-            { key: "administracion", label: "Administración" },
-          ] as { key: "all" | "administracion" | "cocina" | "salon" | "barra" | "reposteria"; label: string }[]).map((cat) => (
-            <button
-              key={cat.key}
-              onClick={() => setActiveCategory(cat.key)}
-              className={`whitespace-nowrap px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
-                activeCategory === cat.key
-                  ? "bg-[#2D473C] text-[#D4AF37] shadow-md"
-                  : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
-
-
         {/* Collaborators Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredCollaborators.map((c) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {COLLABORATORS.map((c) => (
             <div
               key={c.id}
-              className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:ring-2 hover:ring-[#D4AF37]/40 transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+              className="bg-white rounded-3xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-xl hover:ring-2 hover:ring-[#D4AF37]/40 transition-all duration-300 group hover:-translate-y-1"
             >
-              {/* Photo & Badge Header */}
               <div className="relative h-72 overflow-hidden bg-gray-100">
                 <img
                   src={c.photo}
@@ -435,48 +169,14 @@ function FamiliaLasFloresPage() {
                               : "center 15%",
                   }}
                 />
-                <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-[#D4AF37]/90 backdrop-blur-sm text-[#2D473C] text-[10px] font-black uppercase tracking-wider shadow-md">
-                  {c.role}
-                </span>
-
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="font-serif text-3xl leading-tight">
-                    {c.name}
-                  </h3>
-                  <span className="text-[10px] text-gray-300 font-bold uppercase tracking-wider block mt-1">
-                    {c.years}
-                  </span>
-                </div>
               </div>
 
-              {/* Quote Body */}
-              <div className="px-7 pt-7 pb-6 space-y-3 flex-1">
+              <div className="px-7 pt-7 pb-8">
                 <span className="block font-serif text-5xl leading-none text-[#D4AF37]/50">&ldquo;</span>
                 <p className="text-[14px] italic leading-[1.75] text-gray-600 pr-1 -mt-4">
                   {c.quote}
                 </p>
-              </div>
-
-              {/* Dish Recommendation Footer */}
-              <div className="px-5 py-3.5 bg-[#F9F8F3] border-t border-gray-100 flex items-center gap-3">
-                {/* Plato: ocupa el espacio disponible, trunca si es largo */}
-                <div className="flex-1 min-w-0">
-                  <span className="block text-[9px] uppercase tracking-[0.2em] text-gray-400 font-semibold mb-0.5">Su plato recomendado</span>
-                  <p className="font-serif text-sm text-[#2D473C] leading-snug line-clamp-2">
-                    {c.recommendedDish}
-                  </p>
-                </div>
-
-                {/* Botón de ancho fijo para que no se deforme */}
-                <button
-                  onClick={() => setIsMenuOpen(true)}
-                  className="w-[72px] shrink-0 flex flex-col items-center justify-center gap-0.5 py-2.5 rounded-xl border border-[#D4AF37]/40 bg-[#D4AF37]/8 hover:bg-[#D4AF37]/20 text-[#2D473C] transition-all active:scale-95"
-                >
-                  <Utensils size={13} className="text-[#D4AF37]" />
-                  <span className="text-[9px] font-bold uppercase tracking-wider">Pedir</span>
-                </button>
+                <p className="mt-4 text-sm font-bold text-[#2D473C]">— {c.name}</p>
               </div>
             </div>
           ))}
@@ -507,7 +207,6 @@ function FamiliaLasFloresPage() {
 
       </main>
 
-      <MenuModal open={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
       <SiteFooter />
     </div>
   );
