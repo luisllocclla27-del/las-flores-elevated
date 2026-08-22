@@ -472,7 +472,7 @@ function RestaurantePage() {
 
       {/* CTA Reservas y Delivery */}
       <section id="reservas" className="bg-piedra py-16 md:py-32 px-6">
-        <div className="max-w-6xl mx-auto grid items-center gap-10 md:grid-cols-2 md:gap-16">
+        <div className="max-w-7xl mx-auto grid items-center gap-10 md:grid-cols-[1.35fr_1fr] md:gap-16">
           <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
             <img
               src="/inicio/Ubicacion.webp"
