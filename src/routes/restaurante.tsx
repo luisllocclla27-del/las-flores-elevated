@@ -479,7 +479,7 @@ function RestaurantePage() {
               alt="Ubicacion y destino del Restaurante Las Flores"
               loading="lazy"
               decoding="async"
-              className="h-full w-full object-cover"
+              className="h-full w-full object-contain"
             />
           </div>
           <div className="text-center md:text-left">
