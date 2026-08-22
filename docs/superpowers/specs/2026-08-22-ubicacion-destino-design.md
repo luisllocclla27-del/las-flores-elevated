@@ -11,6 +11,7 @@ Actualizar unicamente la seccion de contenido que actualmente se presenta como "
 - Reemplazar el titulo y el texto descriptivo por contenido orientado a la ubicacion del restaurante.
 - Eliminar los botones "Reservar mesa" y "Pedir delivery" de esta seccion.
 - Mostrar `public/inicio/Ubicacion.webp` mediante `/inicio/Ubicacion.webp`, con texto alternativo descriptivo y carga diferida coherente con la seccion.
+- Distribuir la imagen a la izquierda y el texto a la derecha en escritorio; apilar ambos elementos en movil.
 
 ## Validacion
 
