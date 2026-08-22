@@ -472,30 +472,27 @@ function RestaurantePage() {
 
       {/* CTA Reservas y Delivery */}
       <section id="reservas" className="bg-piedra py-16 md:py-32 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-eucalipto font-medium uppercase tracking-[0.3em] text-xs block mb-6">
-            Reservas y Delivery
-          </span>
-          <h2 className="font-serif text-4xl md:text-6xl leading-[1.05] mb-8 text-balance">
-            Reserve su mesa o disfrute Las Flores en casa
-          </h2>
-          <p className="text-lg text-nogal/70 leading-[1.7] max-w-[52ch] mx-auto mb-12">
-            Separe su lugar con anticipación o pida nuestros platos con delivery y recojo en
-            Ayacucho.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6 mt-4">
-            <Link
-              to="/reservas"
-              className="px-10 py-5 font-serif font-bold text-lg tracking-wide rounded-xl btn-yellow-hover inline-block"
-            >
-              <span>Reservar mesa</span>
-            </Link>
-            <button
-              onClick={() => startTransition(() => setIsMenuOpen(true))}
-              className="px-10 py-5 font-serif font-bold text-lg tracking-wide transition-all shadow-md hover:shadow-lg rounded-xl hover:-translate-y-0.5 bg-eucalipto text-piedra"
-            >
-              Pedir delivery
-            </button>
+        <div className="max-w-6xl mx-auto grid items-center gap-10 md:grid-cols-2 md:gap-16">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-sm">
+            <img
+              src="/inicio/Ubicacion.webp"
+              alt="Ubicacion y destino del Restaurante Las Flores"
+              loading="lazy"
+              decoding="async"
+              className="h-full w-full object-cover"
+            />
+          </div>
+          <div className="text-center md:text-left">
+            <span className="text-eucalipto font-medium uppercase tracking-[0.3em] text-xs block mb-6">
+              Ubicacion y destino
+            </span>
+            <h2 className="font-serif text-4xl md:text-6xl leading-[1.05] mb-8 text-balance">
+              Encuentrenos en el corazon de Ayacucho
+            </h2>
+            <p className="text-lg text-nogal/70 leading-[1.7] max-w-[52ch]">
+              Visite Restaurante Las Flores y descubra una experiencia gastronomica ayacuchana en
+              un espacio familiar y acogedor.
+            </p>
           </div>
         </div>
       </section>
