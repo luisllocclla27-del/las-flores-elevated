@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateDistanceKm, calculateDeliveryCost, DELIVERY_CONFIG, RESTAURANT_LOCATION } from "../utils/deliveryUtils";
-import { resolveProductCustomOptions } from "../lib/liveProducts";
+import { resolveProductCustomOptions, resolveDeliveryPrice } from "../lib/liveProducts";
 
 describe("Pruebas Unitarias de Cálculo de Delivery", () => {
   it("debe verificar la ubicación exacta del restaurante Las Flores en Ayacucho", () => {
@@ -42,8 +42,14 @@ describe("Pruebas Unitarias de Cálculo de Delivery", () => {
         expect.objectContaining({ name: "Filet mignon", price: 46 }),
       ]),
     );
-    expect(customOptions?.[1]).toMatchObject({ title: "2. Carbohidrato" });
-    expect(customOptions?.[2]).toMatchObject({ title: "3. Ensalada" });
+    expect(customOptions).toHaveLength(1);
+  });
+
+  it("debe usar los precios iniciales solicitados en la ventana de delivery", () => {
+    expect(resolveDeliveryPrice("Duo de pastas", "S/ 0.00")).toBe("S/ 56.00");
+    expect(resolveDeliveryPrice("Espagueti al pesto", "S/ 0.00")).toBe("S/ 40.00");
+    expect(resolveDeliveryPrice("Fettuccini a la huancaina", "S/ 0.00")).toBe("S/ 44.00");
+    expect(resolveDeliveryPrice("Puca picante", "S/ 25.00")).toBe("S/ 25.00");
   });
 
   it("debe personalizar fetuchini a la huancaina con pollo al grill y lomo saltado", () => {
@@ -57,6 +63,7 @@ describe("Pruebas Unitarias de Cálculo de Delivery", () => {
         expect.objectContaining({ name: "Lomo saltado", price: 44 }),
       ]),
     );
+    expect(customOptions).toHaveLength(1);
   });
 
   it("debe personalizar gran filet mignon con carbohidrato y ensalada", () => {

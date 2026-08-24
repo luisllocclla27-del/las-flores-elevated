@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Plus, X, ShoppingCart } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { BreakfastCustomizationModal } from "./BreakfastCustomizationModal";
-import { useLiveMenuCategories } from "../lib/liveProducts";
+import { resolveDeliveryPrice, useLiveMenuCategories } from "../lib/liveProducts";
 import { MobileCategoryFilter } from "./MobileCategoryFilter";
 
 /* ─── Paleta de Lujo (Eucalipto & Crema) ─── */
@@ -306,7 +306,7 @@ export function MenuModal({ open, onClose }: MenuModalProps) {
               {(active?.dishes || []).map((dish, i) => (
                 <DishCard
                   key={i}
-                  dish={dish}
+                  dish={{ ...dish, price: resolveDeliveryPrice(dish.name, dish.price) }}
                   categoryId={activeId}
                   onSelectBreakfast={(d) => setSelectedBreakfastDish(d)}
                 />

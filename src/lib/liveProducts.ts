@@ -14,6 +14,21 @@ function normalizeText(value: string): string {
     .trim();
 }
 
+export function resolveDeliveryPrice(productName: string, fallbackPrice: string): string {
+  const normalizedName = normalizeText(productName);
+
+  if (normalizedName.includes("duo de pastas")) return "S/ 56.00";
+  if (normalizedName.includes("espagueti") && normalizedName.includes("pesto")) return "S/ 40.00";
+  if (
+    (normalizedName.includes("fetuchini") || normalizedName.includes("fetuccini") || normalizedName.includes("fettuccini")) &&
+    normalizedName.includes("huancaina")
+  ) {
+    return "S/ 44.00";
+  }
+
+  return fallbackPrice;
+}
+
 function buildSizeCustomizationSection(medioPrice: number, enteroPrice: number) {
   return [
     {
@@ -70,22 +85,6 @@ export function resolveProductCustomOptions(productName: string, basePrice: numb
           { id: "milanesa", name: "Milanesa", price: 42 },
           { id: "pollo_grill", name: "Pollo al grill", price: 40 },
           { id: "filet_mignon", name: "Filet mignon", price: 46 },
-        ],
-      },
-      {
-        id: "carbohidrato",
-        title: "2. Carbohidrato",
-        options: [
-          { id: "papas_fritas_francesas", name: "Papas fritas francesas", price: 0 },
-          { id: "papas_salteadas_mantequilla", name: "Papas salteadas en mantequilla", price: 0 },
-        ],
-      },
-      {
-        id: "ensalada",
-        title: "3. Ensalada",
-        options: [
-          { id: "ensalada_organica", name: "Ensalada orgánica", price: 0 },
-          { id: "ensalada_sancochada", name: "Ensalada sancochada", price: 0 },
         ],
       },
     ];
