@@ -11,6 +11,7 @@ import { CashierKanbanView } from "../components/CashierKanbanView";
 import { CashierListView } from "../components/CashierListView";
 import { CashierAuditModal } from "../components/CashierAuditModal";
 import { CashierStockModal } from "../components/CashierStockModal";
+import { YapeConfigModal } from "../components/YapeConfigModal";
 import {
   Search,
   RefreshCw,
@@ -1327,158 +1328,15 @@ function CashierDashboardRoute() {
       />
 
       {/* Modal Switcher / Selector de QR Yape (Empresa vs Personal) */}
-      {isYapeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 md:p-8 shadow-2xl border border-gray-200 space-y-6">
-            <div className="flex items-center justify-between border-b border-gray-100 pb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center font-bold">
-                  <QrCode size={22} />
-                </div>
-                <div>
-                  <h3 className="font-serif font-black text-lg text-[#2D473C]">Configurar QR de Yape</h3>
-                  <p className="text-xs text-gray-500">Alternar entre cuenta de Empresa y cuenta Personal</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsYapeModalOpen(false)}
-                className="p-2 rounded-xl text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            {/* Selector de Modo */}
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = { ...yapeConfig, mode: "business" as const };
-                  setYapeConfig(updated);
-                  saveYapeConfig(updated);
-                }}
-                className={`p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col gap-2 ${
-                  yapeConfig.mode === "business"
-                    ? "border-emerald-600 bg-emerald-50/70 shadow-sm ring-1 ring-emerald-600"
-                    : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <Building2 className={yapeConfig.mode === "business" ? "text-emerald-700" : "text-gray-400"} size={20} />
-                  {yapeConfig.mode === "business" && (
-                    <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs">
-                      <Check size={12} strokeWidth={3} />
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <span className="font-bold text-xs uppercase block text-gray-900">Yape Empresa</span>
-                  <span className="text-xs text-gray-500 line-clamp-1">{yapeConfig.businessName}</span>
-                </div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = { ...yapeConfig, mode: "personal" as const };
-                  setYapeConfig(updated);
-                  saveYapeConfig(updated);
-                }}
-                className={`p-4 rounded-2xl border-2 text-left transition-all cursor-pointer flex flex-col gap-2 ${
-                  yapeConfig.mode === "personal"
-                    ? "border-purple-600 bg-purple-50/70 shadow-sm ring-1 ring-purple-600"
-                    : "border-gray-200 bg-white hover:bg-gray-50 text-gray-600"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <UserCheck className={yapeConfig.mode === "personal" ? "text-purple-700" : "text-gray-400"} size={20} />
-                  {yapeConfig.mode === "personal" && (
-                    <span className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">
-                      <Check size={12} strokeWidth={3} />
-                    </span>
-                  )}
-                </div>
-                <div>
-                  <span className="font-bold text-xs uppercase block text-gray-900">Yape Personal</span>
-                  <span className="text-xs text-gray-500 line-clamp-1">{yapeConfig.personalName}</span>
-                </div>
-              </button>
-            </div>
-
-            {/* Datos Editables del Modo Activo */}
-            <div className="p-4 rounded-2xl bg-gray-50 border border-gray-200 space-y-4 text-xs">
-              <span className="text-xs font-bold text-gray-400 uppercase tracking-widest block">
-                Datos del Yape Activo ({yapeConfig.mode === "personal" ? "Personal" : "Empresarial"})
-              </span>
-
-              {yapeConfig.mode === "personal" ? (
-                <>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Nombre del Titular Personal *</label>
-                    <input
-                      type="text"
-                      value={yapeConfig.personalName}
-                      onChange={(e) => setYapeConfig({ ...yapeConfig, personalName: e.target.value })}
-                      className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-purple-600"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Número Celular Personal (Opcional)</label>
-                    <input
-                      type="text"
-                      value={yapeConfig.personalPhone || ""}
-                      onChange={(e) => setYapeConfig({ ...yapeConfig, personalPhone: e.target.value })}
-                      placeholder="980 723 422"
-                      className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs text-gray-800 focus:outline-none focus:border-purple-600"
-                    />
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Razón Social de la Empresa *</label>
-                    <input
-                      type="text"
-                      value={yapeConfig.businessName}
-                      onChange={(e) => setYapeConfig({ ...yapeConfig, businessName: e.target.value })}
-                      className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs font-bold text-gray-800 focus:outline-none focus:border-emerald-600"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-700 mb-1">Teléfono Empresa (Opcional)</label>
-                    <input
-                      type="text"
-                      value={yapeConfig.businessPhone || ""}
-                      onChange={(e) => setYapeConfig({ ...yapeConfig, businessPhone: e.target.value })}
-                      placeholder="967 456 230"
-                      className="w-full bg-white border border-gray-300 rounded-xl px-3.5 py-2 text-xs text-gray-800 focus:outline-none focus:border-emerald-600"
-                    />
-                  </div>
-                </>
-              )}
-
-              <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs leading-relaxed">
-                ℹ️ Al cambiar de modo, el carrito de compras de todos los clientes mostrará de forma inmediata el nuevo nombre y datos al momento de pagar por Yape.
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => {
-                  saveYapeConfig(yapeConfig);
-                  setIsYapeModalOpen(false);
-                }}
-                className="w-full py-3 rounded-xl bg-[#2D473C] hover:bg-[#243B31] text-white text-xs font-black transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <Check size={16} strokeWidth={2.5} />
-                <span>Aplicar y Guardar Configuración</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
-      )}
+      <YapeConfigModal
+        isOpen={isYapeModalOpen}
+        onClose={() => setIsYapeModalOpen(false)}
+        currentConfig={yapeConfig}
+        onSave={(updated) => {
+          setYapeConfig(updated);
+          saveYapeConfig(updated);
+        }}
+      />
 
     </div>
   );
