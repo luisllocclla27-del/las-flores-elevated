@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useRef } from "react";
 import { supabase } from "../lib/supabase";
 import { sendReviewRequestEmail } from "../lib/emailService";
@@ -43,6 +43,7 @@ export const Route = createFileRoute("/caja")({
 });
 
 function CashierDashboardRoute() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   
@@ -193,23 +194,23 @@ function CashierDashboardRoute() {
 
   const checkAuth = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
       
-      if (!user) {
-        window.location.href = "/restaurante";
+      if (userError || !user) {
+        navigate({ to: "/restaurante" });
         return;
       }
 
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", user.id)
         .single();
 
       const userRole = profile?.role?.toLowerCase();
-      if (userRole !== "admin" && userRole !== "cashier" && userRole !== "staff") {
+      if (profileError || (userRole !== "admin" && userRole !== "cashier" && userRole !== "staff")) {
         console.warn("Acceso denegado a caja. Rol insuficiente:", userRole);
-        window.location.href = "/restaurante";
+        navigate({ to: "/restaurante" });
         return;
       }
 
@@ -217,7 +218,7 @@ function CashierDashboardRoute() {
       await fetchData();
     } catch (err) {
       console.error("Error al comprobar permisos de caja:", err);
-      window.location.href = "/restaurante";
+      navigate({ to: "/restaurante" });
     } finally {
       setLoading(false);
     }
@@ -614,6 +615,17 @@ function CashierDashboardRoute() {
     const s = (r.status || "").toLowerCase();
     return s === "confirmed" || s === "confirmada";
   }).length;
+
+  if (loading || !isAuthorized) {
+    return (
+      <div className="min-h-screen bg-[#F9F8F3] flex items-center justify-center font-sans">
+        <div className="text-center space-y-3">
+          <RefreshCw size={32} className="animate-spin text-[#2D473C] mx-auto" />
+          <p className="text-sm font-bold text-gray-700">Verificando credenciales de caja...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="doc-legible min-h-screen bg-[#F9F8F3] text-[#231A14] pb-20 font-sans selection:bg-[#D4AF37] selection:text-[#2D473C]">

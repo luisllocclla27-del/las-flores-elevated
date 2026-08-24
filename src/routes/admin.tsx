@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase, signOut } from "../lib/supabase";
 import {
@@ -48,6 +48,7 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminRoute() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [userEmail, setUserEmail] = useState<string>("");
@@ -108,23 +109,23 @@ function AdminRoute() {
 
   const checkAuth = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
       
-      if (!user) {
-        window.location.href = "/restaurante";
+      if (userError || !user) {
+        navigate({ to: "/restaurante" });
         return;
       }
 
       setUserEmail(user.email || "");
 
-      const { data: profile } = await supabase
+      const { data: profile, error: profileError } = await supabase
         .from("profiles")
         .select("role")
         .eq("id", user.id)
         .single();
 
-      if (profile?.role !== "admin") {
-        window.location.href = "/restaurante";
+      if (profileError || profile?.role !== "admin") {
+        navigate({ to: "/restaurante" });
         return;
       }
 
@@ -132,7 +133,7 @@ function AdminRoute() {
       await fetchData();
     } catch (error) {
       console.error("Error checking auth:", error);
-      window.location.href = "/restaurante";
+      navigate({ to: "/restaurante" });
     } finally {
       setLoading(false);
     }
@@ -340,12 +341,12 @@ function AdminRoute() {
     return matchSearch && matchCategory;
   });
 
-  if (loading) {
+  if (loading || !isAuthorized) {
     return (
       <div className="min-h-screen bg-[#F9F8F3] flex items-center justify-center font-sans">
         <div className="text-center space-y-3">
           <RefreshCw size={32} className="animate-spin text-[#2D473C] mx-auto" />
-          <p className="text-sm font-bold text-gray-700">Cargando Suite de Administración...</p>
+          <p className="text-sm font-bold text-gray-700">Verificando credenciales de acceso...</p>
         </div>
       </div>
     );
