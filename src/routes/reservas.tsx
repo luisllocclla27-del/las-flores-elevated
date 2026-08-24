@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState, useRef, useEffect, useMemo } from "react";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
+import { SiteHeader } from "@/components/SiteHeader";
 import { useCart } from "@/context/CartContext";
 import type { User } from "@supabase/supabase-js";
 import { signInWithGoogle, signInWithFacebook, signOut, createReservation, updateUserProfile, supabase } from "@/lib/supabase";
@@ -647,45 +647,8 @@ function ReservasPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f4e6] flex flex-col text-[#2c2a29] font-sans">
-      {/* Navigation Bar */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
-          isScrolled
-            ? "bg-[#f8f4e6]/95 backdrop-blur-md text-nogal shadow-md border-b border-nogal/10"
-            : "bg-transparent text-piedra border-b border-transparent"
-        }`}
-      >
-        <div className="flex items-center">
-          <SiteNavigationMenu isScrolled={isScrolled} />
-        </div>
-        <Link
-          to="/"
-          className="flex-1 flex justify-center pointer-events-auto"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <img
-            src="/images.png"
-            alt="Restaurante Las Flores"
-            className="h-10 w-auto object-contain transition-all"
-            style={
-              isScrolled
-                ? { filter: "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)" }
-                : { filter: "brightness(0) invert(1)" }
-            }
-          />
-        </Link>
-        <div className="flex items-center gap-6 text-xs uppercase tracking-widest font-semibold pointer-events-auto">
-          {totalItems > 0 && (
-            <AnimatedCartButton
-              onClick={() => setCartOpen(true)}
-              className="hover:opacity-70 transition-opacity"
-              size={20}
-              color="#8B7355"
-            />
-          )}
-
-        </div>
-      </nav>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader showReservar={false} />
 
       {/* Header Banner */}
       {!selectedZona && (

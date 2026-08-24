@@ -1,13 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
+import { SiteHeader } from "@/components/SiteHeader";
 import { categories as staticCategories } from "@/components/MenuModal";
 import { MenuModal } from "@/components/MenuModal";
 import { SiteFooter } from "@/components/site-footer";
 import { useLiveMenuCategories, Dish } from "@/lib/liveProducts";
 import { CartSidebar } from "@/components/CartSidebar";
 import { useCart } from "@/context/CartContext";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { MobileCategoryFilter } from "@/components/MobileCategoryFilter";
 
 export const Route = createFileRoute("/carta")({
@@ -103,58 +102,12 @@ function CartaPage() {
 
   return (
     <div className="min-h-screen bg-piedra text-nogal font-sans flex flex-col">
-      {/* Unified Top Nav Bar - Premium Style (Matches Homepage & Reservas) */}
-      <nav className="bg-[#f8f4e6] text-nogal px-4 md:px-10 py-3 flex items-center justify-between gap-3 shadow-xs border-b border-nogal/10 sticky top-0 z-50">
-        <div className="flex items-center">
-          <SiteNavigationMenu isScrolled={true} />
-        </div>
-
-        <Link
-          to="/"
-          className="flex-1 flex justify-center pointer-events-auto"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <img
-            src="/images.png"
-            alt="Las Flores Logo"
-            className="h-8 md:h-10 w-auto object-contain"
-          />
-        </Link>
-
-        <div className="flex items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
-          {/* Delivery: Estilo pill en móvil, texto simple en desktop */}
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="pointer-events-auto sm:hidden px-4.5 py-1.5 text-[11px] font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-          >
-            Delivery
-          </button>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="hidden sm:inline-block hover:text-chilca transition-colors text-nogal leading-none"
-          >
-            DELIVERY
-          </button>
-
-          {/* Reservar: Oculto en móvil, estilo pill en desktop */}
-          <Link
-            to="/reservas"
-            className="hidden sm:inline-flex pointer-events-auto md:px-5 md:py-2 md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-          >
-            Reservar
-          </Link>
-
-          {/* Carrito: Aparece al lado derecho después de los botones */}
-          {totalItems > 0 && (
-            <AnimatedCartButton
-              onClick={() => setIsCartOpen(true)}
-              className="hover:text-chilca transition-colors text-nogal"
-              size={20}
-              color="#8B7355"
-            />
-          )}
-        </div>
-      </nav>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader
+        isAlwaysSolid={true}
+        showDelivery={true}
+        onDeliveryClick={() => setIsMenuOpen(true)}
+      />
 
       {/* Page Title */}
       <div className="bg-piedra pt-10 pb-4 text-center">

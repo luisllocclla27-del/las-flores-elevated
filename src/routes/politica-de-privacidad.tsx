@@ -1,10 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
+import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/site-footer";
 import { ShieldCheck, Lock, Eye, FileText, CheckCircle2, ArrowLeft } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/politica-de-privacidad")({
   head: () => ({
@@ -22,71 +19,10 @@ export const Route = createFileRoute("/politica-de-privacidad")({
 });
 
 function PoliticaPrivacidadPage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const { totalItems, setIsOpen: setCartOpen } = useCart();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-piedra flex flex-col font-sans text-nogal selection:bg-chilca/20">
-      {/* ── HEADER FIJO ── */}
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${
-          isScrolled
-            ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3"
-            : "bg-transparent border-transparent py-5"
-        }`}
-      >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center gap-3">
-          <div className="flex items-center">
-            <SiteNavigationMenu isScrolled={isScrolled} />
-          </div>
-
-          <a href="/" className="flex-1 flex justify-center items-center group">
-            <img
-              src="/images.png"
-              alt="Las Flores"
-              className={`transition-all duration-300 origin-center ${
-                isScrolled ? "h-8 opacity-100" : "h-10 md:h-12 opacity-100 invert brightness-0"
-              }`}
-              style={
-                isScrolled
-                  ? {
-                      filter:
-                        "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)",
-                    }
-                  : {}
-              }
-            />
-          </a>
-
-          <div className="flex items-center gap-3">
-            <a
-              href="/reservas"
-              className={`px-4 py-2 rounded-full font-semibold text-xs transition-all ${
-                isScrolled
-                  ? "bg-eucalipto text-cream hover:bg-eucalipto/90"
-                  : "bg-cream text-ink hover:bg-cream/90"
-              }`}
-            >
-              Reservar
-            </a>
-
-            {totalItems > 0 && (
-              <AnimatedCartButton
-                onClick={() => setCartOpen(true)}
-                className="p-2 rounded-full bg-eucalipto text-cream hover:bg-eucalipto/90 transition-all"
-                size={20}
-                color="#8B7355"
-              />
-            )}
-          </div>
-        </div>
-      </header>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader />
 
       {/* ── HERO BANNER ── */}
       <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 px-6 md:px-12 lg:px-20 bg-eucalipto text-cream overflow-hidden">

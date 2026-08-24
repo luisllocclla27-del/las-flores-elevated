@@ -8,10 +8,7 @@ const platoMaizImg = "/gastronomia/chicharron.webp"; // placeholder
 import { SiteFooter } from "@/components/site-footer";
 import { useState, useTransition, useEffect, useRef } from "react";
 import { Calendar, CreditCard, ChevronRight, Check, ChevronDown } from "lucide-react";
-import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
-import { useCart } from "@/context/CartContext";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
-
+import { SiteHeader } from "@/components/SiteHeader";
 import { MenuModal } from "@/components/MenuModal";
 import { FamiliaLasFloresSection } from "../components/FamiliaLasFloresSection";
 
@@ -325,10 +322,8 @@ function ChefAccordionSection() {
 }
 
 function RestaurantePage() {
-  const { totalItems, setIsOpen: setCartOpen } = useCart();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const handleOpenMenu = () => setIsMenuOpen(true);
@@ -336,62 +331,13 @@ function RestaurantePage() {
     return () => window.removeEventListener("open_menu_modal", handleOpenMenu);
   }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-  const [isPending, startTransition] = useTransition();
-
   return (
     <div className="bg-piedra text-nogal font-sans selection:bg-chilca/30">
-      {/* Nav: nuestra historia | logo | reservas y delivery */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
-      >
-        <div className="flex items-center">
-          <SiteNavigationMenu isScrolled={isScrolled} />
-        </div>
-        <Link
-          to="/restaurante"
-          className="flex-1 flex justify-center pointer-events-auto"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <img
-            src="/images.png"
-            alt="Las Flores Logo"
-            className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
-          />
-        </Link>
-        <div className="flex items-center gap-4 md:gap-6 text-[11px] md:text-sm uppercase tracking-[0.15em] font-semibold pointer-events-auto">
-          <button
-            onClick={() => startTransition(() => setIsMenuOpen(true))}
-            className="hidden sm:inline-block hover:text-chilca transition-colors leading-none"
-          >
-            DELIVERY
-          </button>
-          <Link
-            to="/reservas"
-            className={`pointer-events-auto px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
-              isScrolled
-                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
-            }`}
-          >
-            Reservar
-          </Link>
-          {totalItems > 0 && (
-            <AnimatedCartButton
-              onClick={() => setCartOpen(true)}
-              className="hover:text-chilca transition-colors ml-1"
-              size={20}
-              color={isScrolled ? "#8B7355" : "#F5F5DC"}
-            />
-          )}
-        </div>
-      </nav>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader
+        showDelivery={true}
+        onDeliveryClick={() => startTransition(() => setIsMenuOpen(true))}
+      />
 
       <header
         id="historia"

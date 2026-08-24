@@ -16,10 +16,8 @@ import {
   ExternalLink,
   Sparkles
 } from "lucide-react";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
-import { SiteNavigationMenu } from "../components/SiteNavigationMenu";
+import { SiteHeader } from "../components/SiteHeader";
 import { useState, useEffect } from "react";
-import { useCart } from "@/context/CartContext";
 
 export const Route = createFileRoute("/contacto")({
   head: () => ({
@@ -59,8 +57,6 @@ const FAQS = [
 ];
 
 function ContactoPage() {
-  const { totalItems, setIsOpen: setCartOpen } = useCart();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -69,16 +65,9 @@ function ContactoPage() {
 
   useEffect(() => {
     setIsMounted(true);
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-
     const now = new Date();
     const hours = now.getHours();
     setIsOpenNow(hours >= 7 && hours < 18);
-
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,48 +110,8 @@ function ContactoPage() {
 
   return (
     <div className="min-h-screen bg-[#f8f4e6] flex flex-col font-sans text-[#2c2a29]">
-      {/* Nav */}
-      <nav
-        className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-2 md:py-4 transition-all duration-500 pointer-events-none ${isScrolled ? "bg-piedra text-nogal shadow-md" : "bg-transparent text-piedra"}`}
-      >
-        <div className="flex items-center">
-          <SiteNavigationMenu isScrolled={isScrolled} />
-        </div>
-        <a
-          href="/"
-          className="flex-1 flex justify-center pointer-events-auto"
-        >
-          <img
-            src="/images.png"
-            alt="Las Flores Logo"
-            className={`w-auto object-contain transition-all duration-500 ${isScrolled ? "h-8" : "h-10 md:h-12 brightness-0 invert"}`}
-          />
-        </a>
-        <div className="flex items-center gap-4 md:gap-8 pointer-events-auto">
-          <Link
-            to="/reservas"
-            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
-              isScrolled
-                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
-            }`}
-          >
-            Reservar
-          </Link>
-          
-          {/* Carrito */}
-          {totalItems > 0 && (
-            <AnimatedCartButton
-              onClick={() => setCartOpen(true)}
-              className={`transition-colors ${
-                isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
-              }`}
-              size={20}
-              color={isScrolled ? "#8B7355" : "#F5F5DC"}
-            />
-          )}
-        </div>
-      </nav>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader />
 
       {/* ── HERO ── */}
       <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">

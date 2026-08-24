@@ -1,10 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Sparkles, ArrowRight } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 
 export const Route = createFileRoute("/familia-las-flores")({
   head: () => ({
@@ -57,63 +54,10 @@ const COLLABORATORS: Collaborator[] = [
 ];
 
 function FamiliaLasFloresPage() {
-  const { totalItems, setIsOpen: setCartOpen } = useCart();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <div className="min-h-screen bg-piedra flex flex-col font-sans text-nogal selection:bg-chilca/20">
-      {/* ── HEADER FIJO ── */}
-      <header
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 border-b ${isScrolled ? "bg-piedra/90 backdrop-blur-md shadow-sm border-nogal/10 py-3" : "bg-transparent border-transparent py-5"
-          }`}
-      >
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 flex justify-between items-center gap-3 relative">
-          <div className="flex items-center">
-            <SiteNavigationMenu isScrolled={isScrolled} />
-          </div>
-
-          <a href="/" className="flex-1 flex justify-center items-center group">
-            <img
-              src="/images.png"
-              alt="Las Flores"
-              className={`transition-all duration-300 origin-center ${isScrolled ? "h-8 opacity-100" : "h-10 md:h-12 opacity-100 invert brightness-0"}`}
-              style={isScrolled ? { filter: "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)" } : {}}
-            />
-          </a>
-
-          <div className="flex items-center gap-4 md:gap-6">
-            <Link
-              to="/reservas"
-              className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${isScrolled
-                  ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-                  : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
-                }`}
-            >
-              Reservar
-            </Link>
-            
-            {/* Carrito */}
-            {totalItems > 0 && (
-              <AnimatedCartButton
-                onClick={() => setCartOpen(true)}
-                className={`transition-colors ${
-                  isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
-                }`}
-                size={20}
-                color={isScrolled ? "#8B7355" : "#F5F5DC"}
-              />
-            )}
-          </div>
-        </div>
-      </header>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader />
 
       {/* Hero Section Completa */}
       <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">

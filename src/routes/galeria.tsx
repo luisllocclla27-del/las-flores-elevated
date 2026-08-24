@@ -1,10 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { SiteFooter } from "@/components/site-footer";
-import { SiteNavigationMenu } from "@/components/SiteNavigationMenu";
+import { SiteHeader } from "@/components/SiteHeader";
 import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import { AnimatedCartButton } from "@/components/AnimatedCartButton";
 import { MobileCategoryFilter } from "@/components/MobileCategoryFilter";
 
 export const Route = createFileRoute("/galeria")({
@@ -140,16 +138,8 @@ const GALLERY_CATEGORIES: Category[] = [
 ];
 
 function GaleriaPage() {
-  const { totalItems, setIsOpen: setCartOpen } = useCart();
   const [activeCategory, setActiveCategory] = useState<string>("festividades");
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 40);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const currentCategory = GALLERY_CATEGORIES.find((cat) => cat.id === activeCategory);
   const images = currentCategory?.images ?? [];
@@ -167,55 +157,8 @@ function GaleriaPage() {
 
   return (
     <div className="min-h-screen bg-piedra flex flex-col">
-      {/* Navigation Bar */}
-      <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-3 px-4 md:px-10 py-3 transition-all duration-300 pointer-events-none ${
-          isScrolled
-            ? "bg-piedra/95 backdrop-blur-sm border-b border-nogal/10"
-            : "bg-transparent border-b border-transparent"
-        }`}>
-        <div className="flex items-center">
-          <SiteNavigationMenu isScrolled={isScrolled} isAlwaysDark={false} />
-        </div>
-        <div className="flex-1 flex justify-center pointer-events-auto">
-          <img
-            src="/images.png"
-            alt="Restaurante Las Flores"
-            className="h-10 w-auto object-contain transition-all"
-            style={
-              isScrolled
-                ? {
-                    filter:
-                      "brightness(0) saturate(100%) invert(19%) sepia(16%) saturate(740%) hue-rotate(346deg) brightness(96%) contrast(89%)",
-                  }
-                : { filter: "brightness(0) invert(1)" }
-            }
-          />
-        </div>
-        <div className="flex items-center gap-4 md:gap-8 pointer-events-auto">
-          <Link
-            to="/reservas"
-            className={`px-4.5 py-1.5 md:px-5 md:py-2 text-[11px] md:text-xs font-bold uppercase tracking-widest transition-all rounded-full border ${
-              isScrolled
-                ? "border-nogal text-nogal hover:bg-nogal hover:text-white shadow-sm"
-                : "border-piedra/60 text-piedra hover:bg-piedra hover:text-nogal shadow-sm"
-            }`}
-          >
-            Reservar
-          </Link>
-          
-          {/* Carrito */}
-          {totalItems > 0 && (
-            <AnimatedCartButton
-              onClick={() => setCartOpen(true)}
-              className={`transition-colors ${
-                isScrolled ? "hover:text-chilca text-nogal" : "hover:text-chilca text-piedra"
-              }`}
-              size={20}
-              color={isScrolled ? "#8B7355" : "#F5F5DC"}
-            />
-          )}
-        </div>
-      </nav>
+      {/* ── HEADER UNIFICADO ── */}
+      <SiteHeader />
 
       {/* Header Banner */}
       <section className="relative min-h-[60vh] flex items-center justify-center pt-32 pb-24 px-6 bg-eucalipto-dark text-piedra overflow-hidden">
