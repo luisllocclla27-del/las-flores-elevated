@@ -1332,6 +1332,7 @@ function CashierDashboardRoute() {
         isOpen={isYapeModalOpen}
         onClose={() => setIsYapeModalOpen(false)}
         currentConfig={yapeConfig}
+        role="cashier"
         onSave={(updated) => {
           setYapeConfig(updated);
           saveYapeConfig(updated);
