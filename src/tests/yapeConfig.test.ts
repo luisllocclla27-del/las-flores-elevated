@@ -1,5 +1,14 @@
 import { describe, it, expect, beforeEach, vi, beforeAll } from "vitest";
-import { DEFAULT_YAPE_CONFIG, getYapeConfig, saveYapeConfig, YapeConfig } from "../lib/yapeService";
+import {
+  DEFAULT_YAPE_CONFIG,
+  DEFAULT_YAPE_ACCOUNTS,
+  getYapeConfig,
+  saveYapeConfig,
+  getActiveYapeAccount,
+  normalizeYapeConfig,
+  YapeConfig,
+  YapeAccount,
+} from "../lib/yapeService";
 
 describe("Yape Config Service", () => {
   let mockStorage: Record<string, string> = {};
@@ -44,46 +53,87 @@ describe("Yape Config Service", () => {
     vi.restoreAllMocks();
   });
 
-  it("returns default config when storage is empty", async () => {
+  it("returns default config and accounts when storage is empty", async () => {
     const config = await getYapeConfig();
     expect(config.mode).toBe("business");
+    expect(config.accounts.length).toBeGreaterThanOrEqual(2);
     expect(config.businessQrUrl).toBeDefined();
     expect(config.personalQrUrl).toBeDefined();
+
+    const active = getActiveYapeAccount(config);
+    expect(active.id).toBe("business");
+    expect(active.name).toBe("Corporación Las Flores SAC");
   });
 
-  it("persists updated QR URLs and settings", async () => {
+  it("persists multiple dynamic Yape accounts and switches active account", async () => {
+    const customAccount: YapeAccount = {
+      id: "account_caja_3",
+      type: "custom",
+      label: "Yape Caja Secundaria",
+      name: "Administración Las Flores 2",
+      phone: "911 222 333",
+      qrUrl: "https://example.com/qr3.webp",
+      enabled: true,
+    };
+
     const newConfig: YapeConfig = {
       ...DEFAULT_YAPE_CONFIG,
-      mode: "personal",
-      personalQrUrl: "https://example.com/new-personal-qr.webp",
-      personalName: "Juan Perez",
-      personalPhone: "999 888 777",
+      activeAccountId: "account_caja_3",
+      accounts: [...DEFAULT_YAPE_ACCOUNTS, customAccount],
     };
 
-    const saved = await saveYapeConfig(newConfig);
-    expect(saved).toBe(true);
+    await saveYapeConfig(newConfig);
 
     const loaded = await getYapeConfig();
-    expect(loaded.mode).toBe("personal");
-    expect(loaded.personalQrUrl).toBe("https://example.com/new-personal-qr.webp");
-    expect(loaded.personalName).toBe("Juan Perez");
-    expect(loaded.personalPhone).toBe("999 888 777");
+    expect(loaded.accounts.length).toBe(3);
+    expect(loaded.activeAccountId).toBe("account_caja_3");
+
+    const active = getActiveYapeAccount(loaded);
+    expect(active.id).toBe("account_caja_3");
+    expect(active.name).toBe("Administración Las Flores 2");
+    expect(active.phone).toBe("911 222 333");
   });
 
-  it("persists updated business QR URL and settings", async () => {
-    const updatedBusiness: YapeConfig = {
+  it("automatically falls back to another enabled account if active account is disabled", async () => {
+    const configWithDisabled: YapeConfig = {
       ...DEFAULT_YAPE_CONFIG,
-      mode: "business",
-      businessQrUrl: "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoBAAEAAQAcJaACdLoAAP7/2QAA",
-      businessName: "Corporación Las Flores 2026",
+      activeAccountId: "business",
+      accounts: [
+        {
+          ...DEFAULT_YAPE_ACCOUNTS[0],
+          enabled: false, // Empresa deshabilitada
+        },
+        {
+          ...DEFAULT_YAPE_ACCOUNTS[1],
+          enabled: true, // Personal habilitada
+        },
+      ],
     };
 
-    const saved = await saveYapeConfig(updatedBusiness);
-    expect(saved).toBe(true);
+    const normalized = normalizeYapeConfig(configWithDisabled);
+    const active = getActiveYapeAccount(normalized);
+    expect(active.id).toBe("personal");
+    expect(active.name).toBe(DEFAULT_YAPE_ACCOUNTS[1].name);
+  });
+
+  it("can restore full factory default configuration", async () => {
+    // 1. Modificar
+    const modified: YapeConfig = {
+      ...DEFAULT_YAPE_CONFIG,
+      activeAccountId: "personal",
+      personalName: "Nombre Modificado",
+      personalPhone: "000 000 000",
+      accounts: [],
+    };
+    await saveYapeConfig(modified);
+
+    // 2. Restaurar original completo
+    await saveYapeConfig(DEFAULT_YAPE_CONFIG);
 
     const loaded = await getYapeConfig();
-    expect(loaded.mode).toBe("business");
-    expect(loaded.businessQrUrl).toContain("data:image/webp;base64");
-    expect(loaded.businessName).toBe("Corporación Las Flores 2026");
+    expect(loaded.activeAccountId).toBe("business");
+    expect(loaded.accounts.length).toBe(2);
+    expect(loaded.businessName).toBe("Corporación Las Flores SAC");
+    expect(loaded.personalName).toBe("Ivinovith Chu*");
   });
 });

@@ -37,7 +37,7 @@ import { CustomerHistoryModal } from "./CustomerHistoryModal";
 import { LoginModal } from "./LoginModal";
 import { openCulqiCheckout, formatAmountToCents, getCulqiErrorMessage, type CulqiToken } from "../lib/culqiClient";
 import { processCulqiCharge } from "../lib/culqiApi";
-import { getYapeConfig, subscribeToYapeConfig, DEFAULT_YAPE_CONFIG, type YapeConfig } from "../lib/yapeService";
+import { getYapeConfig, subscribeToYapeConfig, getActiveYapeAccount, DEFAULT_YAPE_CONFIG, type YapeConfig } from "../lib/yapeService";
 import type { User } from "@supabase/supabase-js";
 
 type Step = "cart" | "delivery" | "payment" | "success" | "profile";
@@ -1361,28 +1361,33 @@ export function CartSidebar() {
                 <div
                   className="bg-white rounded-2xl p-5 border border-nogal/10 shadow-sm space-y-4 animate-in fade-in duration-300"
                 >
-                  <div className="flex flex-col items-center">
-                    <div
-                      className="w-36 h-36 rounded-xl p-3 mb-3 border border-nogal/10 bg-white shadow-xs"
-                    >
-                      <img
-                        src={yapeConfig.mode === "personal" ? yapeConfig.personalQrUrl : yapeConfig.businessQrUrl}
-                        alt="QR Yape o Plin"
-                        className="w-full h-full object-contain rounded-lg"
-                      />
-                    </div>
-                    <p className="font-serif font-bold text-sm text-black/80">
-                      Escanea con Yape o Plin
-                    </p>
-                    <p className="text-xs text-black/60 mt-0.5 text-center">
-                      A nombre de <strong className="text-[#2D473C] font-bold">{yapeConfig.mode === "personal" ? yapeConfig.personalName : yapeConfig.businessName}</strong>
-                    </p>
-                    {(yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone) && (
-                      <span className="text-xs text-gray-500 font-mono mt-0.5">
-                        Número: {yapeConfig.mode === "personal" ? yapeConfig.personalPhone : yapeConfig.businessPhone}
-                      </span>
-                    )}
-                  </div>
+                  {(() => {
+                    const activeAccount = getActiveYapeAccount(yapeConfig);
+                    return (
+                      <div className="flex flex-col items-center">
+                        <div
+                          className="w-36 h-36 rounded-xl p-3 mb-3 border border-nogal/10 bg-white shadow-xs"
+                        >
+                          <img
+                            src={activeAccount.qrUrl}
+                            alt="QR Yape o Plin"
+                            className="w-full h-full object-contain rounded-lg"
+                          />
+                        </div>
+                        <p className="font-serif font-bold text-sm text-black/80">
+                          Escanea con Yape o Plin
+                        </p>
+                        <p className="text-xs text-black/60 mt-0.5 text-center">
+                          A nombre de <strong className="text-[#2D473C] font-bold">{activeAccount.name}</strong>
+                        </p>
+                        {activeAccount.phone && (
+                          <span className="text-xs text-gray-500 font-mono mt-0.5">
+                            Número: {activeAccount.phone}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })()}
                   <div>
                     <Label>Titular de la cuenta origen (Yape / Plin) *</Label>
                     <input
